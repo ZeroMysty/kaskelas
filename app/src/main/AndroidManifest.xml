@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.KasKelasApp"
+        tools:targetApi="31">
+
+        <!-- Main Activity (Beranda) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Anggota Activity -->
+        <activity
+            android:name=".AnggotaActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Tambah Anggota Activity -->
+        <activity
+            android:name=".TambahAnggotaActivity"
+            android:exported="false"
+            android:parentActivityName=".AnggotaActivity" />
+
+        <!-- Edit Anggota Activity -->
+        <activity
+            android:name=".EditAnggotaActivity"
+            android:exported="false"
+            android:parentActivityName=".AnggotaActivity" />
+
+        <!-- Pemasukan Anggota Activity -->
+        <activity
+            android:name=".PemasukanAnggotaActivity"
+            android:exported="false"
+            android:parentActivityName=".AnggotaActivity" />
+
+        <!-- Tambah Pemasukan Activity -->
+        <activity
+            android:name=".TambahPemasukanActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Tambah Pengeluaran Activity -->
+        <activity
+            android:name=".TambahPengeluaranActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Detail Pemasukan Activity -->
+        <activity
+            android:name=".DetailPemasukanActivity"
+            android:exported="false"
+            android:parentActivityName=".RiwayatActivity" />
+
+        <!-- Detail Pengeluaran Activity -->
+        <activity
+            android:name=".DetailPengeluaranActivity"
+            android:exported="false"
+            android:parentActivityName=".RiwayatActivity" />
+
+        <!-- Riwayat Activity -->
+        <activity
+            android:name=".RiwayatActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <ImageView
+        android:id="@+id/btnBackAnggota"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="back"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#333333" />
+
+    <TextView
+        android:id="@+id/tvHeaderAnggota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Anggota"
+        android:textColor="#333333"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etSearchAnggota"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_search_white"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:drawablePadding="12dp"
+        android:hint="Cari Anggota..."
+        android:paddingHorizontal="16dp"
+        android:textSize="14sp"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        app:layout_constraintTop_toBottomOf="@id/tvHeaderAnggota" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDaftarAnggota"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearchAnggota"
+        tools:listitem="@layout/item_anggota_edit" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTambahAnggotaBaru"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_margin="24dp"
+        android:text="Anggota Baru"
+        android:textAllCaps="false"
+        android:textColor="#333333"
+        android:backgroundTint="#B0D4EC"
+        app:cornerRadius="27dp"
+        app:icon="@drawable/blue_add"
+        app:iconTint="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

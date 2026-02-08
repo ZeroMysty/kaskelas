@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <RelativeLayout
+        android:id="@+id/headerPemasukanAnggota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBackBayar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back"
+            app:tint="#333333" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Pemasukan Anggota"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/headerPemasukanAnggota">
+
+        <EditText
+            android:id="@+id/etNamaBayar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_search_white"
+            android:hint="Nama Pembayaran"
+            android:paddingHorizontal="20dp"
+            android:textColor="#333333" />
+
+        <EditText
+            android:id="@+id/etJumlahBayar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_search_white"
+            android:hint="Jumlah"
+            android:inputType="number"
+            android:paddingHorizontal="20dp"
+            android:textColor="#333333" />
+
+        <EditText
+            android:id="@+id/etKeteranganBayar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/bg_search_white"
+            android:hint="Keterangan"
+            android:paddingHorizontal="20dp"
+            android:textColor="#333333" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSimpanBayar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#B0D4EC"
+        android:text="Simpan"
+        android:textAllCaps="false"
+        android:textColor="#333333"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
