@@ -1,8 +1,11 @@
 package com.example.kaskelasapp
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,11 +20,35 @@ class TambahPemasukanActivity : AppCompatActivity() {
         val etKet = findViewById<EditText>(R.id.etKeteranganPemasukan)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanPemasukan)
 
-        // Check if this is from anggota payment
+        etJumlah.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString() != current) {
+                    etJumlah.removeTextChangedListener(this)
+
+                    val cleanString = s.toString().replace("[^\\d]".toRegex(), "")
+
+                    if (cleanString.isNotEmpty()) {
+                        val parsed = cleanString.toDouble()
+                        val formatted = DecimalFormat("#,###").format(parsed).replace(",", ".")
+
+                        current = formatted
+                        etJumlah.setText(formatted)
+                        etJumlah.setSelection(formatted.length)
+                    } else {
+                        current = ""
+                        etJumlah.setText("")
+                    }
+                    etJumlah.addTextChangedListener(this)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         val anggotaId = intent.getStringExtra("ANGGOTA_ID")
         val anggotaNama = intent.getStringExtra("ANGGOTA_NAMA")
-        
-        // If from anggota, pre-fill with anggota name and disable editing
+
         if (anggotaNama != null) {
             etNama.setText(anggotaNama)
             etNama.isEnabled = false
@@ -29,12 +56,15 @@ class TambahPemasukanActivity : AppCompatActivity() {
 
         btnSimpan.setOnClickListener {
             val nama = etNama.text.toString()
-            val jumlah = etJumlah.text.toString()
+
+            val jumlahRaw = etJumlah.text.toString()
+            val jumlahBersih = jumlahRaw.replace(".", "")
+
             val ket = etKet.text.toString()
             val tanggal = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
 
-            if (nama.isNotEmpty() && jumlah.isNotEmpty()) {
-                db.insertTransaksi(nama, jumlah, tanggal, "MASUK", ket)
+            if (nama.isNotEmpty() && jumlahBersih.isNotEmpty()) {
+                db.insertTransaksi(nama, jumlahBersih, tanggal, "MASUK", ket)
                 Toast.makeText(this, "Pemasukan disimpan!", Toast.LENGTH_SHORT).show()
                 finish()
             } else {

@@ -33,7 +33,7 @@ class EditAnggotaActivity : AppCompatActivity() {
 
         // Isi field dengan data sebelumnya
         etId.setText(anggotaId)
-        etId.isEnabled = false
+        etId.isEnabled = true
         etNama.setText(anggotaNama ?: "")
         etNis.setText(anggotaNis ?: "")
 

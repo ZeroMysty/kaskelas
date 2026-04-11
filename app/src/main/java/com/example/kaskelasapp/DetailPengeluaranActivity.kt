@@ -24,5 +24,6 @@ class DetailPengeluaranActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btnBackDetailK).setOnClickListener { finish() }
+        findViewById<android.widget.Button>(R.id.btnSelesaiDetailK).setOnClickListener { finish() }
     }
 }
