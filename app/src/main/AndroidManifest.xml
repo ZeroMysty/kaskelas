@@ -15,69 +15,87 @@
         android:theme="@style/Theme.KasKelasApp"
         tools:targetApi="31">
 
-        <!-- Main Activity (Beranda) -->
+        <!-- Main Activity (Beranda) - DIKUNCI PORTRAIT -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:screenOrientation="portrait">
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Anggota Activity -->
+        <!-- Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".AnggotaActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
 
-        <!-- Tambah Anggota Activity -->
+        <!-- Tambah Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".TambahAnggotaActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".AnggotaActivity" />
 
-        <!-- Edit Anggota Activity -->
+        <!-- Edit Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".EditAnggotaActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".AnggotaActivity" />
 
-        <!-- Pemasukan Anggota Activity -->
+        <!-- Pemasukan Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".PemasukanAnggotaActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".AnggotaActivity" />
 
-        <!-- Tambah Pemasukan Activity -->
+        <!-- Tambah Pemasukan Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".TambahPemasukanActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
 
-        <!-- Tambah Pengeluaran Activity -->
+        <!-- Tambah Pengeluaran Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".TambahPengeluaranActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
 
-        <!-- Detail Pemasukan Activity -->
+        <!-- Detail Pemasukan Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".DetailPemasukanActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".RiwayatActivity" />
 
-        <!-- Detail Pengeluaran Activity -->
+        <!-- Detail Pengeluaran Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".DetailPengeluaranActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".RiwayatActivity" />
 
-        <!-- Riwayat Activity -->
+        <!-- Riwayat Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".RiwayatActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
+
+        <!-- KHUSUS Chart Detail - DIKUNCI LANDSCAPE -->
+        <activity
+            android:name=".ChartDetailActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize" />
 
     </application>
 

@@ -2,18 +2,16 @@ package com.example.kaskelasapp
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,18 +20,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: AnggotaBayarAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
-
-        // 1. Aktifkan Edge-to-Edge
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        // 2. Hilangkan kotak hitam di area kamera (PENTING)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            window.attributes.layoutInDisplayCutoutMode =
-                android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        }
-
         setContentView(R.layout.activity_main)
+
         db = DatabaseHelper(this)
 
         rvAnggotaBeranda = findViewById(R.id.rvAnggotaBeranda)
@@ -43,13 +34,13 @@ class MainActivity : AppCompatActivity() {
         loadChart()
         loadAnggotaBayar()
 
-        // Hide keyboard when clicking outside EditText/keyboard area
+        // Hide keyboard when clicking outside
         window.decorView.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
         }
 
-        // Navigasi
+        // --- NAVIGASI TOMBOL ---
         findViewById<View>(R.id.btnNavPemasukan).setOnClickListener {
             startActivity(Intent(this, TambahPemasukanActivity::class.java))
         }
@@ -61,6 +52,20 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.fabTambahAnggota).setOnClickListener {
             startActivity(Intent(this, AnggotaActivity::class.java))
+        }
+
+        // --- NAVIGASI EXPAND CHART (YANG DIPERBAIKI) ---
+
+        // 1. Klik Tombol Expand
+        findViewById<View>(R.id.btnExpandChart).setOnClickListener {
+            val intent = Intent(this, ChartDetailActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 2. Klik Area Grafik (Opsional: Agar user lebih mudah expand)
+        findViewById<View>(R.id.ivGrafikDummy).setOnClickListener {
+            val intent = Intent(this, ChartDetailActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -79,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadAnggotaBayar() {
         val daftarAnggota = db.getAllAnggota()
         adapter = AnggotaBayarAdapter(daftarAnggota) { anggota ->
-            // Navigate to pembayaran anggota
             val intent = Intent(this, TambahPemasukanActivity::class.java)
             intent.putExtra("ANGGOTA_ID", anggota.id)
             intent.putExtra("ANGGOTA_NAMA", anggota.nama)
@@ -90,70 +94,103 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateSaldo() {
         val total = db.hitungTotalSaldo()
-        findViewById<android.widget.TextView>(R.id.tvTotalUangkas).text = "Rp. $total"
+        val formatRupiah = java.text.NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply {
+            maximumFractionDigits = 0
+            minimumFractionDigits = 0
+        }
+        findViewById<android.widget.TextView>(R.id.tvTotalUangkas).text = formatRupiah.format(total)
     }
-
     private fun loadChart() {
         val chart = findViewById<LineChart>(R.id.ivGrafikDummy)
         if (chart == null) return
 
-        // Ambil data transaksi
         val transaksi = db.getAllTransaksi()
-        
-        // Group transaksi by date
+
         val masukanByDate = mutableMapOf<String, Long>()
         val keluarByDate = mutableMapOf<String, Long>()
-        
+
         transaksi.forEach {
             val jumlah = it.jumlah.toLongOrNull() ?: 0
-            val date = it.tanggal // Format: "dd/MM/yyyy"
-            
+            val date = it.tanggal
+
             if (it.tipe == "MASUK") {
                 masukanByDate[date] = (masukanByDate[date] ?: 0) + jumlah
             } else {
                 keluarByDate[date] = (keluarByDate[date] ?: 0) + jumlah
             }
         }
-        
-        // Get unique dates sorted
-        val allDates = (masukanByDate.keys + keluarByDate.keys).distinct().sorted()
-        
-        // Create entries for chart
-        val entriesMasuk = mutableListOf<Entry>()
-        val entriesKeluar = mutableListOf<Entry>()
-        
+
+        val allDates = (masukanByDate.keys + keluarByDate.keys)
+            .distinct()
+            .sorted()
+
+        // 🔥 BUAT SALDO (AKUMULASI)
+        val entries = mutableListOf<Entry>()
+        var saldo = 0f
+
         allDates.forEachIndexed { index, date ->
-            entriesMasuk.add(Entry(index.toFloat(), (masukanByDate[date] ?: 0L).toFloat()))
-            entriesKeluar.add(Entry(index.toFloat(), (keluarByDate[date] ?: 0L).toFloat()))
+            val masuk = masukanByDate[date] ?: 0L
+            val keluar = keluarByDate[date] ?: 0L
+
+            saldo += (masuk - keluar).toFloat()
+            entries.add(Entry(index.toFloat(), saldo))
         }
-        
-        // If no data, show empty chart
-        if (entriesMasuk.isEmpty()) {
-            entriesMasuk.add(Entry(0f, 0f))
-            entriesKeluar.add(Entry(0f, 0f))
+
+        if (entries.size < 2) {
+            entries.add(Entry(0f, 0f))
+            entries.add(Entry(1f, 0f))
         }
-        
-        val dataSetMasuk = LineDataSet(entriesMasuk, "Pemasukan").apply {
-            color = android.graphics.Color.GREEN
-            setCircleColor(android.graphics.Color.GREEN)
-            lineWidth = 3f
-            circleRadius = 5f
-            setDrawCircleHole(false)
-            setDrawValues(false)
+
+        // 🔥 BUAT SEGMENT (PER GARIS)
+        val dataSets = mutableListOf<LineDataSet>()
+
+        for (i in 1 until entries.size) {
+            val prev = entries[i - 1]
+            val curr = entries[i]
+
+            val segment = listOf(prev, curr)
+
+            val isNaik = curr.y >= prev.y
+
+            val dataSet = LineDataSet(segment, "").apply {
+                color = if (isNaik)
+                    android.graphics.Color.GREEN
+                else
+                    android.graphics.Color.RED
+
+                lineWidth = 3f
+
+                setDrawCircles(false)
+                setDrawValues(false)
+
+                mode = LineDataSet.Mode.LINEAR
+            }
+
+            dataSets.add(dataSet)
         }
-        
-        val dataSetKeluar = LineDataSet(entriesKeluar, "Pengeluaran").apply {
-            color = android.graphics.Color.RED
-            setCircleColor(android.graphics.Color.RED)
-            lineWidth = 3f
-            circleRadius = 5f
-            setDrawCircleHole(false)
-            setDrawValues(false)
+
+        chart.apply {
+            data = LineData(dataSets as List<com.github.mikephil.charting.interfaces.datasets.ILineDataSet>)
+
+            // 🔥 STYLE KAYAK SAHAM
+            description.isEnabled = false
+            legend.isEnabled = false
+
+            axisRight.isEnabled = false
+
+            xAxis.setDrawGridLines(false)
+            axisLeft.setDrawGridLines(false)
+
+            // 🔥 ZOOM & DRAG
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+            setPinchZoom(true)
+
+            // 🔥 ANIMASI
+            animateX(800)
+
+            invalidate()
         }
-        
-        val lineData = LineData(dataSetMasuk, dataSetKeluar)
-        chart.data = lineData
-        chart.xAxis.labelCount = allDates.size
-        chart.invalidate()
     }
 }

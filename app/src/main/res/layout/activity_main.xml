@@ -138,6 +138,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutQuickAction" />
 
+    <!-- Cari bagian cardGrafik di activity_main.xml Anda dan ubah urutannya seperti ini -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardGrafik"
         android:layout_width="match_parent"
@@ -148,11 +149,25 @@
         app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@id/tvLabelGrafik">
 
+        <!-- 1. Letakkan Chart terlebih dahulu (Lapisan Bawah) -->
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/ivGrafikDummy"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="12dp" />
+
+        <!-- 2. Letakkan Tombol Expand TERAKHIR (Lapisan Atas) agar bisa diklik -->
+        <ImageButton
+            android:id="@+id/btnExpandChart"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|end"
+            android:padding="10dp"
+            android:src="@drawable/ic_expand"
+            android:scaleType="centerInside"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:elevation="5dp" />
+
     </androidx.cardview.widget.CardView>
 
     <TextView

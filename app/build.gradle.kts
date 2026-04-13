@@ -47,11 +47,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // --- ROOM DATABASE SETUP (Sintaks Kotlin DSL) ---
-    val room_version = "2.6.1" // PERBAIKAN 2: Pakai 'val', bukan 'def'
+    // ROOM DATABASE SETUP (Sintaks Kotlin DSL)
+    val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version") // Wajib pakai kapt
+    kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
     // Lifecycle
@@ -59,4 +59,7 @@ dependencies {
 
     // MPAndroidChart untuk grafik
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.2.0")
 }
