@@ -154,6 +154,7 @@
             android:id="@+id/ivGrafikDummy"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:padding="12dp" />
 
         <!-- 2. Letakkan Tombol Expand TERAKHIR (Lapisan Atas) agar bisa diklik -->

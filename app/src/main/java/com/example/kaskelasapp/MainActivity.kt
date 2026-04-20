@@ -2,6 +2,8 @@ package com.example.kaskelasapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import android.view.View
@@ -22,8 +24,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
 
+        // Splash screen delay (2 detik)
+        var keepSplashScreen = true
+        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
+        Handler(Looper.getMainLooper()).postDelayed({
+            keepSplashScreen = false
+        }, 2000)
+
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main) 
 
         db = DatabaseHelper(this)
 

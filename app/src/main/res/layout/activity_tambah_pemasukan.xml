@@ -46,7 +46,8 @@
             android:background="@drawable/bg_search_white"
             android:hint="Nama Pembayaran"
             android:paddingHorizontal="20dp"
-            android:textColor="#333333" />
+            android:textColorHint="#333333"
+            android:textColor="#000000" />
 
         <EditText
             android:id="@+id/etJumlahPemasukan"
@@ -57,7 +58,8 @@
             android:hint="Jumlah"
             android:inputType="number"
             android:paddingHorizontal="20dp"
-            android:textColor="#333333" />
+            android:textColorHint="#333333"
+            android:textColor="#000000" />
 
         <EditText
             android:id="@+id/etKeteranganPemasukan"
@@ -66,7 +68,8 @@
             android:background="@drawable/bg_search_white"
             android:hint="Keterangan"
             android:paddingHorizontal="20dp"
-            android:textColor="#333333" />
+            android:textColorHint="#333333"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <Button

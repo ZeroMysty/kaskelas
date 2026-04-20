@@ -47,6 +47,8 @@
         android:inputType="text"
         android:imeOptions="actionSearch"
         android:singleLine="true"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/tvHeaderAnggota" />
 
     <androidx.recyclerview.widget.RecyclerView
