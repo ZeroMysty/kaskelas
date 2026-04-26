@@ -25,9 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="History"
-            android:textColor="#333333"
-            android:textSize="18sp"
+            android:text="HISTORY"
+            android:textColor="#111111"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -37,89 +37,97 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
-        app:cardBackgroundColor="#99ffffff"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@id/headerRiwayat">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:gravity="center_horizontal"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uang Yang Tersedia"
+                android:textColor="#555555"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvTotalBalanceRiwayat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:text="Rp 0"
+                android:textColor="#111111"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_pill_white"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/green_add" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Pemasukan -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_pill_green"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="12dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_up_green" />
+
+                    <TextView
+                        android:id="@+id/tvTotalPemasukanRiwayat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Pemasukan: Rp 0"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Pengeluaran -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:text="Pemasukan"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:background="@drawable/bg_pill_red"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="12dp">
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="20dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="#E0E0E0" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_down_red" />
 
-                <TextView
-                    android:id="@+id/tvTotalPemasukanRiwayat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Rp 0"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tvTotalPengeluaranRiwayat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Pengeluaran: Rp 0"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_pill_white"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/negative" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Pengeluaran"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="20dp"
-                    android:layout_marginHorizontal="12dp"
-                    android:background="#E0E0E0" />
-
-                <TextView
-                    android:id="@+id/tvTotalPengeluaranRiwayat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Rp 0"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -130,10 +138,91 @@
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
         android:paddingBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintTop_toBottomOf="@id/cardSummary"
         app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="20dp"
         tools:listitem="@layout/item_riwayat" />
+
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navHistory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/history"
+                app:tint="#333333" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History"
+                android:textColor="#333333"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/user"
+                app:tint="#777777" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

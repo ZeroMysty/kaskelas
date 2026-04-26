@@ -25,12 +25,37 @@ class RiwayatActivity : AppCompatActivity() {
         updateTotals()
 
         findViewById<ImageView>(R.id.btnBackRiwayat).setOnClickListener { finish() }
+
+        setupBottomNav()
+    }
+
+    private fun setupBottomNav() {
+        findViewById<android.view.View>(R.id.navHome).setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
+        findViewById<android.view.View>(R.id.navHistory).setOnClickListener {
+            // Already in history
+        }
+        findViewById<android.view.View>(R.id.navProfile).setOnClickListener {
+            // To be implemented
+        }
+        findViewById<android.view.View>(R.id.navSettings).setOnClickListener {
+            // To be implemented
+        }
     }
 
     override fun onResume() {
         super.onResume()
         loadTransaksi()
         updateTotals()
+    }
+
+    private fun formatRupiah(number: Long): String {
+        val localeID = java.util.Locale.Builder().setLanguage("id").setRegion("ID").build()
+        return java.text.NumberFormat.getNumberInstance(localeID).format(number)
     }
 
     private fun updateTotals() {
@@ -47,9 +72,11 @@ class RiwayatActivity : AppCompatActivity() {
                 totalKeluar += jumlah
             }
         }
+        val totalBalance = totalMasuk - totalKeluar
         
-        findViewById<TextView>(R.id.tvTotalPemasukanRiwayat).text = "Rp $totalMasuk"
-        findViewById<TextView>(R.id.tvTotalPengeluaranRiwayat).text = "Rp $totalKeluar"
+        findViewById<TextView>(R.id.tvTotalBalanceRiwayat).text = "Rp ${formatRupiah(totalBalance)}"
+        findViewById<TextView>(R.id.tvTotalPemasukanRiwayat).text = "Income: Rp ${formatRupiah(totalMasuk)}"
+        findViewById<TextView>(R.id.tvTotalPengeluaranRiwayat).text = "Expense: Rp ${formatRupiah(totalKeluar)}"
     }
 
     private fun loadTransaksi() {
