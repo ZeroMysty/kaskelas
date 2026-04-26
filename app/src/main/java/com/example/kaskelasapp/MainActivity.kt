@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, TambahPengeluaranActivity::class.java))
         }
         findViewById<View>(R.id.btnHistoryMain).setOnClickListener {
-            startActivity(Intent(this, RiwayatActivity::class.java))
+            val intent = Intent(this, RiwayatActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
         }
 
         // --- NAVIGASI EXPAND CHART DENGAN TRANSISI ---
