@@ -97,6 +97,20 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize" />
 
+        <!-- Settings Activity -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Detail Anggota Activity -->
+        <activity
+            android:name=".DetailAnggotaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

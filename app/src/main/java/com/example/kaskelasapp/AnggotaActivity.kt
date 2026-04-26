@@ -60,6 +60,8 @@ class AnggotaActivity : AppCompatActivity() {
 
         // Back button
         findViewById<ImageView>(R.id.btnBackAnggota).setOnClickListener { finish() }
+
+        BottomNavHelper.setupBottomNav(this)
     }
 
     override fun onResume() {

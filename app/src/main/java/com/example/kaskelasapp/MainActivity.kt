@@ -60,9 +60,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnHistoryMain).setOnClickListener {
             startActivity(Intent(this, RiwayatActivity::class.java))
         }
-        findViewById<View>(R.id.fabTambahAnggota).setOnClickListener {
-            startActivity(Intent(this, AnggotaActivity::class.java))
-        }
 
         // --- NAVIGASI EXPAND CHART ---
         findViewById<View>(R.id.cardGrafik)?.setOnClickListener {
@@ -70,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        BottomNavHelper.setupBottomNav(this)
     }
 
     override fun onResume() {
@@ -86,13 +84,48 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadAnggotaBayar() {
         val daftarAnggota = db.getAllAnggota()
-        adapter = AnggotaBayarAdapter(daftarAnggota) { anggota ->
-            val intent = Intent(this, TambahPemasukanActivity::class.java)
-            intent.putExtra("ANGGOTA_ID", anggota.id)
-            intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-            startActivity(intent)
-        }
+        adapter = AnggotaBayarAdapter(
+            list = daftarAnggota,
+            onPayClick = { anggota ->
+                tampilkanDialogBayar(anggota)
+            },
+            onItemClick = { anggota ->
+                val intent = Intent(this, DetailAnggotaActivity::class.java)
+                intent.putExtra("ANGGOTA_ID", anggota.id)
+                intent.putExtra("ANGGOTA_NAMA", anggota.nama)
+                intent.putExtra("ANGGOTA_NIS", anggota.nis)
+                startActivity(intent)
+            }
+        )
         rvAnggotaBeranda.adapter = adapter
+    }
+
+    private fun tampilkanDialogBayar(anggota: Anggota) {
+        val sharedPref = getSharedPreferences("SettingsKas", android.content.Context.MODE_PRIVATE)
+        val nominalDefault = sharedPref.getString("nominal_kas", "2000") ?: "2000"
+
+        val localeID = java.util.Locale.Builder().setLanguage("id").setRegion("ID").build()
+        val formatRupiah = java.text.NumberFormat.getNumberInstance(localeID).format(nominalDefault.toLongOrNull() ?: 0)
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Konfirmasi Pembayaran")
+            .setMessage("Apakah Anda akan melanjutkan pembayaran kas sebesar Rp$formatRupiah untuk ${anggota.nama}?")
+            .setPositiveButton("Lanjut") { _, _ ->
+                val tgl = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault()).format(java.util.Date())
+                db.insertTransaksi(
+                    judul = "Bayar kas",
+                    jumlah = nominalDefault,
+                    tanggal = tgl,
+                    jenis = "MASUK",
+                    keterangan = "Pembayaran dari ${anggota.nama}",
+                    anggotaId = anggota.id
+                )
+                updateSaldo()
+                loadChart()
+                android.widget.Toast.makeText(this, "Pembayaran berhasil!", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun updateSaldo() {

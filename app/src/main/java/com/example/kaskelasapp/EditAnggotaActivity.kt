@@ -37,6 +37,16 @@ class EditAnggotaActivity : AppCompatActivity() {
         etNama.setText(anggotaNama ?: "")
         etNis.setText(anggotaNis ?: "")
 
+        val btnLihatHistory = findViewById<Button>(R.id.btnLihatHistory)
+        btnLihatHistory.text = "Lihat History $anggotaNama"
+        btnLihatHistory.setOnClickListener {
+            val intent = android.content.Intent(this, DetailAnggotaActivity::class.java)
+            intent.putExtra("ANGGOTA_ID", anggotaId)
+            intent.putExtra("ANGGOTA_NAMA", anggotaNama)
+            intent.putExtra("ANGGOTA_NIS", anggotaNis)
+            startActivity(intent)
+        }
+
         btnBack.setOnClickListener { finish() }
 
         btnSimpan.setOnClickListener {

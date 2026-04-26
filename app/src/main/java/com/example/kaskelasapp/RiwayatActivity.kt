@@ -30,21 +30,7 @@ class RiwayatActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNav() {
-        findViewById<android.view.View>(R.id.navHome).setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
-            finish()
-        }
-        findViewById<android.view.View>(R.id.navHistory).setOnClickListener {
-            // Already in history
-        }
-        findViewById<android.view.View>(R.id.navProfile).setOnClickListener {
-            // To be implemented
-        }
-        findViewById<android.view.View>(R.id.navSettings).setOnClickListener {
-            // To be implemented
-        }
+        BottomNavHelper.setupBottomNav(this)
     }
 
     override fun onResume() {
@@ -75,8 +61,8 @@ class RiwayatActivity : AppCompatActivity() {
         val totalBalance = totalMasuk - totalKeluar
         
         findViewById<TextView>(R.id.tvTotalBalanceRiwayat).text = "Rp ${formatRupiah(totalBalance)}"
-        findViewById<TextView>(R.id.tvTotalPemasukanRiwayat).text = "Income: Rp ${formatRupiah(totalMasuk)}"
-        findViewById<TextView>(R.id.tvTotalPengeluaranRiwayat).text = "Expense: Rp ${formatRupiah(totalKeluar)}"
+        findViewById<TextView>(R.id.tvTotalPemasukanRiwayat).text = "Pemasukan: Rp ${formatRupiah(totalMasuk)}"
+        findViewById<TextView>(R.id.tvTotalPengeluaranRiwayat).text = "Pengeluaran: Rp ${formatRupiah(totalKeluar)}"
     }
 
     private fun loadTransaksi() {

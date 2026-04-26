@@ -12,5 +12,6 @@ data class Transaksi(
     val jumlah: String,
     val tanggal: String,
     val tipe: String, // "MASUK" atau "KELUAR"
-    val keterangan: String = ""
+    val keterangan: String = "",
+    val anggota_id: String? = null
 )

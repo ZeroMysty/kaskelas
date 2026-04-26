@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class AnggotaBayarAdapter(
     private val list: List<Anggota>,
-    private val onClick: (Anggota) -> Unit
+    private val onPayClick: (Anggota) -> Unit,
+    private val onItemClick: (Anggota) -> Unit
 ) : RecyclerView.Adapter<AnggotaBayarAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,7 +29,8 @@ class AnggotaBayarAdapter(
         val anggota = list[position]
         holder.tvNama.text = anggota.nama
 
-        holder.btnBayar.setOnClickListener { onClick(anggota) }
+        holder.btnBayar.setOnClickListener { onPayClick(anggota) }
+        holder.itemView.setOnClickListener { onItemClick(anggota) }
     }
 
     override fun getItemCount() = list.size
