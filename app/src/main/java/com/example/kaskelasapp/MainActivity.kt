@@ -14,6 +14,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -63,19 +64,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AnggotaActivity::class.java))
         }
 
-        // --- NAVIGASI EXPAND CHART (YANG DIPERBAIKI) ---
-
-        // 1. Klik Tombol Expand
-        findViewById<View>(R.id.btnExpandChart).setOnClickListener {
+        // --- NAVIGASI EXPAND CHART ---
+        findViewById<View>(R.id.cardGrafik)?.setOnClickListener {
             val intent = Intent(this, ChartDetailActivity::class.java)
             startActivity(intent)
         }
 
-        // 2. Klik Area Grafik (Opsional: Agar user lebih mudah expand)
-        findViewById<View>(R.id.ivGrafikDummy).setOnClickListener {
-            val intent = Intent(this, ChartDetailActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     override fun onResume() {
@@ -103,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateSaldo() {
         val total = db.hitungTotalSaldo()
-        val formatRupiah = java.text.NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply {
+        val formatRupiah = java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
             maximumFractionDigits = 0
             minimumFractionDigits = 0
         }
@@ -179,7 +173,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         chart.apply {
-            data = LineData(dataSets as List<com.github.mikephil.charting.interfaces.datasets.ILineDataSet>)
+            data = LineData(dataSets as List<ILineDataSet>)
 
             // 🔥 STYLE KAYAK SAHAM
             description.isEnabled = false
@@ -190,16 +184,19 @@ class MainActivity : AppCompatActivity() {
             xAxis.setDrawGridLines(false)
             axisLeft.setDrawGridLines(false)
 
-            // 🔥 ZOOM & DRAG
+            // 🔥 PREVIEW MODE: Enable touch but disable interaction
             setTouchEnabled(true)
-            isDragEnabled = true
-            setScaleEnabled(true)
-            setPinchZoom(true)
+            isDragEnabled = false
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            isHighlightPerTapEnabled = false
+            isHighlightPerDragEnabled = false
 
             // 🔥 ANIMASI
             animateX(800)
 
             invalidate()
         }
+
     }
 }

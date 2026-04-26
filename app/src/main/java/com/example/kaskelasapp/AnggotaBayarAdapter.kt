@@ -16,7 +16,7 @@ class AnggotaBayarAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvNama = view.findViewById<TextView>(R.id.tvNamaItem)
         val imgIcon = view.findViewById<ImageView>(R.id.imgIcon)
-        val btnBayar = view.findViewById<Button>(R.id.btnBayarItem)
+        val btnBayar = view.findViewById<TextView>(R.id.btnBayarItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
