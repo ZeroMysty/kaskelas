@@ -21,7 +21,7 @@ class ChartDetailActivity : AppCompatActivity() {
         db = DatabaseHelper(this)
 
         findViewById<ImageButton>(R.id.btnBackChart).setOnClickListener {
-            finish()
+            supportFinishAfterTransition()
         }
 
         setupFullChart()
@@ -33,9 +33,7 @@ class ChartDetailActivity : AppCompatActivity() {
 
         if (transaksi.isEmpty()) return
 
-        // 🔥 ambil warna SEKALI (biar efisien)
-        val HEJO = ContextCompat.getColor(this, R.color.HEJO)
-        val BEREUM = ContextCompat.getColor(this, R.color.BEREUM)
+        val mainColor = ContextCompat.getColor(this, R.color.blue_premium)
         val black = ContextCompat.getColor(this, R.color.black)
 
         val entries = mutableListOf<Entry>()
@@ -45,7 +43,9 @@ class ChartDetailActivity : AppCompatActivity() {
         val sorted = transaksi.sortedBy { it.id }
 
         sorted.forEachIndexed { index, trx ->
-            val jumlah = trx.jumlah.toFloatOrNull() ?: 0f
+            // Bersihkan titik format ribuan agar angka valid
+            val cleanJumlah = trx.jumlah.replace(".", "").replace(",", "")
+            val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
 
             if (trx.tipe == "MASUK") {
                 saldo += jumlah
@@ -60,47 +60,32 @@ class ChartDetailActivity : AppCompatActivity() {
             entries.add(Entry(entries.size.toFloat(), saldo))
         }
 
-        val dataSets = mutableListOf<ILineDataSet>()
+        // 🔥 SATU DATASET UTAMA (Garis + Area)
+        val lineDataSet = LineDataSet(entries, "Saldo").apply {
+            color = mainColor
+            lineWidth = 3f
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.15f
 
-        for (i in 1 until entries.size) {
-            val prev = entries[i - 1]
-            val curr = entries[i]
+            setDrawCircles(true)
+            setCircleColor(mainColor)
+            circleRadius = 6f
+            setDrawCircleHole(true)
+            circleHoleRadius = 3f
+            circleHoleColor = android.graphics.Color.WHITE
 
-            val isNaik = curr.y >= prev.y
-            val diff = curr.y - prev.y
+            setDrawValues(false)
 
-            // 🔥 GARIS
-            val lineDataSet = LineDataSet(listOf(prev, curr), "").apply {
-                color = if (isNaik) HEJO else BEREUM
-                lineWidth = 4f
+            // Area Fill
+            setDrawFilled(true)
+            fillDrawable = ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
 
-                setDrawCircles(false)
-                setDrawValues(false)
-            }
-
-            // 🔥 TITIK TENGAH
-            val midX = (prev.x + curr.x) / 2f
-            val midY = (prev.y + curr.y) / 2f
-            val midEntry = Entry(midX, midY)
-
-            // 🔥 LABEL + / -
-            val labelDataSet = LineDataSet(listOf(midEntry), "").apply {
-                setDrawCircles(false)
-                setDrawValues(true)
-
-                valueTextSize = 10f
-                valueTextColor = if (isNaik) black else black
-
-                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
-                    override fun getPointLabel(entry: Entry?): String {
-                        return if (diff >= 0) "+${diff.toInt()}" else "${diff.toInt()}"
-                    }
-                }
-            }
-
-            dataSets.add(lineDataSet)
-            dataSets.add(labelDataSet)
+            // Highlighting
+            enableDashedHighlightLine(10f, 5f, 0f)
+            highLightColor = mainColor
         }
+
+        val dataSets = listOf(lineDataSet)
 
         chart.apply {
             data = LineData(dataSets)

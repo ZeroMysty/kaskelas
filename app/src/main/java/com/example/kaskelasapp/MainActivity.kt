@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -23,15 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: AnggotaBayarAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
-
-        // Splash screen delay (2 detik)
-        var keepSplashScreen = true
-        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
-        Handler(Looper.getMainLooper()).postDelayed({
-            keepSplashScreen = false
-        }, 2000)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) 
 
@@ -61,11 +53,22 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, RiwayatActivity::class.java))
         }
 
-        // --- NAVIGASI EXPAND CHART ---
-        findViewById<View>(R.id.cardGrafik)?.setOnClickListener {
+        // --- NAVIGASI EXPAND CHART DENGAN TRANSISI ---
+        val cardGrafik = findViewById<View>(R.id.cardGrafik)
+        val openChartDetail = {
             val intent = Intent(this, ChartDetailActivity::class.java)
-            startActivity(intent)
+            val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, cardGrafik, "chart_transition"
+            )
+            startActivity(intent, options.toBundle())
         }
+        cardGrafik?.setOnClickListener { openChartDetail() }
+        findViewById<View>(R.id.ivGrafikDummy)?.setOnClickListener { openChartDetail() }
+
+        // --- ANIMASI LAYOUT MASUK ---
+        val rootLayout = findViewById<View>(android.R.id.content)
+        val animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.item_animation_fall_down)
+        rootLayout.startAnimation(animation)
 
         BottomNavHelper.setupBottomNav(this)
     }
@@ -140,93 +143,75 @@ class MainActivity : AppCompatActivity() {
         val chart = findViewById<LineChart>(R.id.ivGrafikDummy)
         if (chart == null) return
 
-        val transaksi = db.getAllTransaksi()
+        val transaksi = db.getAllTransaksi().sortedBy { it.id }
 
-        val masukanByDate = mutableMapOf<String, Long>()
-        val keluarByDate = mutableMapOf<String, Long>()
-
-        transaksi.forEach {
-            val jumlah = it.jumlah.toLongOrNull() ?: 0
-            val date = it.tanggal
-
-            if (it.tipe == "MASUK") {
-                masukanByDate[date] = (masukanByDate[date] ?: 0) + jumlah
-            } else {
-                keluarByDate[date] = (keluarByDate[date] ?: 0) + jumlah
-            }
-        }
-
-        val allDates = (masukanByDate.keys + keluarByDate.keys)
-            .distinct()
-            .sorted()
-
-        // 🔥 BUAT SALDO (AKUMULASI)
         val entries = mutableListOf<Entry>()
         var saldo = 0f
 
-        allDates.forEachIndexed { index, date ->
-            val masuk = masukanByDate[date] ?: 0L
-            val keluar = keluarByDate[date] ?: 0L
+        transaksi.forEachIndexed { index, it ->
+            // Bersihkan titik agar tidak salah hitung (TradingView style fix)
+            val cleanJumlah = it.jumlah.replace(".", "").replace(",", "")
+            val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
 
-            saldo += (masuk - keluar).toFloat()
+            if (it.tipe == "MASUK") {
+                saldo += jumlah
+            } else {
+                saldo -= jumlah
+            }
             entries.add(Entry(index.toFloat(), saldo))
         }
 
-        if (entries.size < 2) {
+        if (entries.isEmpty()) {
             entries.add(Entry(0f, 0f))
             entries.add(Entry(1f, 0f))
         }
 
-        // 🔥 BUAT SEGMENT (PER GARIS)
-        val dataSets = mutableListOf<LineDataSet>()
+        // 🔥 BUAT SATU DATASET UNTUK GRADIENT (TradingView Style)
+        val dataSet = LineDataSet(entries, "Saldo").apply {
+            // Warna garis biru premium
+            color = android.graphics.Color.parseColor("#2196F3")
+            lineWidth = 2.5f
 
-        for (i in 1 until entries.size) {
-            val prev = entries[i - 1]
-            val curr = entries[i]
+            // Smooth curves (dibuat lebih tajam/dempet)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.08f
 
-            val segment = listOf(prev, curr)
+            setDrawCircles(false)
+            setDrawValues(false)
 
-            val isNaik = curr.y >= prev.y
+            // 🔥 GRADIENT FILL
+            setDrawFilled(true)
+            val drawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
+            fillDrawable = drawable
 
-            val dataSet = LineDataSet(segment, "").apply {
-                color = if (isNaik)
-                    android.graphics.Color.GREEN
-                else
-                    android.graphics.Color.RED
-
-                lineWidth = 3f
-
-                setDrawCircles(false)
-                setDrawValues(false)
-
-                mode = LineDataSet.Mode.LINEAR
-            }
-
-            dataSets.add(dataSet)
+            // Hilangkan garis bantu saat disentuh
+            setDrawHorizontalHighlightIndicator(false)
+            highLightColor = android.graphics.Color.parseColor("#2196F3")
         }
+
+        val dataSets = listOf(dataSet)
 
         chart.apply {
             data = LineData(dataSets as List<ILineDataSet>)
 
-            // 🔥 STYLE KAYAK SAHAM
+            // 🔥 STYLE MINIMALIS (TRADING VIEW)
             description.isEnabled = false
             legend.isEnabled = false
 
             axisRight.isEnabled = false
+            axisLeft.isEnabled = false
+            xAxis.isEnabled = false
 
-            xAxis.setDrawGridLines(false)
-            axisLeft.setDrawGridLines(false)
+            setDrawBorders(false)
+            setDrawGridBackground(false)
 
-            // 🔥 PREVIEW MODE: Enable touch but disable interaction
-            setTouchEnabled(true)
-            isDragEnabled = false
-            setScaleEnabled(false)
-            setPinchZoom(false)
-            isHighlightPerTapEnabled = false
-            isHighlightPerDragEnabled = false
+            // 🔥 FORCE BERDEMPETAN (Edge to Edge)
+            setExtraOffsets(0f, 0f, 0f, 0f)
+            setViewPortOffsets(0f, 0f, 0f, 0f)
 
-            // 🔥 ANIMASI
-            animateX(800)
+            // 🔥 PREVIEW MODE
+            setTouchEnabled(false)
+            animateY(1000)
 
             invalidate()
         }

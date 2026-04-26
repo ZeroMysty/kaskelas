@@ -16,7 +16,7 @@ class DetailPemasukanActivity : AppCompatActivity() {
             val transaksi = db.getTransaksiById(transaksiId)
             if (transaksi != null) {
                 findViewById<TextView>(R.id.tvDetailNamaP).text = transaksi.nama
-                findViewById<TextView>(R.id.tvDetailJumlahP).text = "Rp. ${transaksi.jumlah}"
+                findViewById<TextView>(R.id.tvDetailJumlahP).text = "Rp${transaksi.jumlah}"
                 findViewById<TextView>(R.id.tvDetailTanggalP).text = transaksi.tanggal
                 findViewById<TextView>(R.id.tvDetailKeteranganP).text = transaksi.keterangan
             }

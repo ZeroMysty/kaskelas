@@ -7,30 +7,23 @@
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <ImageView
-        android:id="@+id/btnBackAnggota"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:contentDescription="back"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#333333" />
-
-    <TextView
-        android:id="@+id/tvHeaderAnggota"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/headerAnggota"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Anggota"
-        android:textColor="#333333"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvHeaderAnggota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Anggota"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/etSearchAnggota"
@@ -49,7 +42,7 @@
         android:singleLine="true"
         android:textColorHint="@color/black"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/tvHeaderAnggota" />
+        app:layout_constraintTop_toBottomOf="@id/headerAnggota" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDaftarAnggota"
@@ -57,8 +50,8 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
-        android:paddingBottom="80dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
+        android:paddingBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etSearchAnggota"
         tools:listitem="@layout/item_anggota_edit" />
 

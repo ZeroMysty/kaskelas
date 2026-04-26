@@ -64,10 +64,15 @@
         <EditText
             android:id="@+id/etKeteranganPemasukan"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="55dp"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
             android:background="@drawable/bg_search_white"
             android:hint="Keterangan"
             android:paddingHorizontal="20dp"
+            android:paddingVertical="15dp"
             android:textColorHint="#333333"
             android:textColor="#000000" />
     </LinearLayout>

@@ -14,7 +14,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        findViewById<ImageView>(R.id.btnBackSettings).setOnClickListener { finish() }
+
 
         val etNominalKas = findViewById<EditText>(R.id.etNominalKas)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanSettings)

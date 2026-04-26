@@ -24,7 +24,7 @@ class RiwayatActivity : AppCompatActivity() {
         loadTransaksi()
         updateTotals()
 
-        findViewById<ImageView>(R.id.btnBackRiwayat).setOnClickListener { finish() }
+
 
         setupBottomNav()
     }

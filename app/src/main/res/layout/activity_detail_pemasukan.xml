@@ -74,10 +74,12 @@
         <TextView
             android:id="@+id/tvDetailKeteranganP"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
+            android:minHeight="55dp"
             android:background="@drawable/bg_search_white"
-            android:gravity="center_vertical"
+            android:gravity="top|start"
             android:paddingHorizontal="20dp"
+            android:paddingVertical="15dp"
             android:text="Keterangan"
             android:textColor="#555555" />
     </LinearLayout>
