@@ -169,4 +169,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
         val db = this.writableDatabase
         return db.delete("anggota", "id = ?", arrayOf(id))
     }
+
+    // Fungsi Reset Seluruh Data (Factory Reset)
+    fun resetDatabase() {
+        val db = this.writableDatabase
+        db.execSQL("DELETE FROM transaksi")
+        db.execSQL("DELETE FROM anggota")
+        // Reset autoincrement ID jika perlu
+        db.execSQL("DELETE FROM sqlite_sequence WHERE name='transaksi'")
+    }
 }

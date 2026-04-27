@@ -95,7 +95,12 @@ class ChartDetailActivity : AppCompatActivity() {
 
             axisRight.isEnabled = false
             xAxis.setDrawGridLines(false)
-            axisLeft.setDrawGridLines(false)
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = android.graphics.Color.parseColor("#E0E0E0")
+                gridLineWidth = 0.5f
+                setDrawAxisLine(false)
+            }
 
             setTouchEnabled(true)
             isDragEnabled = true

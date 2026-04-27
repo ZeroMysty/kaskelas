@@ -56,17 +56,13 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
         }
 
-        // --- NAVIGASI EXPAND CHART DENGAN TRANSISI ---
-        val cardGrafik = findViewById<View>(R.id.cardGrafik)
+        // --- NAVIGASI KE DETAIL CHART (Tanpa Animasi karena Bug) ---
+        val ivGrafikDummy = findViewById<View>(R.id.ivGrafikDummy)
         val openChartDetail = {
-            val intent = Intent(this, ChartDetailActivity::class.java)
-            val options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this, cardGrafik, "chart_transition"
-            )
-            startActivity(intent, options.toBundle())
+            startActivity(Intent(this, ChartDetailActivity::class.java))
         }
-        cardGrafik?.setOnClickListener { openChartDetail() }
-        findViewById<View>(R.id.ivGrafikDummy)?.setOnClickListener { openChartDetail() }
+        findViewById<View>(R.id.cardGrafik)?.setOnClickListener { openChartDetail() }
+        ivGrafikDummy?.setOnClickListener { openChartDetail() }
 
         // --- ANIMASI LAYOUT MASUK ---
         val rootLayout = findViewById<View>(android.R.id.content)
@@ -208,9 +204,9 @@ class MainActivity : AppCompatActivity() {
             setDrawBorders(false)
             setDrawGridBackground(false)
 
-            // 🔥 FORCE BERDEMPETAN (Edge to Edge)
-            setExtraOffsets(0f, 0f, 0f, 0f)
-            setViewPortOffsets(0f, 0f, 0f, 0f)
+            // 🔥 RESET OFFSETS (Gunakan default dulu untuk debugging)
+            setExtraOffsets(5f, 5f, 5f, 5f)
+            resetViewPortOffsets()
 
             // 🔥 PREVIEW MODE
             setTouchEnabled(false)
@@ -218,6 +214,5 @@ class MainActivity : AppCompatActivity() {
 
             invalidate()
         }
-
     }
 }

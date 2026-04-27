@@ -46,17 +46,82 @@
             android:textColor="#777777"
             android:textSize="12sp" />
 
-        <EditText
-            android:id="@+id/etNominalKas"
+        <RadioGroup
+            android:id="@+id/rgNominalOptions"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bg_input_putih"
-            android:hint="Contoh: 2000"
-            android:inputType="number"
-            android:paddingHorizontal="16dp"
-            android:textColor="#111111"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <RadioButton
+                android:id="@+id/rb2k"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Rp2.000"
+                android:textColor="@drawable/text_radio_selector"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb5k"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Rp5.000"
+                android:textColor="@drawable/text_radio_selector"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rbCustom"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_radio_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Custom"
+                android:textColor="@drawable/text_radio_selector"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/layoutCustomNominal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Masukkan Nominal Custom"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etNominalKas"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_putih"
+                android:hint="Contoh: 10000"
+                android:inputType="number"
+                android:paddingHorizontal="16dp"
+                android:textColor="#111111"
+                android:textColorHint="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnSimpanSettings"
@@ -65,6 +130,18 @@
             android:layout_marginTop="24dp"
             android:backgroundTint="#4CAF50"
             android:text="Simpan Pengaturan"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
+
+        <Button
+            android:id="@+id/btnHapusData"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F44336"
+            android:text="Hapus Semua Data"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
