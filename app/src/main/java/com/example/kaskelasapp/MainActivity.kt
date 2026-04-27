@@ -1,5 +1,6 @@
 package com.example.kaskelasapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -17,15 +18,17 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.*
+import androidx.core.graphics.toColorInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHelper
     private lateinit var rvAnggotaBeranda: RecyclerView
     private lateinit var adapter: AnggotaBayarAdapter
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) 
+        setContentView(R.layout.activity_main)
 
         db = DatabaseHelper(this)
 
@@ -39,8 +42,7 @@ class MainActivity : AppCompatActivity() {
         // Hide keyboard when clicking outside
         window.decorView.setOnTouchListener { _, _ ->
             hideKeyboard()
-            false
-        }
+            false}
 
         // --- NAVIGASI TOMBOL ---
         findViewById<View>(R.id.btnNavPemasukan).setOnClickListener {
@@ -53,10 +55,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RiwayatActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
-            overridePendingTransition(0, 0)
         }
-
-        // --- NAVIGASI KE DETAIL CHART (Tanpa Animasi karena Bug) ---
         val ivGrafikDummy = findViewById<View>(R.id.ivGrafikDummy)
         val openChartDetail = {
             startActivity(Intent(this, ChartDetailActivity::class.java))
@@ -66,7 +65,10 @@ class MainActivity : AppCompatActivity() {
 
         // --- ANIMASI LAYOUT MASUK ---
         val rootLayout = findViewById<View>(android.R.id.content)
-        val animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.item_animation_fall_down)
+        val animation = android.view.animation.AnimationUtils.loadAnimation(
+            this,
+            R.anim.item_animation_fall_down
+        )
         rootLayout.startAnimation(animation)
 
         BottomNavHelper.setupBottomNav(this)
@@ -107,13 +109,15 @@ class MainActivity : AppCompatActivity() {
         val nominalDefault = sharedPref.getString("nominal_kas", "2000") ?: "2000"
 
         val localeID = java.util.Locale.Builder().setLanguage("id").setRegion("ID").build()
-        val formatRupiah = java.text.NumberFormat.getNumberInstance(localeID).format(nominalDefault.toLongOrNull() ?: 0)
+        val formatRupiah = java.text.NumberFormat.getNumberInstance(localeID)
+            .format(nominalDefault.toLongOrNull() ?: 0)
 
         android.app.AlertDialog.Builder(this)
             .setTitle("Konfirmasi Pembayaran")
             .setMessage("Apakah Anda akan melanjutkan pembayaran kas sebesar Rp$formatRupiah untuk ${anggota.nama}?")
             .setPositiveButton("Lanjut") { _, _ ->
-                val tgl = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault()).format(java.util.Date())
+                val tgl = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+                    .format(java.util.Date())
                 db.insertTransaksi(
                     judul = "Bayar kas",
                     jumlah = nominalDefault,
@@ -124,7 +128,11 @@ class MainActivity : AppCompatActivity() {
                 )
                 updateSaldo()
                 loadChart()
-                android.widget.Toast.makeText(this, "Pembayaran berhasil!", android.widget.Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(
+                    this,
+                    "Pembayaran berhasil!",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
             }
             .setNegativeButton("Batal", null)
             .show()
@@ -132,23 +140,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateSaldo() {
         val total = db.hitungTotalSaldo()
-        val formatRupiah = java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
-            maximumFractionDigits = 0
-            minimumFractionDigits = 0
-        }
+        val formatRupiah =
+            java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
+                maximumFractionDigits = 0
+                minimumFractionDigits = 0
+            }
         findViewById<android.widget.TextView>(R.id.tvTotalUangkas).text = formatRupiah.format(total)
     }
-    private fun loadChart() {
-        val chart = findViewById<LineChart>(R.id.ivGrafikDummy)
-        if (chart == null) return
 
-        val transaksi = db.getAllTransaksi().sortedBy { it.id }
+    private fun loadChart() {
+        val chart = findViewById<LineChart>(R.id.ivGrafikDummy) ?: return
+
+        val sdf = java.text.SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+
+        // 🔥 SORT BERDASARKAN TANGGAL (Biar urutan bener)
+        val transaksi = db.getAllTransaksi().sortedBy {
+            try {
+                sdf.parse(it.tanggal)
+            } catch (e: Exception) {
+                Date(0)
+            }
+        }
 
         val entries = mutableListOf<Entry>()
         var saldo = 0f
 
+        entries.add(Entry(0f, 0f))
+
         transaksi.forEachIndexed { index, it ->
-            // Bersihkan titik agar tidak salah hitung (TradingView style fix)
             val cleanJumlah = it.jumlah.replace(".", "").replace(",", "")
             val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
 
@@ -157,43 +176,39 @@ class MainActivity : AppCompatActivity() {
             } else {
                 saldo -= jumlah
             }
-            entries.add(Entry(index.toFloat(), saldo))
+
+            entries.add(Entry((index + 1).toFloat(), saldo))
         }
 
-        if (entries.isEmpty()) {
-            entries.add(Entry(0f, 0f))
+        // Kalau masih kosong
+        if (entries.size == 1) {
             entries.add(Entry(1f, 0f))
         }
 
-        // 🔥 BUAT SATU DATASET UNTUK GRADIENT (TradingView Style)
+        // 🔥 DATASET
         val dataSet = LineDataSet(entries, "Saldo").apply {
-            // Warna garis biru premium
-            color = android.graphics.Color.parseColor("#2196F3")
+            this.color = "#2196F3".toColorInt()
             lineWidth = 2.5f
 
-            // Smooth curves (dibuat lebih tajam/dempet)
+            // 🔥 Smooth tapi gak over
             mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.08f
+            cubicIntensity = 0.2f
 
             setDrawCircles(false)
             setDrawValues(false)
 
-            // 🔥 GRADIENT FILL
+            // 🔥 Gradient fill
             setDrawFilled(true)
             val drawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
             fillDrawable = drawable
 
-            // Hilangkan garis bantu saat disentuh
             setDrawHorizontalHighlightIndicator(false)
-            highLightColor = android.graphics.Color.parseColor("#2196F3")
+            highLightColor = "#2196F3".toColorInt()
         }
 
-        val dataSets = listOf(dataSet)
-
         chart.apply {
-            data = LineData(dataSets as List<ILineDataSet>)
+            data = LineData(dataSet)
 
-            // 🔥 STYLE MINIMALIS (TRADING VIEW)
             description.isEnabled = false
             legend.isEnabled = false
 
@@ -204,13 +219,11 @@ class MainActivity : AppCompatActivity() {
             setDrawBorders(false)
             setDrawGridBackground(false)
 
-            // 🔥 RESET OFFSETS (Gunakan default dulu untuk debugging)
-            setExtraOffsets(5f, 5f, 5f, 5f)
-            resetViewPortOffsets()
+            // 🔥 Ini penting biar gak kepotong awalnya
+            setViewPortOffsets(0f, 0f, 0f, 0f)
 
-            // 🔥 PREVIEW MODE
             setTouchEnabled(false)
-            animateY(1000)
+            animateY(800)
 
             invalidate()
         }
