@@ -153,18 +153,20 @@ class MainActivity : AppCompatActivity() {
 
         val sdf = java.text.SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
-        // 🔥 SORT BERDASARKAN TANGGAL (Biar urutan bener)
-        val transaksi = db.getAllTransaksi().sortedBy {
+        // 🔥 FIX SORTING: Urutkan berdasarkan Tanggal (ASC) dan ID (ASC)
+        // Agar transaksi di hari yang sama tidak berantakan di grafik
+        val transaksi = db.getAllTransaksi().sortedWith(compareBy({
             try {
                 sdf.parse(it.tanggal)
             } catch (e: Exception) {
                 Date(0)
             }
-        }
+        }, { it.id }))
 
         val entries = mutableListOf<Entry>()
         var saldo = 0f
 
+        // Titik awal
         entries.add(Entry(0f, 0f))
 
         transaksi.forEachIndexed { index, it ->
@@ -180,38 +182,31 @@ class MainActivity : AppCompatActivity() {
             entries.add(Entry((index + 1).toFloat(), saldo))
         }
 
-        // Kalau masih kosong
         if (entries.size == 1) {
             entries.add(Entry(1f, 0f))
         }
 
-        // 🔥 DATASET
         val dataSet = LineDataSet(entries, "Saldo").apply {
-            this.color = "#2196F3".toColorInt()
-            lineWidth = 2.5f
-
-            // 🔥 Smooth tapi gak over
+            color = "#2196F3".toColorInt()
+            lineWidth = 3f
             mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.2f
-
+            cubicIntensity = 0.15f // Lebih smooth
             setDrawCircles(false)
             setDrawValues(false)
-
-            // 🔥 Gradient fill
             setDrawFilled(true)
-            val drawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
-            fillDrawable = drawable
-
+            fillDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
+            
+            // Highlight styling
             setDrawHorizontalHighlightIndicator(false)
             highLightColor = "#2196F3".toColorInt()
         }
 
         chart.apply {
             data = LineData(dataSet)
-
             description.isEnabled = false
             legend.isEnabled = false
 
+            // Sembunyikan axis untuk mini-chart agar terlihat sleek
             axisRight.isEnabled = false
             axisLeft.isEnabled = false
             xAxis.isEnabled = false
@@ -219,12 +214,11 @@ class MainActivity : AppCompatActivity() {
             setDrawBorders(false)
             setDrawGridBackground(false)
 
-            // 🔥 Ini penting biar gak kepotong awalnya
-            setViewPortOffsets(0f, 0f, 0f, 0f)
+            // Beri sedikit offset agar garis tidak terpotong di tepi card
+            setViewPortOffsets(0f, 10f, 0f, 0f)
 
             setTouchEnabled(false)
-            animateY(800)
-
+            animateY(1000)
             invalidate()
         }
     }

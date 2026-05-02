@@ -31,24 +31,27 @@ class ChartDetailActivity : AppCompatActivity() {
         val chart = findViewById<LineChart>(R.id.fullLineChart)
         val transaksi = db.getAllTransaksi()
 
-        if (transaksi.isEmpty()) return
+        if (transaksi.isEmpty()) {
+            chart.clear()
+            return
+        }
 
-        val mainColor = ContextCompat.getColor(this, R.color.blue_premium)
-
-        val entries = mutableListOf<Entry>()
-        var saldo = 0f
-
-        // 🔥 SORT LEBIH AMAN (opsional tapi disarankan)
+        val mainColor = "#2196F3".toColorInt()
         val sdf = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
-        val sorted = transaksi.sortedBy {
+
+        // 🔥 FIX SORTING: Urutkan Tanggal (ASC) lalu ID (ASC)
+        val sorted = transaksi.sortedWith(compareBy({
             try {
                 sdf.parse(it.tanggal)
             } catch (e: Exception) {
                 java.util.Date(0)
             }
-        }
+        }, { it.id }))
 
-        // 🔥 TITIK AWAL DARI 0
+        val entries = mutableListOf<Entry>()
+        var saldo = 0f
+
+        // Titik awal
         entries.add(Entry(0f, 0f))
 
         sorted.forEachIndexed { index, trx ->
@@ -60,8 +63,6 @@ class ChartDetailActivity : AppCompatActivity() {
             } else {
                 saldo -= jumlah
             }
-
-            // 🔥 index + 1 biar geser dari titik awal
             entries.add(Entry((index + 1).toFloat(), saldo))
         }
 
@@ -72,22 +73,19 @@ class ChartDetailActivity : AppCompatActivity() {
         val lineDataSet = LineDataSet(entries, "Saldo").apply {
             color = mainColor
             lineWidth = 3f
-
             mode = LineDataSet.Mode.CUBIC_BEZIER
             cubicIntensity = 0.15f
 
             setDrawCircles(true)
             setCircleColor(mainColor)
-            circleRadius = 6f
+            circleRadius = 5f
             setDrawCircleHole(true)
-            circleHoleRadius = 3f
+            circleHoleRadius = 2.5f
             circleHoleColor = android.graphics.Color.WHITE
 
             setDrawValues(false)
-
             setDrawFilled(true)
-            fillDrawable =
-                ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
+            fillDrawable = ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
 
             enableDashedHighlightLine(10f, 5f, 0f)
             highLightColor = mainColor
@@ -95,30 +93,33 @@ class ChartDetailActivity : AppCompatActivity() {
 
         chart.apply {
             data = LineData(lineDataSet)
-
-            description.text = "Grafik Kas (Per Input)"
+            description.isEnabled = false
             legend.isEnabled = false
 
             axisRight.isEnabled = false
-            xAxis.setDrawGridLines(false)
+            xAxis.apply {
+                setDrawGridLines(false)
+                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                setDrawAxisLine(true)
+                axisMinimum = 0f
+            }
 
             axisLeft.apply {
                 setDrawGridLines(true)
-                "#E0E0E0".toColorInt().also { gridColor = it }
+                gridColor = "#E0E0E0".toColorInt()
                 gridLineWidth = 0.5f
                 setDrawAxisLine(false)
+                // Beri padding di atas dan bawah
+                spaceTop = 20f
+                spaceBottom = 20f
             }
-
-            // 🔥 BIAR GAK KEPOTONG KIRI
-            xAxis.axisMinimum = 0f
 
             setTouchEnabled(true)
             isDragEnabled = true
             setScaleEnabled(true)
             setPinchZoom(true)
 
-            animateX(800)
-
+            animateX(1000)
             invalidate()
         }
     }
