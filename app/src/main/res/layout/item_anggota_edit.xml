@@ -5,63 +5,79 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="25dp"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="#99ffffff">
+    android:layout_marginVertical="5dp"
+    app:cardBackgroundColor="#00000000"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_glass_card"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14dp">
 
-        <ImageView
-            android:id="@+id/imgIconEdit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivChevron"
-            app:layout_constraintStart_toEndOf="@id/imgIconEdit"
-            app:layout_constraintTop_toTopOf="parent">
+        <!-- Avatar Inisial -->
+        <FrameLayout
+            android:id="@+id/avatarContainer"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_avatar">
 
             <TextView
-                android:id="@+id/tvNamaEdit"
+                android:id="@+id/tvAvatarInisialEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="A"
+                android:textColor="#2563EB"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-black" />
+        </FrameLayout>
+
+        <!-- Info Anggota -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/avatarContainer"
+            android:layout_toStartOf="@+id/ivArrow"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNamaAnggotaEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nama Anggota"
-                android:textColor="#333333"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="@color/text_main"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
             <TextView
-                android:id="@+id/tvIdEdit"
+                android:id="@+id/tvIdAnggotaEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID: 2024001"
-                android:textColor="#555555"
+                android:layout_marginTop="3dp"
+                android:alpha="0.45"
+                android:text="ID: 001"
+                android:textColor="@color/text_main"
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <!-- Panah Kanan -->
         <ImageView
-            android:id="@+id/ivChevron"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:id="@+id/ivArrow"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:alpha="0.25"
             android:src="@drawable/ic_chevron_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#6BA5C1" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:tint="@color/text_main" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

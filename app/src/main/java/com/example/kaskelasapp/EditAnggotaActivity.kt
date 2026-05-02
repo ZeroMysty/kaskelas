@@ -11,70 +11,49 @@ class EditAnggotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_anggota)
-        val db = DatabaseHelper(this)
 
-        val btnHapus = findViewById<Button>(R.id.btnHapusAnggota)
-        val btnSimpan = findViewById<Button>(R.id.btnSimpanEdit)
-        val btnBack = findViewById<ImageView>(R.id.btnBackEdit)
+        val db = DatabaseHelper(this)
+        val anggotaId = intent.getStringExtra("ANGGOTA_ID") ?: ""
+        val anggotaNama = intent.getStringExtra("ANGGOTA_NAMA") ?: ""
+        val anggotaNis = intent.getStringExtra("ANGGOTA_NIS") ?: ""
 
         val etNama = findViewById<EditText>(R.id.etEditNama)
-        val etId = findViewById<EditText>(R.id.etEditID)
-        val etNis = findViewById<EditText>(R.id.etEditNIS)
+        val etNis = findViewById<EditText>(R.id.etEditNis)
+        val btnSimpan = findViewById<Button>(R.id.btnSimpanEdit)
+        val btnHapus = findViewById<Button>(R.id.btnHapusAnggota)
+        val btnBack = findViewById<ImageView>(R.id.btnBackEdit)
 
-        val anggotaId = intent.getStringExtra("ANGGOTA_ID")
-        val anggotaNama = intent.getStringExtra("ANGGOTA_NAMA")
-        val anggotaNis = intent.getStringExtra("ANGGOTA_NIS")
-
-        if (anggotaId == null) {
-            Toast.makeText(this, "Data anggota tidak ditemukan", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        // Isi field dengan data sebelumnya
-        etId.setText(anggotaId)
-        etId.isEnabled = true
-        etNama.setText(anggotaNama ?: "")
-        etNis.setText(anggotaNis ?: "")
-
-        val btnLihatHistory = findViewById<Button>(R.id.btnLihatHistory)
-        btnLihatHistory.text = "Lihat History $anggotaNama"
-        btnLihatHistory.setOnClickListener {
-            val intent = android.content.Intent(this, DetailAnggotaActivity::class.java)
-            intent.putExtra("ANGGOTA_ID", anggotaId)
-            intent.putExtra("ANGGOTA_NAMA", anggotaNama)
-            intent.putExtra("ANGGOTA_NIS", anggotaNis)
-            startActivity(intent)
-        }
+        etNama.setText(anggotaNama)
+        etNis.setText(anggotaNis)
 
         btnBack.setOnClickListener { finish() }
 
         btnSimpan.setOnClickListener {
-            val newNama = etNama.text.toString().trim()
-            val newNis = etNis.text.toString().trim()
+            val newNama = etNama.text.toString()
+            val newNis = etNis.text.toString()
 
-            if (newNama.isEmpty()) {
-                Toast.makeText(this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (newNama.isNotEmpty() && newNis.isNotEmpty()) {
+                val result = db.updateAnggota(anggotaId, newNama, newNis)
+                if (result > 0) {
+                    Toast.makeText(this, "Data diperbarui", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Gagal memperbarui", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            val rows = db.updateAnggota(anggotaId, newNama, newNis)
-            if (rows > 0) {
-                Toast.makeText(this, "Berhasil diperbarui", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Gagal memperbarui", Toast.LENGTH_SHORT).show()
-            }
-            finish()
         }
 
         btnHapus.setOnClickListener {
-            val deleted = db.deleteAnggota(anggotaId)
-            if (deleted > 0) {
-                Toast.makeText(this, "Anggota dihapus", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Gagal menghapus anggota", Toast.LENGTH_SHORT).show()
-            }
-            finish()
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Hapus Anggota")
+                .setMessage("Apakah Anda yakin ingin menghapus ${anggotaNama}?")
+                .setPositiveButton("Ya") { _, _ ->
+                    db.deleteAnggota(anggotaId)
+                    Toast.makeText(this, "Anggota dihapus", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .setNegativeButton("Tidak", null)
+                .show()
         }
     }
 }

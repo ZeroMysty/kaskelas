@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import android.view.View
@@ -19,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.*
 import androidx.core.graphics.toColorInt
+import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHelper
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }
-        val ivGrafikDummy = findViewById<View>(R.id.ivGrafikDummy)
+        val ivGrafikDummy = findViewById<View>(R.id.lineChart)
         val openChartDetail = {
             startActivity(Intent(this, ChartDetailActivity::class.java))
         }
@@ -64,19 +67,7 @@ class MainActivity : AppCompatActivity() {
         ivGrafikDummy?.setOnClickListener { openChartDetail() }
 
         // --- ANIMASI LAYOUT MASUK ---
-        val rootLayout = findViewById<View>(android.R.id.content)
-        val animation = android.view.animation.AnimationUtils.loadAnimation(
-            this,
-            R.anim.item_animation_fall_down
-        )
-        rootLayout.startAnimation(animation)
-
-        BottomNavHelper.setupBottomNav(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateSaldo()
+            updateSaldo()
         loadChart()
         loadAnggotaBayar()
     }
@@ -145,11 +136,11 @@ class MainActivity : AppCompatActivity() {
                 maximumFractionDigits = 0
                 minimumFractionDigits = 0
             }
-        findViewById<android.widget.TextView>(R.id.tvTotalUangkas).text = formatRupiah.format(total)
+        findViewById<android.widget.TextView>(R.id.tvTotalSaldo).text = formatRupiah.format(total)
     }
 
     private fun loadChart() {
-        val chart = findViewById<LineChart>(R.id.ivGrafikDummy) ?: return
+        val chart = findViewById<LineChart>(R.id.lineChart) ?: return
 
         val sdf = java.text.SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
@@ -187,18 +178,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         val dataSet = LineDataSet(entries, "Saldo").apply {
-            color = "#2196F3".toColorInt()
-            lineWidth = 3f
+            color = Color.parseColor("#2563EB") // Biru yang lebih vibrant
+            lineWidth = 3.5f
             mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.15f // Lebih smooth
-            setDrawCircles(false)
+            cubicIntensity = 0.2f
+            setDrawCircles(true)
+            setCircleColor(Color.parseColor("#2563EB"))
+            circleRadius = 4f
+            circleHoleRadius = 2f
+            setDrawCircleHole(true)
             setDrawValues(false)
             setDrawFilled(true)
             fillDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
             
             // Highlight styling
             setDrawHorizontalHighlightIndicator(false)
-            highLightColor = "#2196F3".toColorInt()
+            setDrawVerticalHighlightIndicator(true)
+            highLightColor = Color.parseColor("#2563EB")
+            highlightLineWidth = 1.5f
         }
 
         chart.apply {
@@ -206,19 +203,47 @@ class MainActivity : AppCompatActivity() {
             description.isEnabled = false
             legend.isEnabled = false
 
-            // Sembunyikan axis untuk mini-chart agar terlihat sleek
+            // Styling Axis
             axisRight.isEnabled = false
-            axisLeft.isEnabled = false
-            xAxis.isEnabled = false
+            
+            axisLeft.apply {
+                isEnabled = true
+                setDrawGridLines(true)
+                gridColor = Color.parseColor("#10000000") // Grid tipis
+                textColor = Color.parseColor("#64748B")
+                textSize = 9f
+                setLabelCount(4, true)
+                axisLineColor = Color.TRANSPARENT
+                // Format ribuan
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return if (value >= 1000 || value <= -1000) "${(value / 1000).toInt()}k" else value.toInt().toString()
+                    }
+                }
+            }
+
+            xAxis.apply {
+                isEnabled = true
+                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                textColor = Color.parseColor("#64748B")
+                textSize = 9f
+                axisLineColor = Color.TRANSPARENT
+                setLabelCount(5, false)
+            }
 
             setDrawBorders(false)
             setDrawGridBackground(false)
+            
+            // Atur padding agar label terlihat
+            setExtraOffsets(10f, 0f, 10f, 10f)
 
-            // Beri sedikit offset agar garis tidak terpotong di tepi card
-            setViewPortOffsets(0f, 10f, 0f, 0f)
-
-            setTouchEnabled(false)
-            animateY(1000)
+            setTouchEnabled(true)
+            setDragEnabled(true)
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            
+            animateX(1200)
             invalidate()
         }
     }

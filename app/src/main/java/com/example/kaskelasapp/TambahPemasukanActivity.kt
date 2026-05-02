@@ -19,7 +19,7 @@ class TambahPemasukanActivity : AppCompatActivity() {
         val db = DatabaseHelper(this)
 
         // 🔥 Ambil dari XML (HARUS SESUAI ID)
-        val etNama = findViewById<EditText>(R.id.etNamaPembayaran)
+        val etNama = findViewById<EditText>(R.id.etNamaPemasukan)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPemasukan)
         val etKet = findViewById<EditText>(R.id.etKeteranganPemasukan)
         val btnSimpan = findViewById<Button >(R.id.btnSimpanPemasukan)

@@ -13,72 +13,88 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val etNominalKas = findViewById<EditText>(R.id.etNominalKas)
+        val etNominalCustom = findViewById<EditText>(R.id.etNominalCustom)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanSettings)
-        val btnHapusData = findViewById<Button>(R.id.btnHapusData)
-        val rgNominal = findViewById<RadioGroup>(R.id.rgNominalOptions)
-        val layoutCustom = findViewById<View>(R.id.layoutCustomNominal)
+        val btnResetData = findViewById<Button>(R.id.resetData)
+        
+        val btn2k = findViewById<Button>(R.id.btnNominal2)
+        val btn5k = findViewById<Button>(R.id.btnNominal5)
+        val btnLainnya = findViewById<Button>(R.id.btnNominalLainnya)
 
         val sharedPref = getSharedPreferences("SettingsKas", Context.MODE_PRIVATE)
         val currentNominal = sharedPref.getString("nominal_kas", "2000") ?: "2000"
         
-        etNominalKas.addTextChangedListener(CurrencyTextWatcher(etNominalKas))
+        etNominalCustom.addTextChangedListener(CurrencyTextWatcher(etNominalCustom))
 
-        // Set Initial State Berdasarkan Data Tersimpan
-        when (currentNominal) {
-            "2000" -> {
-                findViewById<RadioButton>(R.id.rb2k).isChecked = true
-                layoutCustom.visibility = View.GONE
-            }
-            "5000" -> {
-                findViewById<RadioButton>(R.id.rb5k).isChecked = true
-                layoutCustom.visibility = View.GONE
-            }
-            else -> {
-                findViewById<RadioButton>(R.id.rbCustom).isChecked = true
-                layoutCustom.visibility = View.VISIBLE
-                etNominalKas.setText(currentNominal)
+        // UI State Logic
+        fun updateButtonStyles(selectedNominal: String) {
+            // Reset styles (using glassy backgrounds)
+            btn2k.alpha = 0.6f
+            btn5k.alpha = 0.6f
+            btnLainnya.alpha = 0.6f
+            
+            when (selectedNominal) {
+                "2000" -> btn2k.alpha = 1.0f
+                "5000" -> btn5k.alpha = 1.0f
+                else -> btnLainnya.alpha = 1.0f
             }
         }
 
-        // Listener RadioGroup (Tampilkan/Sembunyikan Input Custom)
-        rgNominal.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rbCustom) {
-                layoutCustom.visibility = View.VISIBLE
-            } else {
-                layoutCustom.visibility = View.GONE
-            }
+        updateButtonStyles(currentNominal)
+        if (currentNominal != "2000" && currentNominal != "5000") {
+            etNominalCustom.setText(currentNominal)
+            etNominalCustom.visibility = View.VISIBLE
+        } else {
+            etNominalCustom.visibility = View.GONE
+        }
+
+        btn2k.setOnClickListener {
+            updateButtonStyles("2000")
+            etNominalCustom.visibility = View.GONE
+            saveNominal("2000")
+        }
+
+        btn5k.setOnClickListener {
+            updateButtonStyles("5000")
+            etNominalCustom.visibility = View.GONE
+            saveNominal("5000")
+        }
+
+        btnLainnya.setOnClickListener {
+            updateButtonStyles("lainnya")
+            etNominalCustom.visibility = View.VISIBLE
+            etNominalCustom.requestFocus()
         }
 
         btnSimpan.setOnClickListener {
-            val selectedId = rgNominal.checkedRadioButtonId
-            var finalNominal = ""
-
-            when (selectedId) {
-                R.id.rb2k -> finalNominal = "2000"
-                R.id.rb5k -> finalNominal = "5000"
-                R.id.rbCustom -> {
-                    finalNominal = etNominalKas.text.toString().replace(".", "")
+            val nominalText = etNominalCustom.text.toString().replace(".", "")
+            if (etNominalCustom.visibility == View.VISIBLE) {
+                if (nominalText.isNotEmpty()) {
+                    saveNominal(nominalText)
+                    Toast.makeText(this, "Pengaturan disimpan", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Masukkan nominal custom", Toast.LENGTH_SHORT).show()
                 }
-            }
-
-            if (finalNominal.isNotEmpty()) {
-                with(sharedPref.edit()) {
-                    putString("nominal_kas", finalNominal)
-                    apply()
-                }
-                Toast.makeText(this, "Pengaturan berhasil disimpan", Toast.LENGTH_SHORT).show()
-                finish()
             } else {
-                Toast.makeText(this, "Nominal tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Pengaturan disimpan", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 
-        btnHapusData.setOnClickListener {
+        btnResetData.setOnClickListener {
             showFirstWarning()
         }
 
         BottomNavHelper.setupBottomNav(this)
+    }
+
+    private fun saveNominal(nominal: String) {
+        val sharedPref = getSharedPreferences("SettingsKas", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("nominal_kas", nominal)
+            apply()
+        }
     }
 
     private fun showFirstWarning() {
@@ -122,7 +138,6 @@ class SettingsActivity : AppCompatActivity() {
                     Toast.makeText(this@SettingsActivity, "Seluruh data telah dihapus", Toast.LENGTH_LONG).show()
                     dialog.dismiss()
                     
-                    // Kembali ke MainActivity (Beranda)
                     val intent = Intent(this@SettingsActivity, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

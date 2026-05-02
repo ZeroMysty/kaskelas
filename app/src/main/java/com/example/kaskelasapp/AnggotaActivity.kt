@@ -4,16 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.Button
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 class AnggotaActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHelper
@@ -31,7 +29,7 @@ class AnggotaActivity : AppCompatActivity() {
 
         loadDataAnggota()
 
-        findViewById<Button>(R.id.btnTambahAnggotaBaru).setOnClickListener {
+        findViewById<ExtendedFloatingActionButton>(R.id.btnTambahAnggotaBaru).setOnClickListener {
             startActivity(Intent(this, TambahAnggotaActivity::class.java))
         }
 
@@ -58,10 +56,8 @@ class AnggotaActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // Back button
-
-
         BottomNavHelper.setupBottomNav(this)
+        BackgroundHelper.applyAnimatedBackground(this)
     }
 
     override fun onResume() {
@@ -76,6 +72,7 @@ class AnggotaActivity : AppCompatActivity() {
 
     private fun loadDataAnggota() {
         daftarAnggotaFull = db.getAllAnggota()
+        findViewById<TextView>(R.id.tvTotalAnggota).text = "${daftarAnggotaFull.size} Anggota"
         adapter = AnggotaAdapter(daftarAnggotaFull, R.layout.item_anggota_edit) { anggota: Anggota ->
             val intent = Intent(this, EditAnggotaActivity::class.java)
             intent.putExtra("ANGGOTA_ID", anggota.id)

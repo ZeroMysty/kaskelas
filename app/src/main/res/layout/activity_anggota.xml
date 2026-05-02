@@ -1,80 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <RelativeLayout
-        android:id="@+id/headerAnggota"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent">
+    <include layout="@layout/animated_background" />
 
-        <TextView
-            android:id="@+id/tvHeaderAnggota"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Anggota"
-            android:textColor="#333333"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/etSearchAnggota"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_search_white"
-        android:drawableStart="@android:drawable/ic_menu_search"
-        android:drawablePadding="12dp"
-        android:hint="Cari Anggota..."
-        android:paddingHorizontal="16dp"
-        android:textSize="14sp"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
-        android:singleLine="true"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/headerAnggota" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDaftarAnggota"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSearchAnggota"
-        tools:listitem="@layout/item_anggota_edit" />
+        android:paddingBottom="110dp">
 
-    <com.google.android.material.button.MaterialButton
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/headerAnggota"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manajemen Anggota"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h1"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="4dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="6dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_balance_card"
+                    android:padding="@dimen/padding_card">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+                        <TextView
+                            android:text="Daftar Siswa Terdaftar"
+                            android:textColor="@color/text_white"
+                            android:textSize="@dimen/text_body"
+                            android:alpha="0.8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tvTotalAnggota"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0 Anggota"
+                            android:textColor="@color/text_white"
+                            android:textSize="36sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_glass_card"
+                        android:backgroundTint="#20FFFFFF" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="12dp"
+                        android:alpha="0.8"
+                        android:src="@drawable/nav_members"
+                        app:tint="@color/text_white" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_glass_card">
+                    <ImageView
+                        android:id="@+id/ivSearchIcon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="18dp"
+                        android:alpha="0.35"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/text_main" />
+                    <EditText
+                        android:id="@+id/etSearchAnggota"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@+id/ivSearchIcon"
+                        android:background="@null"
+                        android:hint="Cari berdasarkan nama..."
+                        android:paddingStart="10dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/text_main"
+                        android:textColorHint="@color/text_sub"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDaftarAnggota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="4dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnTambahAnggotaBaru"
         android:layout_width="wrap_content"
-        android:layout_height="54dp"
-        android:layout_margin="24dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/margin_main"
+        android:layout_marginBottom="115dp"
         android:text="Anggota Baru"
+        android:textColor="@color/text_white"
         android:textAllCaps="false"
-        android:textColor="#333333"
-        android:backgroundTint="#B0D4EC"
-        app:cornerRadius="27dp"
-        app:icon="@drawable/blue_add"
-        app:iconTint="#2196F3"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:icon="@drawable/ic_plus_circle_green"
+        app:iconTint="@color/text_white"
+        app:backgroundTint="@color/brand_primary"
+        app:elevation="8dp" />
 
-    <include
-        android:id="@+id/bottomNavInclude"
-        layout="@layout/bottom_nav"
+    <include layout="@layout/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_gravity="bottom" />
+</FrameLayout>

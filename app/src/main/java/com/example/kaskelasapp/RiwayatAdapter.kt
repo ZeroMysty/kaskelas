@@ -7,15 +7,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class RiwayatAdapter(private val list: List<Transaksi>, private val onClick: (Transaksi) -> Unit) :
+class RiwayatAdapter(private var list: List<Transaksi>, private val onClick: (Transaksi) -> Unit) :
     RecyclerView.Adapter<RiwayatAdapter.ViewHolder>() {
 
+    fun updateData(newList: List<Transaksi>) {
+        list = newList
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvJudul = view.findViewById<TextView>(R.id.tvNamaTransaksi)
-        val tvTanggal = view.findViewById<TextView>(R.id.tvTanggal)
-        val tvJumlah = view.findViewById<TextView>(R.id.tvStatus)
-        val imgIcon = view.findViewById<ImageView>(R.id.imgIconRiwayat)
-        val imgTypeIndicator = view.findViewById<ImageView>(R.id.imgTypeIndicator)
+        val tvJudul = view.findViewById<TextView>(R.id.tvNamaRiwayat)
+        val tvTanggal = view.findViewById<TextView>(R.id.tvTanggalRiwayat)
+        val tvJumlah = view.findViewById<TextView>(R.id.tvNominalRiwayat)
+        val ivTipe = view.findViewById<ImageView>(R.id.ivTipeRiwayat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,9 +32,6 @@ class RiwayatAdapter(private val list: List<Transaksi>, private val onClick: (Tr
         holder.tvJudul.text = data.nama
         holder.tvTanggal.text = data.tanggal
 
-        // Default icon
-        holder.imgIcon.setImageResource(R.drawable.ic_wallet)
-
         val localeID = java.util.Locale.Builder().setLanguage("id").setRegion("ID").build()
         val numberFormat = java.text.NumberFormat.getNumberInstance(localeID)
         val formattedJumlah = numberFormat.format(data.jumlah.toLongOrNull() ?: 0)
@@ -38,12 +39,14 @@ class RiwayatAdapter(private val list: List<Transaksi>, private val onClick: (Tr
         // Ganti ikon dan warna berdasarkan tipe (Masuk/Keluar)
         if (data.tipe == "MASUK") {
             holder.tvJumlah.text = "+ Rp $formattedJumlah"
-            holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
-            holder.imgTypeIndicator.setImageResource(R.drawable.ic_plus_circle_green)
+            holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#16A34A"))
+            holder.ivTipe.setImageResource(R.drawable.ic_plus_circle_green)
+            holder.ivTipe.setBackgroundResource(R.drawable.bg_chip_green)
         } else {
             holder.tvJumlah.text = "- Rp $formattedJumlah"
-            holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#F44336"))
-            holder.imgTypeIndicator.setImageResource(R.drawable.ic_minus_circle_red)
+            holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#DC2626"))
+            holder.ivTipe.setImageResource(R.drawable.ic_minus_circle_red)
+            holder.ivTipe.setBackgroundResource(R.drawable.bg_chip_red)
         }
 
         holder.itemView.setOnClickListener { onClick(data) }

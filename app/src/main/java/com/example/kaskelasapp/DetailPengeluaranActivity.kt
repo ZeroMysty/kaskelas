@@ -1,7 +1,9 @@
 package com.example.kaskelasapp
 
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.View
+import android.widget.ImageButton
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -16,14 +18,25 @@ class DetailPengeluaranActivity : AppCompatActivity() {
         if (transaksiId != -1) {
             val transaksi = db.getTransaksiById(transaksiId)
             if (transaksi != null) {
-                findViewById<TextView>(R.id.tvDetailNamaK).text = transaksi.nama
-                findViewById<TextView>(R.id.tvDetailJumlahK).text = "Rp${transaksi.jumlah}"
-                findViewById<TextView>(R.id.tvDetailTanggalK).text = transaksi.tanggal
-                findViewById<TextView>(R.id.tvDetailKeteranganK).text = transaksi.keterangan
+                findViewById<TextView>(R.id.tvDetailNamaPe).text = transaksi.nama
+                findViewById<TextView>(R.id.tvDetailJumlahPe).text = "Rp ${transaksi.jumlah}"
+                findViewById<TextView>(R.id.tvDetailTanggalPe).text = transaksi.tanggal
+                findViewById<TextView>(R.id.tvDetailKeteranganPe).text = transaksi.keterangan
             }
         }
 
-        findViewById<ImageView>(R.id.btnBackDetailK).setOnClickListener { finish() }
-        findViewById<android.widget.Button>(R.id.btnSelesaiDetailK).setOnClickListener { finish() }
+        findViewById<ImageButton>(R.id.btnBackDetailPe).setOnClickListener { finish() }
+        findViewById<Button>(R.id.btnSelesaiDetailPe).setOnClickListener { finish() }
+
+        BackgroundHelper.applyAnimatedBackground(this)
+        
+        // Quick Entrance Anim
+        findViewById<View>(R.id.tvDetailJumlahPe)?.parent?.let { parent ->
+            if (parent is View) {
+                parent.alpha = 0f
+                parent.translationY = 50f
+                parent.animate().alpha(1f).translationY(0f).setDuration(500).setStartDelay(100).start()
+            }
+        }
     }
 }

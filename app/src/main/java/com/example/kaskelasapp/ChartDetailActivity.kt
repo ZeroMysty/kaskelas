@@ -1,31 +1,32 @@
 package com.example.kaskelasapp
 
-import androidx.core.content.ContextCompat
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import androidx.core.graphics.toColorInt
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ChartDetailActivity : AppCompatActivity() {
 
     private lateinit var db: DatabaseHelper
-    private val filterOptions = arrayOf("Semua", "Bulan Ini", "7 Hari Terakhir")
+    private val filterOptions = arrayOf("Semua", "Bulan Ini", "7 Hari")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chart_detail)
 
+        BackgroundHelper.applyAnimatedBackground(this)
         db = DatabaseHelper(this)
 
-        findViewById<ImageButton>(R.id.btnBackChart).setOnClickListener {
-            supportFinishAfterTransition()
+        findViewById<ImageView>(R.id.btnBackChart).setOnClickListener {
+            finish()
         }
 
         setupSpinner()
@@ -54,11 +55,9 @@ class ChartDetailActivity : AppCompatActivity() {
             return
         }
 
-        val mainColor = "#2196F3".toColorInt()
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val now = Calendar.getInstance()
 
-        // 🔥 FILTER DATA
         val filteredTransaksi = allTransaksi.filter { trx ->
             when (filter) {
                 "Bulan Ini" -> {
@@ -69,7 +68,7 @@ class ChartDetailActivity : AppCompatActivity() {
                                 cal.get(Calendar.YEAR) == now.get(Calendar.YEAR)
                     } catch (e: Exception) { false }
                 }
-                "7 Hari Terakhir" -> {
+                "7 Hari" -> {
                     val cal = Calendar.getInstance()
                     try {
                         cal.time = sdf.parse(trx.tanggal) ?: Date()
@@ -77,52 +76,38 @@ class ChartDetailActivity : AppCompatActivity() {
                         diff <= 7 * 24 * 60 * 60 * 1000L && diff >= 0
                     } catch (e: Exception) { false }
                 }
-                else -> true // Semua
+                else -> true
             }
         }
 
-        // 🔥 SORTING (Tetap stabil ASC)
         val sorted = filteredTransaksi.sortedWith(compareBy({
-            try { sdf.parse(it.tanggal) } catch (e: Exception) { java.util.Date(0) }
+            try { sdf.parse(it.tanggal) } catch (e: Exception) { Date(0) }
         }, { it.id }))
 
         val entries = mutableListOf<Entry>()
         var saldo = 0f
-
-        // Titik awal 0
         entries.add(Entry(0f, 0f))
 
         sorted.forEachIndexed { index, trx ->
             val cleanJumlah = trx.jumlah.replace(".", "").replace(",", "")
             val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
-
-            if (trx.tipe == "MASUK") {
-                saldo += jumlah
-            } else {
-                saldo -= jumlah
-            }
+            if (trx.tipe == "MASUK") saldo += jumlah else saldo -= jumlah
             entries.add(Entry((index + 1).toFloat(), saldo))
         }
 
-        if (entries.size == 1) {
-            entries.add(Entry(1f, 0f))
-        }
-
         val lineDataSet = LineDataSet(entries, "Saldo").apply {
-            color = mainColor
-            lineWidth = 3f
+            color = Color.parseColor("#2563EB")
+            lineWidth = 3.5f
             mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.15f
+            cubicIntensity = 0.2f // Bikin lekukan lebih smooth
             setDrawCircles(true)
-            setCircleColor(mainColor)
-            circleRadius = 5f
+            setCircleColor(Color.parseColor("#2563EB"))
+            circleRadius = 4f
             setDrawCircleHole(true)
-            circleHoleRadius = 2.5f
-            circleHoleColor = android.graphics.Color.WHITE
+            circleHoleColor = Color.WHITE
             setDrawValues(false)
             setDrawFilled(true)
             fillDrawable = ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
-            highLightColor = mainColor
         }
 
         chart.apply {
@@ -130,21 +115,45 @@ class ChartDetailActivity : AppCompatActivity() {
             description.isEnabled = false
             legend.isEnabled = false
             axisRight.isEnabled = false
+
+            // Tambahkan Extra Offsets (Kiri, Atas, Kanan, Bawah)
+            // Sebagai pengganti padding CardView yang dibuang
+            setExtraOffsets(24f, 32f, 24f, 16f)
+
             xAxis.apply {
-                setDrawGridLines(false)
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
-                setDrawAxisLine(true)
-                axisMinimum = 0f
+                setDrawGridLines(false)
+                textColor = Color.parseColor("#64748B")
+                axisLineColor = Color.TRANSPARENT
+                granularity = 1f
+                setAvoidFirstLastClipping(true)
+                spaceMin = 0.15f
+                spaceMax = 0.15f
             }
+
             axisLeft.apply {
+                // Biarkan grid agar tetap mudah dibaca
                 setDrawGridLines(true)
-                gridColor = "#E0E0E0".toColorInt()
-                setDrawAxisLine(false)
-                spaceTop = 20f
-                spaceBottom = 20f
+                gridColor = Color.parseColor("#12000000")
+                textColor = Color.parseColor("#64748B")
+                axisLineColor = Color.TRANSPARENT
+                setLabelCount(6, false)
+
+                axisMinimum = 0f
+                spaceTop = 35f
+
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return when {
+                            value >= 1000000 -> "${(value / 1000000).toInt()}M"
+                            value >= 1000 -> "${(value / 1000).toInt()}k"
+                            else -> value.toInt().toString()
+                        }
+                    }
+                }
             }
-            setTouchEnabled(true)
-            animateX(1000)
+
+            animateX(800)
             invalidate()
         }
     }

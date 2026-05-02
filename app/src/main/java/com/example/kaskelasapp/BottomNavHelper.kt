@@ -13,35 +13,27 @@ object BottomNavHelper {
         val navSettings = activity.findViewById<View>(R.id.navSettings)
 
         // Update UI Active State
-        val colorActive = android.graphics.Color.parseColor("#111111")
-        val colorInactive = android.graphics.Color.parseColor("#999999")
+        val colorActive = android.graphics.Color.parseColor("#2196F3") // Blue for active
+        val colorInactive = android.graphics.Color.parseColor("#999999") // Gray for inactive
 
         val ivHome = activity.findViewById<android.widget.ImageView>(R.id.ivNavHome)
-        val tvHome = activity.findViewById<android.widget.TextView>(R.id.tvNavHome)
         val ivHistory = activity.findViewById<android.widget.ImageView>(R.id.ivNavHistory)
-        val tvHistory = activity.findViewById<android.widget.TextView>(R.id.tvNavHistory)
         val ivProfile = activity.findViewById<android.widget.ImageView>(R.id.ivNavProfile)
-        val tvProfile = activity.findViewById<android.widget.TextView>(R.id.tvNavProfile)
         val ivSettings = activity.findViewById<android.widget.ImageView>(R.id.ivNavSettings)
-        val tvSettings = activity.findViewById<android.widget.TextView>(R.id.tvNavSettings)
 
         // Reset all to Inactive
         val items = listOf(
-            Triple(ivHome, tvHome, MainActivity::class.java),
-            Triple(ivHistory, tvHistory, RiwayatActivity::class.java),
-            Triple(ivProfile, tvProfile, AnggotaActivity::class.java),
-            Triple(ivSettings, tvSettings, SettingsActivity::class.java)
+            Pair(ivHome, MainActivity::class.java),
+            Pair(ivHistory, RiwayatActivity::class.java),
+            Pair(ivProfile, AnggotaActivity::class.java),
+            Pair(ivSettings, SettingsActivity::class.java)
         )
 
         for (item in items) {
             item.first?.setColorFilter(colorInactive)
-            item.second?.setTextColor(colorInactive)
-            item.second?.setTypeface(null, android.graphics.Typeface.NORMAL)
             
-            if (item.third.isInstance(activity)) {
+            if (item.second.isInstance(activity)) {
                 item.first?.setColorFilter(colorActive)
-                item.second?.setTextColor(colorActive)
-                item.second?.setTypeface(null, android.graphics.Typeface.BOLD)
             }
         }
 

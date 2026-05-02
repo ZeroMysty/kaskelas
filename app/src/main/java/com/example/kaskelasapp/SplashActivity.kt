@@ -13,29 +13,70 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        BackgroundHelper.applyAnimatedBackground(this)
 
-        val cardLogo = findViewById<CardView>(R.id.cardLogoSplash)
-        val layoutText = findViewById<LinearLayout>(R.id.layoutTextSplash)
+        val cardLogo = findViewById<android.view.View>(R.id.cardLogoSplash)
+        val layoutText = findViewById<android.widget.LinearLayout>(R.id.layoutTextSplash)
+        val logoGlow = findViewById<android.view.View>(R.id.logoGlow)
+        val flashOverlay = findViewById<android.view.View>(R.id.flashOverlay)
+        val p1 = findViewById<android.view.View>(R.id.p1)
+        val p2 = findViewById<android.view.View>(R.id.p2)
+        val p3 = findViewById<android.view.View>(R.id.p3)
+        val p4 = findViewById<android.view.View>(R.id.p4)
 
-        // Load Animations
-        val logoAnim = AnimationUtils.loadAnimation(this, R.anim.logo_premium_anim)
-        val textAnim = AnimationUtils.loadAnimation(this, R.anim.text_fade_in)
-
-        // Start Logo Animation
-        cardLogo.startAnimation(logoAnim)
+        // 1. Persiapan Awal (Hidden)
+        cardLogo.alpha = 0f
+        cardLogo.scaleX = 3f // Mulai dari sangat besar (Aggressive zoom in)
+        cardLogo.scaleY = 3f
         
-        // Munculkan teks dengan delay setelah logo mulai geser
-        Handler(Looper.getMainLooper()).postDelayed({
-            layoutText.visibility = android.view.View.VISIBLE
-            layoutText.startAnimation(textAnim)
-        }, 1200)
+        // 2. Ledakan Logo (Aggressive Zoom In)
+        cardLogo.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(400) // Sangat cepat
+            .setInterpolator(android.view.animation.AccelerateInterpolator())
+            .withEndAction {
+                // Flash Effect
+                flashOverlay.alpha = 0.8f
+                flashOverlay.animate().alpha(0f).setDuration(300).start()
+                
+                // Shake Effect
+                cardLogo.animate().translationYBy(-20f).setDuration(50).withEndAction {
+                    cardLogo.animate().translationYBy(40f).setDuration(50).withEndAction {
+                        cardLogo.animate().translationY(0f).setDuration(50).start()
+                    }.start()
+                }.start()
 
-        // Transisi ke MainActivity
+                // Particle Burst
+                p1?.animate()?.alpha(1f)?.translationX(-300f)?.translationY(-400f)?.scaleX(2f)?.scaleY(2f)?.setDuration(600)?.start()
+                p2?.animate()?.alpha(1f)?.translationX(350f)?.translationY(-250f)?.scaleX(1.5f)?.scaleY(1.5f)?.setDuration(700)?.start()
+                p3?.animate()?.alpha(1f)?.translationX(-200f)?.translationY(500f)?.scaleX(3f)?.scaleY(3f)?.setDuration(550)?.start()
+                p4?.animate()?.alpha(1f)?.translationX(400f)?.translationY(300f)?.scaleX(2.5f)?.scaleY(2.5f)?.setDuration(650)?.start()
+
+                // Logo Glow Intense
+                logoGlow?.animate()?.alpha(1f)?.scaleX(2f)?.scaleY(2f)?.setDuration(300)?.start()
+
+                // 3. Teks Reveal (Snappy)
+                layoutText?.let {
+                    it.translationY = 100f
+                    it.animate()
+                        .alpha(1f)
+                        .translationY(0f)
+                        .setDuration(400)
+                        .setStartDelay(200)
+                        .setInterpolator(android.view.animation.OvershootInterpolator())
+                        .start()
+                }
+            }
+            .start()
+
+        // Transisi Cepat ke MainActivity
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }, 3500) 
+        }, 2200) // Total waktu lebih singkat
     }
 }

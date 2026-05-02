@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,9 +14,8 @@ class AnggotaBayarAdapter(
 ) : RecyclerView.Adapter<AnggotaBayarAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvNama = view.findViewById<TextView>(R.id.tvNamaItem)
-        val imgIcon = view.findViewById<ImageView>(R.id.imgIcon)
-        val btnBayar = view.findViewById<TextView>(R.id.btnBayarItem)
+        val tvNama = view.findViewById<TextView>(R.id.tvNamaAnggotaBayar)
+        val btnBayar = view.findViewById<Button>(R.id.btnBayar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

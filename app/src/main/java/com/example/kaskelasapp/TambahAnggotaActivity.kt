@@ -13,11 +13,11 @@ class TambahAnggotaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tambah_anggota)
 
         val db = DatabaseHelper(this)
-        val etNama = findViewById<EditText>(R.id.etTambahNama)
-        val etID = findViewById<EditText>(R.id.etTambahID)
-        val etNIS = findViewById<EditText>(R.id.etTambahNIS)
-        val btnSimpan = findViewById<Button>(R.id.btnSimpanBaru)
-        val btnBack = findViewById<ImageView>(R.id.btnBackTambah)
+        val etNama = findViewById<EditText>(R.id.etNamaAnggota)
+        val etID = findViewById<EditText>(R.id.etIdAnggota)
+        val etNIS = findViewById<EditText>(R.id.etNisAnggota)
+        val btnSimpan = findViewById<Button>(R.id.btnSimpanAnggota)
+        val btnBack = findViewById<ImageView>(R.id.btnBackTambahAnggota)
 
         btnBack.setOnClickListener { finish() }
         btnSimpan.setOnClickListener {

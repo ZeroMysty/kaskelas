@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Layout Spacing -->
+    <dimen name="margin_main">20dp</dimen>
+    <dimen name="margin_section">24dp</dimen>
+    <dimen name="padding_card">20dp</dimen>
+    <dimen name="padding_card_lg">24dp</dimen>
+
+    <!-- Corner Radii -->
+    <dimen name="radius_card">20dp</dimen>
+    <dimen name="radius_card_sm">14dp</dimen>
+    <dimen name="radius_button">16dp</dimen>
+    <dimen name="radius_pill">50dp</dimen>
+
+    <!-- Component Sizes -->
+    <dimen name="nav_height">65dp</dimen>
+    <dimen name="nav_margin_bottom">35dp</dimen>
+    <dimen name="nav_icon_size">24dp</dimen>
+    <dimen name="header_top_padding">24dp</dimen>
+    <dimen name="header_height">90dp</dimen>
+    <dimen name="card_balance_height">160dp</dimen>
+    <dimen name="btn_action_height">56dp</dimen>
+    <dimen name="icon_md">22dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_h1">24sp</dimen>
+    <dimen name="text_h2">16sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_xs">11sp</dimen>
+</resources>
