@@ -17,14 +17,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvTitleChart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Detail Statistik Keuangan"
+        android:text="Statistik Kas"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="#333333"
+        app:layout_constraintBottom_toBottomOf="@id/btnBackChart"
+        app:layout_constraintEnd_toStartOf="@id/spinnerFilterWaktu"
+        app:layout_constraintStart_toEndOf="@id/btnBackChart"
+        app:layout_constraintTop_toTopOf="@id/btnBackChart" />
+
+    <Spinner
+        android:id="@+id/spinnerFilterWaktu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@id/btnBackChart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/btnBackChart" />
 
     <com.github.mikephil.charting.charts.LineChart

@@ -2,17 +2,21 @@ package com.example.kaskelasapp
 
 import androidx.core.content.ContextCompat
 import android.os.Bundle
-import android.widget.ImageButton
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import androidx.core.graphics.toColorInt
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChartDetailActivity : AppCompatActivity() {
 
     private lateinit var db: DatabaseHelper
+    private val filterOptions = arrayOf("Semua", "Bulan Ini", "7 Hari Terakhir")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,34 +28,68 @@ class ChartDetailActivity : AppCompatActivity() {
             supportFinishAfterTransition()
         }
 
-        setupFullChart()
+        setupSpinner()
     }
 
-    private fun setupFullChart() {
-        val chart = findViewById<LineChart>(R.id.fullLineChart)
-        val transaksi = db.getAllTransaksi()
+    private fun setupSpinner() {
+        val spinner = findViewById<Spinner>(R.id.spinnerFilterWaktu)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
 
-        if (transaksi.isEmpty()) {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                setupFullChart(filterOptions[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun setupFullChart(filter: String) {
+        val chart = findViewById<LineChart>(R.id.fullLineChart)
+        val allTransaksi = db.getAllTransaksi()
+
+        if (allTransaksi.isEmpty()) {
             chart.clear()
             return
         }
 
         val mainColor = "#2196F3".toColorInt()
-        val sdf = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val now = Calendar.getInstance()
 
-        // 🔥 FIX SORTING: Urutkan Tanggal (ASC) lalu ID (ASC)
-        val sorted = transaksi.sortedWith(compareBy({
-            try {
-                sdf.parse(it.tanggal)
-            } catch (e: Exception) {
-                java.util.Date(0)
+        // 🔥 FILTER DATA
+        val filteredTransaksi = allTransaksi.filter { trx ->
+            when (filter) {
+                "Bulan Ini" -> {
+                    val cal = Calendar.getInstance()
+                    try {
+                        cal.time = sdf.parse(trx.tanggal) ?: Date()
+                        cal.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+                                cal.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                    } catch (e: Exception) { false }
+                }
+                "7 Hari Terakhir" -> {
+                    val cal = Calendar.getInstance()
+                    try {
+                        cal.time = sdf.parse(trx.tanggal) ?: Date()
+                        val diff = now.timeInMillis - cal.timeInMillis
+                        diff <= 7 * 24 * 60 * 60 * 1000L && diff >= 0
+                    } catch (e: Exception) { false }
+                }
+                else -> true // Semua
             }
+        }
+
+        // 🔥 SORTING (Tetap stabil ASC)
+        val sorted = filteredTransaksi.sortedWith(compareBy({
+            try { sdf.parse(it.tanggal) } catch (e: Exception) { java.util.Date(0) }
         }, { it.id }))
 
         val entries = mutableListOf<Entry>()
         var saldo = 0f
 
-        // Titik awal
+        // Titik awal 0
         entries.add(Entry(0f, 0f))
 
         sorted.forEachIndexed { index, trx ->
@@ -75,19 +113,15 @@ class ChartDetailActivity : AppCompatActivity() {
             lineWidth = 3f
             mode = LineDataSet.Mode.CUBIC_BEZIER
             cubicIntensity = 0.15f
-
             setDrawCircles(true)
             setCircleColor(mainColor)
             circleRadius = 5f
             setDrawCircleHole(true)
             circleHoleRadius = 2.5f
             circleHoleColor = android.graphics.Color.WHITE
-
             setDrawValues(false)
             setDrawFilled(true)
             fillDrawable = ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
-
-            enableDashedHighlightLine(10f, 5f, 0f)
             highLightColor = mainColor
         }
 
@@ -95,7 +129,6 @@ class ChartDetailActivity : AppCompatActivity() {
             data = LineData(lineDataSet)
             description.isEnabled = false
             legend.isEnabled = false
-
             axisRight.isEnabled = false
             xAxis.apply {
                 setDrawGridLines(false)
@@ -103,22 +136,14 @@ class ChartDetailActivity : AppCompatActivity() {
                 setDrawAxisLine(true)
                 axisMinimum = 0f
             }
-
             axisLeft.apply {
                 setDrawGridLines(true)
                 gridColor = "#E0E0E0".toColorInt()
-                gridLineWidth = 0.5f
                 setDrawAxisLine(false)
-                // Beri padding di atas dan bawah
                 spaceTop = 20f
                 spaceBottom = 20f
             }
-
             setTouchEnabled(true)
-            isDragEnabled = true
-            setScaleEnabled(true)
-            setPinchZoom(true)
-
             animateX(1000)
             invalidate()
         }
