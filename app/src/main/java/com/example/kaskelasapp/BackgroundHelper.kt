@@ -17,20 +17,20 @@ object BackgroundHelper {
         val shape6 = activity.findViewById<View>(R.id.bg_shape_6)
         val shape7 = activity.findViewById<View>(R.id.bg_shape_7)
 
-        // Drifting Animations (Organic Movement)
-        animateDrift(shape1, 12000, 40f, -60f)
-        animateDrift(shape2, 10000, -50f, 40f)
-        animateDrift(shape3, 15000, 30f, 70f)
+        // Drifting Animations (Organic Movement) - Faster and more visible
+        animateDrift(shape1, 8000, 60f, -80f)
+        animateDrift(shape2, 7000, -70f, 50f)
+        animateDrift(shape3, 10000, 40f, 90f)
         
         // Rotation for Geometric Shapes
-        animateRotation(shape4, 20000)
-        animateRotation(shape5, 25000)
-        animateRotation(shape7, 18000)
-
+        animateRotation(shape4, 15000)
+        animateRotation(shape5, 20000)
+        animateRotation(shape7, 12000)
+    
         // Pulse for Accent Shapes
-        animatePulse(shape3, 4000)
-        animatePulse(shape6, 3000)
-        animateDrift(shape6, 8000, 20f, -20f)
+        animatePulse(shape3, 3000)
+        animatePulse(shape6, 2500)
+        animateDrift(shape6, 6000, 30f, -30f)
     }
 
     private fun animateDrift(view: View?, duration: Long, deltaX: Float, deltaY: Float) {

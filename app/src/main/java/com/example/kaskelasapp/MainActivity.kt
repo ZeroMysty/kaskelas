@@ -8,7 +8,7 @@ import android.os.Looper
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,10 +66,8 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.cardGrafik)?.setOnClickListener { openChartDetail() }
         ivGrafikDummy?.setOnClickListener { openChartDetail() }
 
-        // --- ANIMASI LAYOUT MASUK ---
-            updateSaldo()
-        loadChart()
-        loadAnggotaBayar()
+        BottomNavHelper.setupBottomNav(this)
+        BackgroundHelper.applyAnimatedBackground(this)
     }
 
     private fun hideKeyboard() {

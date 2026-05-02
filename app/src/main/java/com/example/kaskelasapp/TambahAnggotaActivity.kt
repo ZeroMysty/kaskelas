@@ -11,6 +11,8 @@ class TambahAnggotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_anggota)
+        BackgroundHelper.applyAnimatedBackground(this)
+
 
         val db = DatabaseHelper(this)
         val etNama = findViewById<EditText>(R.id.etNamaAnggota)

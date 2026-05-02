@@ -87,6 +87,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         BottomNavHelper.setupBottomNav(this)
+        BackgroundHelper.applyAnimatedBackground(this)
     }
 
     private fun saveNominal(nominal: String) {

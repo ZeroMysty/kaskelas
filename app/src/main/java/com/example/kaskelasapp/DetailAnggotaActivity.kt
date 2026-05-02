@@ -15,6 +15,8 @@ class DetailAnggotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_anggota)
+        BackgroundHelper.applyAnimatedBackground(this)
+
 
         db = DatabaseHelper(this)
 

@@ -11,6 +11,8 @@ class EditAnggotaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_anggota)
+        BackgroundHelper.applyAnimatedBackground(this)
+
 
         val db = DatabaseHelper(this)
         val anggotaId = intent.getStringExtra("ANGGOTA_ID") ?: ""
