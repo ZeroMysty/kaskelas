@@ -71,12 +71,20 @@ class SplashActivity : AppCompatActivity() {
             }
             .start()
 
-        // Transisi Cepat ke MainActivity
+        // Transisi ke Onboarding atau MainActivity
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+            val isFinished = sharedPref.getBoolean("onboarding_finished", false)
+            
+            val intent = if (isFinished) {
+                Intent(this, MainActivity::class.java)
+            } else {
+                Intent(this, OnboardingActivity::class.java)
+            }
+            
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }, 2200) // Total waktu lebih singkat
+        }, 3500)
     }
 }

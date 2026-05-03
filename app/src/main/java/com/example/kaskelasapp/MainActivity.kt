@@ -14,11 +14,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.util.*
 import androidx.core.graphics.toColorInt
 import android.graphics.Color
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }
-        val ivGrafikDummy = findViewById<View>(R.id.lineChart)
+        val ivGrafikDummy = findViewById<View>(R.id.barChart)
         val openChartDetail = {
             startActivity(Intent(this, ChartDetailActivity::class.java))
         }
@@ -68,7 +68,95 @@ class MainActivity : AppCompatActivity() {
 
         BottomNavHelper.setupBottomNav(this)
         BackgroundHelper.applyAnimatedBackground(this)
+
+        // Tampilkan tutorial jika baru pertama kali install
+        findViewById<View>(R.id.tutorialRoot).post {
+            checkTutorial()
+        }
     }
+
+    private fun checkTutorial() {
+        val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+        val isTutorialDone = sharedPref.getBoolean("tutorial_done", false)
+        if (!isTutorialDone) {
+            startTutorial()
+        }
+    }
+
+    private fun startTutorial() {
+        val tutorialRoot = findViewById<View>(R.id.tutorialRoot)
+        val spotlight = findViewById<SpotlightView>(R.id.spotlightView)
+        val tvTitle = findViewById<android.widget.TextView>(R.id.tvTutorialTitle)
+        val tvDesc = findViewById<android.widget.TextView>(R.id.tvTutorialDesc)
+        val btnNext = findViewById<android.widget.Button>(R.id.btnNextTutorial)
+        
+        tutorialRoot.visibility = View.VISIBLE
+        
+        var step = 0
+        val steps = listOf(
+            Triple(findViewById<View>(R.id.cardBalance), "Dashboard Saldo", "Ini adalah ringkasan keuangan Anda. Semua total uang kas masuk dan keluar akan terakumulasi di sini."),
+            Triple(findViewById<View>(R.id.cardGrafik), "Statistik Kas", "Pantau naik-turunnya saldo kas Anda melalui grafik interaktif ini secara real-time."),
+            Triple(findViewById<View>(R.id.btnNavPemasukan), "Input Pemasukan", "Klik di sini untuk mencatat iuran yang masuk. Pastikan nominal sudah benar!"),
+            Triple(findViewById<View>(R.id.btnNavPengeluaran), "Input Pengeluaran", "Gunakan ini untuk mencatat pengeluaran kelas. Transparan dan akurat."),
+            Triple(findViewById<View>(R.id.rvAnggotaBeranda), "Daftar Anggota", "Daftar siswa di kelas Anda. Klik pada nama siswa untuk melihat riwayat pembayaran pribadi mereka."),
+            Triple(findViewById<View>(R.id.navSettings), "Menu Pengaturan", "Di sini Anda dapat mengatur nominal kas mingguan atau melakukan reset data jika diperlukan di masa mendatang.")
+        )
+        
+        fun showStep(i: Int) {
+            val current = steps[i]
+            val targetView = current.first
+            
+            // Beri tinggi ekstra untuk RecyclerView agar highlight LEBIH BESAR
+            if (current.second == "Daftar Anggota") {
+                targetView.minimumHeight = 1000
+            }
+
+            val centerY = spotlight.setTarget(targetView)
+            
+            val card = findViewById<androidx.cardview.widget.CardView>(R.id.cardTutorialInfo)
+            val params = card.layoutParams as android.widget.FrameLayout.LayoutParams
+            
+            // Khusus langkah pertama (Saldo), paksa kartu di bawah
+            if (i == 0) {
+                params.gravity = android.view.Gravity.BOTTOM
+                card.translationY = -80f
+            } else if (centerY > spotlight.height * 0.45) {
+                params.gravity = android.view.Gravity.TOP
+                card.translationY = 80f
+            } else {
+                params.gravity = android.view.Gravity.BOTTOM
+                card.translationY = -80f
+            }
+            card.layoutParams = params
+            
+            tvTitle.text = current.second
+            tvDesc.text = current.third
+            if (i == steps.size - 1) btnNext.text = "Selesai" else btnNext.text = "Lanjut"
+        }
+        
+        showStep(0)
+        
+        btnNext.setOnClickListener {
+            step++
+            if (step < steps.size) {
+                showStep(step)
+            } else {
+                finishTutorial()
+            }
+        }
+        
+        findViewById<android.view.View>(R.id.btnSkipTutorial).setOnClickListener {
+            finishTutorial()
+        }
+    }
+
+    private fun finishTutorial() {
+        val tutorialRoot = findViewById<android.view.View>(R.id.tutorialRoot)
+        tutorialRoot.visibility = android.view.View.GONE
+        getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+            .edit().putBoolean("tutorial_done", true).apply()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -145,81 +233,78 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadChart() {
-        val chart = findViewById<LineChart>(R.id.lineChart) ?: return
+        val chart = findViewById<BarChart>(R.id.barChart) ?: return
 
         val sdf = java.text.SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val days = mutableListOf<String>()
+        val entriesMasuk = mutableListOf<BarEntry>()
+        val entriesKeluar = mutableListOf<BarEntry>()
 
-        // 🔥 FIX SORTING: Urutkan berdasarkan Tanggal (ASC) dan ID (ASC)
-        // Agar transaksi di hari yang sama tidak berantakan di grafik
-        val transaksi = db.getAllTransaksi().sortedWith(compareBy({
-            try {
-                sdf.parse(it.tanggal)
-            } catch (e: Exception) {
-                Date(0)
-            }
-        }, { it.id }))
+        val allTransaksi = db.getAllTransaksi()
 
-        val entries = mutableListOf<Entry>()
-        var saldo = 0f
+        // Ambil data 7 hari terakhir (Hari ini di paling Kiri)
+        for (i in 0..6) {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -i) // 0 = Hari ini, 1 = Kemarin, dst
+            val dateStr = sdf.format(calendar.time)
+            
+            // Label sumbu X
+            val label = if (i == 0) "Hari Ini" else java.text.SimpleDateFormat("dd/MM", Locale.getDefault()).format(calendar.time)
+            days.add(label)
 
-        // Titik awal
-        entries.add(Entry(0f, 0f))
+            val totalMasuk = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "MASUK" }
+                .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
+            
+            val totalKeluar = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "KELUAR" }
+                .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
 
-        transaksi.forEachIndexed { index, it ->
-            val cleanJumlah = it.jumlah.replace(".", "").replace(",", "")
-            val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
-
-            if (it.tipe == "MASUK") {
-                saldo += jumlah
-            } else {
-                saldo -= jumlah
-            }
-
-            entries.add(Entry((index + 1).toFloat(), saldo))
+            entriesMasuk.add(BarEntry(i.toFloat(), totalMasuk))
+            entriesKeluar.add(BarEntry(i.toFloat(), totalKeluar))
         }
 
-        if (entries.size == 1) {
-            entries.add(Entry(1f, 0f))
-        }
-
-        val dataSet = LineDataSet(entries, "Saldo").apply {
-            color = Color.parseColor("#2563EB") // Biru yang lebih vibrant
-            lineWidth = 3.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.2f
-            setDrawCircles(true)
-            setCircleColor(Color.parseColor("#2563EB"))
-            circleRadius = 4f
-            circleHoleRadius = 2f
-            setDrawCircleHole(true)
+        val dataSetMasuk = BarDataSet(entriesMasuk, "Masuk").apply {
+            color = Color.parseColor("#16A34A")
             setDrawValues(false)
-            setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.chart_gradient)
-            
-            // Highlight styling
-            setDrawHorizontalHighlightIndicator(false)
-            setDrawVerticalHighlightIndicator(true)
-            highLightColor = Color.parseColor("#2563EB")
-            highlightLineWidth = 1.5f
+        }
+        val dataSetKeluar = BarDataSet(entriesKeluar, "Keluar").apply {
+            color = Color.parseColor("#DC2626")
+            setDrawValues(false)
         }
 
-        chart.apply {
-            data = LineData(dataSet)
-            description.isEnabled = false
-            legend.isEnabled = false
+        val barData = BarData(dataSetMasuk, dataSetKeluar)
+        val groupSpace = 0.35f
+        val barSpace = 0.05f
+        val barWidth = 0.275f 
 
-            // Styling Axis
-            axisRight.isEnabled = false
+        barData.barWidth = barWidth
+        
+        chart.apply {
+            data = barData
+            groupBars(0f, groupSpace, barSpace)
             
-            axisLeft.apply {
-                isEnabled = true
-                setDrawGridLines(true)
-                gridColor = Color.parseColor("#10000000") // Grid tipis
+            description.isEnabled = false
+            legend.isEnabled = true
+            legend.textColor = Color.parseColor("#64748B")
+            legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.LEFT
+            
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(days)
+                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setCenterAxisLabels(true)
+                axisMinimum = 0f
+                axisMaximum = days.size.toFloat()
+                setDrawGridLines(false)
                 textColor = Color.parseColor("#64748B")
-                textSize = 9f
-                setLabelCount(4, true)
                 axisLineColor = Color.TRANSPARENT
-                // Format ribuan
+            }
+
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = Color.parseColor("#10000000")
+                textColor = Color.parseColor("#64748B")
+                axisLineColor = Color.TRANSPARENT
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         return if (value >= 1000 || value <= -1000) "${(value / 1000).toInt()}k" else value.toInt().toString()
@@ -227,28 +312,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            xAxis.apply {
-                isEnabled = true
-                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
-                setDrawGridLines(false)
-                textColor = Color.parseColor("#64748B")
-                textSize = 9f
-                axisLineColor = Color.TRANSPARENT
-                setLabelCount(5, false)
-            }
-
-            setDrawBorders(false)
-            setDrawGridBackground(false)
-            
-            // Atur padding agar label terlihat
-            setExtraOffsets(10f, 0f, 10f, 10f)
-
+            axisRight.isEnabled = false
             setTouchEnabled(true)
-            setDragEnabled(true)
-            setScaleEnabled(false)
-            setPinchZoom(false)
-            
-            animateX(1200)
+            animateY(1000)
             invalidate()
         }
     }

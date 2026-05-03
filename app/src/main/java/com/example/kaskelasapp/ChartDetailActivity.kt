@@ -6,10 +6,11 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,113 +48,94 @@ class ChartDetailActivity : AppCompatActivity() {
     }
 
     private fun setupFullChart(filter: String) {
-        val chart = findViewById<LineChart>(R.id.fullLineChart)
+        val chart = findViewById<BarChart>(R.id.fullBarChart)
         val allTransaksi = db.getAllTransaksi()
 
-        if (allTransaksi.isEmpty()) {
-            chart.clear()
-            return
-        }
-
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val now = Calendar.getInstance()
+        val days = mutableListOf<String>()
+        val entriesMasuk = mutableListOf<BarEntry>()
+        val entriesKeluar = mutableListOf<BarEntry>()
 
-        val filteredTransaksi = allTransaksi.filter { trx ->
-            when (filter) {
-                "Bulan Ini" -> {
-                    val cal = Calendar.getInstance()
-                    try {
-                        cal.time = sdf.parse(trx.tanggal) ?: Date()
-                        cal.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
-                                cal.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-                    } catch (e: Exception) { false }
-                }
-                "7 Hari" -> {
-                    val cal = Calendar.getInstance()
-                    try {
-                        cal.time = sdf.parse(trx.tanggal) ?: Date()
-                        val diff = now.timeInMillis - cal.timeInMillis
-                        diff <= 7 * 24 * 60 * 60 * 1000L && diff >= 0
-                    } catch (e: Exception) { false }
-                }
-                else -> true
-            }
+        // Tentukan jumlah hari berdasarkan filter
+        val range = when (filter) {
+            "7 Hari" -> 6
+            "Bulan Ini" -> Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1
+            else -> 14 // Default Semua tampilkan 15 hari terakhir
         }
 
-        val sorted = filteredTransaksi.sortedWith(compareBy({
-            try { sdf.parse(it.tanggal) } catch (e: Exception) { Date(0) }
-        }, { it.id }))
+        for (i in 0..range) {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -i)
+            val dateStr = sdf.format(calendar.time)
+            
+            val label = if (i == 0) "Hari Ini" else SimpleDateFormat("dd/MM", Locale.getDefault()).format(calendar.time)
+            days.add(label)
 
-        val entries = mutableListOf<Entry>()
-        var saldo = 0f
-        entries.add(Entry(0f, 0f))
+            val totalMasuk = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "MASUK" }
+                .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
+            
+            val totalKeluar = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "KELUAR" }
+                .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
 
-        sorted.forEachIndexed { index, trx ->
-            val cleanJumlah = trx.jumlah.replace(".", "").replace(",", "")
-            val jumlah = cleanJumlah.toFloatOrNull() ?: 0f
-            if (trx.tipe == "MASUK") saldo += jumlah else saldo -= jumlah
-            entries.add(Entry((index + 1).toFloat(), saldo))
+            entriesMasuk.add(BarEntry(i.toFloat(), totalMasuk))
+            entriesKeluar.add(BarEntry(i.toFloat(), totalKeluar))
         }
 
-        val lineDataSet = LineDataSet(entries, "Saldo").apply {
-            color = Color.parseColor("#2563EB")
-            lineWidth = 3.5f
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            cubicIntensity = 0.2f // Bikin lekukan lebih smooth
-            setDrawCircles(true)
-            setCircleColor(Color.parseColor("#2563EB"))
-            circleRadius = 4f
-            setDrawCircleHole(true)
-            circleHoleColor = Color.WHITE
+        val dataSetMasuk = BarDataSet(entriesMasuk, "Masuk").apply {
+            color = Color.parseColor("#16A34A")
             setDrawValues(false)
-            setDrawFilled(true)
-            fillDrawable = ContextCompat.getDrawable(this@ChartDetailActivity, R.drawable.chart_gradient)
+        }
+        val dataSetKeluar = BarDataSet(entriesKeluar, "Keluar").apply {
+            color = Color.parseColor("#DC2626")
+            setDrawValues(false)
         }
 
-        chart.apply {
-            data = LineData(lineDataSet)
-            description.isEnabled = false
-            legend.isEnabled = false
-            axisRight.isEnabled = false
+        val barData = BarData(dataSetMasuk, dataSetKeluar)
+        val groupSpace = 0.35f
+        val barSpace = 0.05f
+        val barWidth = 0.275f 
 
-            // Tambahkan Extra Offsets (Kiri, Atas, Kanan, Bawah)
-            // Sebagai pengganti padding CardView yang dibuang
-            setExtraOffsets(24f, 32f, 24f, 16f)
+        barData.barWidth = barWidth
+        
+        chart.apply {
+            data = barData
+            groupBars(0f, groupSpace, barSpace)
+            
+            description.isEnabled = false
+            legend.isEnabled = true
+            legend.textColor = Color.parseColor("#64748B")
+            legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.LEFT
+            
+            setExtraOffsets(10f, 20f, 10f, 10f)
 
             xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(days)
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setCenterAxisLabels(true)
+                axisMinimum = 0f
+                axisMaximum = days.size.toFloat()
                 setDrawGridLines(false)
                 textColor = Color.parseColor("#64748B")
                 axisLineColor = Color.TRANSPARENT
-                granularity = 1f
-                setAvoidFirstLastClipping(true)
-                spaceMin = 0.15f
-                spaceMax = 0.15f
             }
 
             axisLeft.apply {
-                // Biarkan grid agar tetap mudah dibaca
                 setDrawGridLines(true)
-                gridColor = Color.parseColor("#12000000")
+                gridColor = Color.parseColor("#10000000")
                 textColor = Color.parseColor("#64748B")
                 axisLineColor = Color.TRANSPARENT
-                setLabelCount(6, false)
-
-                axisMinimum = 0f
-                spaceTop = 35f
-
                 valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
-                        return when {
-                            value >= 1000000 -> "${(value / 1000000).toInt()}M"
-                            value >= 1000 -> "${(value / 1000).toInt()}k"
-                            else -> value.toInt().toString()
-                        }
+                        return if (value >= 1000 || value <= -1000) "${(value / 1000).toInt()}k" else value.toInt().toString()
                     }
                 }
             }
 
-            animateX(800)
+            axisRight.isEnabled = false
+            setTouchEnabled(true)
+            animateY(1000)
             invalidate()
         }
     }
