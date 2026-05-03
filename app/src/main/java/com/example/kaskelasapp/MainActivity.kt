@@ -242,10 +242,10 @@ class MainActivity : AppCompatActivity() {
 
         val allTransaksi = db.getAllTransaksi()
 
-        // Ambil data 7 hari terakhir (Hari ini di paling Kiri)
-        for (i in 0..6) {
+        // Ambil data 7 hari terakhir (Kronologis: Masa Lalu -> Hari Ini)
+        for (i in 6 downTo 0) {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, -i) // 0 = Hari ini, 1 = Kemarin, dst
+            calendar.add(Calendar.DAY_OF_YEAR, -i)
             val dateStr = sdf.format(calendar.time)
             
             // Label sumbu X
@@ -258,8 +258,10 @@ class MainActivity : AppCompatActivity() {
             val totalKeluar = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "KELUAR" }
                 .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
 
-            entriesMasuk.add(BarEntry(i.toFloat(), totalMasuk))
-            entriesKeluar.add(BarEntry(i.toFloat(), totalKeluar))
+            // Index 0 = 6 hari lalu, Index 6 = Hari Ini
+            val xPos = (6 - i).toFloat()
+            entriesMasuk.add(BarEntry(xPos, totalMasuk))
+            entriesKeluar.add(BarEntry(xPos, totalKeluar))
         }
 
         val dataSetMasuk = BarDataSet(entriesMasuk, "Masuk").apply {
@@ -286,7 +288,7 @@ class MainActivity : AppCompatActivity() {
             legend.isEnabled = true
             legend.textColor = Color.parseColor("#64748B")
             legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
-            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.LEFT
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.RIGHT
             
             xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(days)

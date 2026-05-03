@@ -17,7 +17,7 @@ import java.util.*
 class ChartDetailActivity : AppCompatActivity() {
 
     private lateinit var db: DatabaseHelper
-    private val filterOptions = arrayOf("Semua", "Bulan Ini", "7 Hari")
+    private val filterOptions = arrayOf("7 Hari Terakhir", "Bulan Ini", "Tahun Ini", "Semua Data")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,12 +58,14 @@ class ChartDetailActivity : AppCompatActivity() {
 
         // Tentukan jumlah hari berdasarkan filter
         val range = when (filter) {
-            "7 Hari" -> 6
+            "7 Hari Terakhir" -> 6
             "Bulan Ini" -> Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1
-            else -> 14 // Default Semua tampilkan 15 hari terakhir
+            "Tahun Ini" -> Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
+            else -> 29 // Default Semua tampilkan 30 hari terakhir
         }
 
-        for (i in 0..range) {
+        // Kronologis: Masa Lalu -> Hari Ini
+        for (i in range downTo 0) {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -i)
             val dateStr = sdf.format(calendar.time)
@@ -77,8 +79,9 @@ class ChartDetailActivity : AppCompatActivity() {
             val totalKeluar = allTransaksi.filter { it.tanggal == dateStr && it.tipe == "KELUAR" }
                 .sumOf { it.jumlah.replace(".", "").replace(",", "").toLongOrNull() ?: 0L }.toFloat()
 
-            entriesMasuk.add(BarEntry(i.toFloat(), totalMasuk))
-            entriesKeluar.add(BarEntry(i.toFloat(), totalKeluar))
+            val xPos = (range - i).toFloat()
+            entriesMasuk.add(BarEntry(xPos, totalMasuk))
+            entriesKeluar.add(BarEntry(xPos, totalKeluar))
         }
 
         val dataSetMasuk = BarDataSet(entriesMasuk, "Masuk").apply {
@@ -105,7 +108,7 @@ class ChartDetailActivity : AppCompatActivity() {
             legend.isEnabled = true
             legend.textColor = Color.parseColor("#64748B")
             legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
-            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.LEFT
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.RIGHT
             
             setExtraOffsets(10f, 20f, 10f, 10f)
 
