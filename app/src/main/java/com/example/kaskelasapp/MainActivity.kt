@@ -70,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         BackgroundHelper.applyAnimatedBackground(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateSaldo()
+        loadChart()
+        loadAnggotaBayar()
+    }
+
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
