@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Book - KasKelas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #4b0082;
+            --bg-dark: #0f0c29;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --accent: #ff00ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.2) 0%, transparent 70%);
+            padding: 2rem;
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: -100px auto 100px;
+            padding: 0 20px;
+        }
+
+        section {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '';
+            width: 40px;
+            height: 4px;
+            background: var(--primary);
+            display: inline-block;
+            margin-right: 15px;
+            border-radius: 2px;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .mockup {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid #1a1a1a;
+        }
+
+        .step-list {
+            list-style: none;
+        }
+
+        .step-item {
+            display: flex;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-right: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 3rem;
+            }
+            section {
+                padding: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            animation: fadeIn 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KasKelas</h1>
+    <p>Panduan Penggunaan Sistem Manajemen Keuangan Kelas Digital Versi 1.0.0</p>
+</header>
+
+<div class="container">
+    <section id="pendahuluan">
+        <h2>Pendahuluan</h2>
+        <p>KasKelas adalah solusi digital yang dirancang untuk memodernisasi tata kelola administrasi keuangan di lingkungan pendidikan. Dengan integrasi teknologi database lokal dan visualisasi data, aplikasi ini memberikan transparansi penuh bagi seluruh anggota organisasi.</p>
+        <p>Panduan ini akan membimbing Anda melalui setiap fitur utama untuk memastikan pemanfaatan aplikasi secara maksimal.</p>
+    </section>
+
+    <section id="dashboard">
+        <div class="grid">
+            <div>
+                <h2>Dasbor Utama</h2>
+                <p>Layar utama memberikan ringkasan instan tentang kondisi keuangan Anda. Terdapat tiga metrik utama:</p>
+                <ul style="margin-left: 1.5rem; color: var(--text-dim);">
+                    <li><strong>Total Saldo</strong>: Akumulasi dana yang tersedia saat ini.</li>
+                    <li><strong>Pemasukan</strong>: Total dana yang masuk dari iuran anggota.</li>
+                    <li><strong>Pengeluaran</strong>: Total dana yang telah digunakan.</li>
+                </ul>
+                <p style="margin-top: 1rem;">Grafik analitik di bagian bawah menampilkan tren arus kas untuk membantu perencanaan anggaran masa depan.</p>
+            </div>
+            <img src="dashboard.png" alt="Dashboard KasKelas" class="mockup">
+        </div>
+    </section>
+
+    <section id="anggota">
+        <div class="grid">
+            <img src="anggota.png" alt="Manajemen Anggota KasKelas" class="mockup">
+            <div>
+                <h2>Manajemen Anggota</h2>
+                <p>Fitur ini memungkinkan Bendahara untuk mengelola database siswa dengan akurat. Anda dapat:</p>
+                <ul style="margin-left: 1.5rem; color: var(--text-dim);">
+                    <li>Menambah anggota baru ke dalam sistem.</li>
+                    <li>Memantau status pembayaran iuran secara individu.</li>
+                    <li>Melakukan pencarian cepat anggota berdasarkan nama.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="instruksi">
+        <h2>Langkah Penggunaan</h2>
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3>Registrasi Anggota</h3>
+                    <p>Mulailah dengan memasukkan daftar anggota kelas melalui menu Anggota. Pastikan setiap nama sesuai dengan absen resmi untuk memudahkan pelaporan.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3>Pencatatan Pemasukan</h3>
+                    <p>Setiap kali anggota membayar iuran, catat transaksi tersebut melalui menu Pemasukan. Sistem akan secara otomatis memperbarui saldo pada dasbor.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3>Pencatatan Pengeluaran</h3>
+                    <p>Gunakan menu Pengeluaran untuk mencatat setiap penggunaan dana. Sertakan keterangan yang jelas untuk menjaga transparansi keuangan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq">
+        <h2>Tanya Jawab (FAQ)</h2>
+        <div style="margin-bottom: 2rem;">
+            <h4 style="color: #fff; margin-bottom: 0.5rem;">Apakah data saya akan hilang jika tidak ada internet?</h4>
+            <p>Tidak. KasKelas menggunakan Room Database yang menyimpan seluruh data secara lokal di perangkat Anda. Koneksi internet tidak diperlukan untuk operasional harian.</p>
+        </div>
+        <div>
+            <h4 style="color: #fff; margin-bottom: 0.5rem;">Bagaimana cara mencadangkan data?</h4>
+            <p>Untuk saat ini, cadangan data dapat dilakukan dengan menyalin file database aplikasi atau menunggu fitur Sinkronisasi Cloud pada pembaruan mendatang.</p>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2026 KasKelas Project. All rights reserved.</p>
+    <p>Elegant Solution for Modern Classroom Management.</p>
+</footer>
+
+</body>
+</html>

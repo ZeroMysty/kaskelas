@@ -34,6 +34,14 @@ KasKelas merupakan solusi aplikasi manajemen keuangan yang dirancang untuk memba
 
 ---
 
+## Tampilan Aplikasi
+
+| Dasbor Utama | Manajemen Anggota |
+| :---: | :---: |
+| ![Dashboard](dashboard.png) | ![Members](anggota.png) |
+
+---
+
 ## Dokumentasi Tambahan
 
 Informasi detail mengenai cara penggunaan aplikasi dapat diakses melalui berkas [Manual Book](manual_book.html) yang tersedia dalam paket distribusi aplikasi.
