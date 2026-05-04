@@ -4,6 +4,8 @@
 
 KasKelas merupakan solusi aplikasi manajemen keuangan yang dirancang untuk membantu administrasi kas kelas atau organisasi secara sistematis dan transparan. Dengan fokus pada kemudahan penggunaan dan visualisasi data, aplikasi ini menjadi alat bantu yang efisien bagi bendahara dalam mengelola alur kas harian.
 
+[Buka Buku Panduan (Manual Book)](https://zeromysty.github.io/kaskelas/manual_book.html)
+
 ---
 
 ## Fitur Utama
