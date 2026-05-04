@@ -42,4 +42,4 @@ KasKelas merupakan solusi aplikasi manajemen keuangan yang dirancang untuk memba
 
 ---
 
-**Dikembangkan oleh [ZeroMysty](https://github.com/ZeroMysty)**
+**Dikembangkan oleh [ZeroMysty](https://github.com/ZeroMysty)**, [akramzzz22](https://github.com/akramzzz22), [nabiel-z29](https://github.com/nabielz-29)
