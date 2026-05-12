@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_splash_exclusive">
 
-    <include layout="@layout/animated_background" />
+    <include layout="@layout/layout_animated_background" />
     
     <!-- Floating Bubble 1 -->
     <View
@@ -199,3 +199,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

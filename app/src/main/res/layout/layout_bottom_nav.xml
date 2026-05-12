@@ -36,7 +36,7 @@
                     android:id="@+id/ivNavHome"
                     android:layout_width="@dimen/nav_icon_size"
                     android:layout_height="@dimen/nav_icon_size"
-                    android:src="@drawable/nav_home"
+                    android:src="@drawable/ic_nav_home"
                     app:tint="@color/brand_primary" />
             </LinearLayout>
 
@@ -54,7 +54,7 @@
                     android:id="@+id/ivNavHistory"
                     android:layout_width="@dimen/nav_icon_size"
                     android:layout_height="@dimen/nav_icon_size"
-                    android:src="@drawable/nav_history"
+                    android:src="@drawable/ic_nav_history"
                     app:tint="@color/text_sub" />
             </LinearLayout>
 
@@ -72,7 +72,7 @@
                     android:id="@+id/ivNavProfile"
                     android:layout_width="@dimen/nav_icon_size"
                     android:layout_height="@dimen/nav_icon_size"
-                    android:src="@drawable/nav_members"
+                    android:src="@drawable/ic_nav_members"
                     app:tint="@color/text_sub" />
             </LinearLayout>
 
@@ -90,10 +90,11 @@
                     android:id="@+id/ivNavSettings"
                     android:layout_width="@dimen/nav_icon_size"
                     android:layout_height="@dimen/nav_icon_size"
-                    android:src="@drawable/nav_settings"
+                    android:src="@drawable/ic_nav_settings"
                     app:tint="@color/text_sub" />
             </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
+

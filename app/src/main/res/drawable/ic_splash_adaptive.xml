@@ -4,7 +4,8 @@
     </item>
     <item>
         <inset
-            android:drawable="@drawable/splashscreen"
+            android:drawable="@drawable/img_splashscreen"
             android:inset="32dp" />
     </item>
 </layer-list>
+

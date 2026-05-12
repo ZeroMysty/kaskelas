@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/bg_main">
 
     <!-- Content -->
     <androidx.core.widget.NestedScrollView
@@ -39,7 +39,7 @@
                         android:layout_width="38dp"
                         android:layout_height="38dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/nav_members"
+                        android:src="@drawable/ic_nav_members"
                         app:tint="@color/brand_primary" />
                 </FrameLayout>
 

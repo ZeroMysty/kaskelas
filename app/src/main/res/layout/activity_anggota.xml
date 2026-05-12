@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/bg_main">
 
-    <include layout="@layout/animated_background" />
+    <include layout="@layout/layout_animated_background" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="12dp"
                         android:alpha="0.8"
-                        android:src="@drawable/nav_members"
+                        android:src="@drawable/ic_nav_members"
                         app:tint="@color/text_white" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -153,7 +153,7 @@
         app:backgroundTint="@color/brand_primary"
         app:elevation="8dp" />
 
-    <include layout="@layout/bottom_nav"
+    <include layout="@layout/layout_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
