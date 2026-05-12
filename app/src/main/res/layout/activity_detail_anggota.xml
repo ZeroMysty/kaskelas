@@ -26,39 +26,72 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardProfileInfo"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
-                app:cardElevation="0dp">
+                app:cardBackgroundColor="@color/brand_primary"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_balance_card"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="35dp">
+                    android:padding="32dp">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/bg_glass_card"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_nav_members"
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/tvNamaDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:text="Nama Anggota"
-                        android:textColor="@color/text_white"
-                        android:textSize="28sp"
-                        android:fontFamily="sans-serif-black" />
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvNisDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="4dp"
                         android:alpha="0.8"
                         android:text="NIS: 123456"
-                        android:textColor="@color/text_white"
-                        android:textSize="@dimen/text_body" />
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvPhoneDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:alpha="0.8"
+                        android:text="0812-3456-7890"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <!-- Tombol WA -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHubungiWA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Tagih via WhatsApp"
+                        android:textColor="@color/brand_primary"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/white"
+                        app:cornerRadius="20dp"
+                        app:icon="@drawable/ic_nav_history"
+                        app:iconTint="@color/brand_primary" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_main">
+    android:background="@color/bg_base">
 
-    <include layout="@layout/layout_animated_background" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_main" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,168 +21,223 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Profile Header Info -->
             <LinearLayout
-                android:id="@+id/headerSettings"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/margin_main"
-                android:paddingTop="15dp">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="48dp"
+                android:paddingBottom="24dp">
+
+                <ImageView
+                    android:id="@+id/ivProfileBendahara"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_nav_members"
+                    app:tint="@color/brand_primary" />
 
                 <TextView
+                    android:id="@+id/tvNamaBendahara"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pengaturan"
+                    android:layout_marginTop="16dp"
+                    android:text="Budi (Bendahara)"
                     android:textColor="@color/text_main"
-                    android:textSize="@dimen/text_h1"
-                    android:fontFamily="sans-serif-black" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvKelasInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Kelas: XII IPA 1"
+                    android:textColor="@color/text_sub"
+                    android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Pengaturan Kas Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/glass_bg"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_card">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Preferensi Pembayaran"
+                        android:text="Pengaturan Kas Kelas"
                         android:textColor="@color/text_main"
-                        android:textSize="@dimen/text_h2"
-                        android:fontFamily="sans-serif-bold" />
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Nominal Default -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:alpha="0.6"
-                        android:text="Nominal default untuk pembayaran cepat."
-                        android:textColor="@color/text_main"
-                        android:textSize="@dimen/text_caption" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnNominal2"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="6dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_outline_button"
-                            android:text="2.000"
-                            android:textAllCaps="false"
-                            android:textColor="@color/brand_primary"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-bold"
-                            app:backgroundTint="@null" />
-
-                        <Button
-                            android:id="@+id/btnNominal5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="3dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_outline_button"
-                            android:text="5.000"
-                            android:textAllCaps="false"
-                            android:textColor="@color/brand_primary"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-bold"
-                            app:backgroundTint="@null" />
-
-                        <Button
-                            android:id="@+id/btnNominalLainnya"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="6dp"
-                            android:layout_weight="1.2"
-                            android:background="@drawable/bg_outline_button"
-                            android:text="Lainnya"
-                            android:textAllCaps="false"
-                            android:textColor="@color/text_main"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-bold"
-                            app:backgroundTint="@null" />
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/etNominalCustom"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
                         android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_input_putih"
-                        android:hint="Masukkan nominal..."
-                        android:inputType="number"
-                        android:paddingHorizontal="24dp"
-                        android:textColor="@color/text_main"
-                        android:textSize="@dimen/text_body"
-                        android:visibility="gone" />
+                        android:hint="Nominal Kas Default (Rp)"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp">
 
-                    <Button
-                        android:id="@+id/btnSimpanSettings"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNominalDefault"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="5000" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Interval Pembayaran -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Interval Pembayaran"
+                        android:textColor="@color/text_main"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="24dp"
-                        android:backgroundTint="@color/brand_accent"
-                        android:text="Simpan Perubahan"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_white"
-                        android:fontFamily="sans-serif-bold"
-                        app:cornerRadius="20dp" />
+                        android:layout_height="wrap_content"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerInterval"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:text="Mingguan" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Ekspor & Spreadsheet Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
+                app:cardBackgroundColor="@color/glass_bg"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_red"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_card">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-bold"
-                        android:text="Manajemen Data"
-                        android:textColor="@color/brand_danger"
-                        android:textSize="@dimen/text_h2" />
+                        android:layout_marginBottom="16dp"
+                        android:text="Laporan &amp; Data"
+                        android:textColor="@color/text_main"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/resetData"
+                    <!-- Hubungkan Spreadsheet -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnConnectSpreadsheet"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_outline_button_danger"
-                        android:text="Reset Semua Data"
-                        android:textAllCaps="false"
+                        android:text="Hubungkan ke Google Sheets"
+                        android:textColor="@color/brand_accent"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/white"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_nav_history"
+                        app:iconTint="@color/brand_accent"
+                        app:strokeColor="@color/brand_accent"
+                        app:strokeWidth="1dp" />
+
+                    <!-- Ekspor ke PDF/Excel -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExportReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Ekspor Laporan Bulanan (PDF)"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/brand_primary"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_nav_history"
+                        app:iconTint="@color/white" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Danger Zone (Manajemen / Reset) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/bg_glass_red"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Zona Bahaya"
                         android:textColor="@color/brand_danger"
-                        android:fontFamily="sans-serif-bold"
-                        app:backgroundTint="@null" />
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnResetData"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Tutup Buku / Reset Kas"
+                        android:textColor="@color/brand_danger"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/white"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/brand_danger"
+                        app:strokeWidth="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Keluar Akun (Logout)"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/brand_danger"
+                        app:cornerRadius="12dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
