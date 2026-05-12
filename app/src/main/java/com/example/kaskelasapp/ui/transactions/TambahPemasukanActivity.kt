@@ -10,22 +10,26 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TambahPengeluaranActivity : AppCompatActivity() {
+class TambahPemasukanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tambah_pengeluaran)
+        setContentView(R.layout.activity_tambah_pemasukan)
         BackgroundHelper.applyAnimatedBackground(this)
 
 
         val db = DatabaseHelper(this)
 
-        val etNama = findViewById<EditText>(R.id.etNamaPengeluaran)
-        val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
-        val etKet = findViewById<EditText>(R.id.etKeteranganPengeluaran)
-        val btnSimpan = findViewById<Button>(R.id.btnSimpanPengeluaran)
+        // 🔥 Ambil dari XML (HARUS SESUAI ID)
+        val etNama = findViewById<EditText>(R.id.etNamaPemasukan)
+        val etJumlah = findViewById<EditText>(R.id.etJumlahPemasukan)
+        val etKet = findViewById<EditText>(R.id.etKeteranganPemasukan)
+        val btnSimpan = findViewById<Button >(R.id.btnSimpanPemasukan)
 
-        // 🔥 FORMAT RUPIAH (AMAN)
+        // 🔥 Ambil anggotaId dari intent
+        val anggotaId = intent.getStringExtra("ANGGOTA_ID")
+
+        // 🔥 FORMAT RUPIAH
         etJumlah.addTextChangedListener(object : TextWatcher {
             private var current = ""
 
@@ -58,7 +62,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // 🔥 BUTTON SIMPAN → ALERT PREVIEW
+        // 🔥 BUTTON SIMPAN → ALERT DULU
         btnSimpan.setOnClickListener {
             val nama = etNama.text.toString()
             val jumlahRaw = etJumlah.text.toString()
@@ -72,7 +76,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             }
 
             val message = """
-                Yakin ingin menyimpan pengeluaran?
+                Yakin ingin menyimpan pemasukan?
 
                 Nama       : $nama
                 Jumlah     : Rp $jumlahRaw
@@ -81,7 +85,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             """.trimIndent()
 
             AlertDialog.Builder(this)
-                .setTitle("Konfirmasi Pengeluaran")
+                .setTitle("Konfirmasi Pemasukan")
                 .setMessage(message)
                 .setPositiveButton("Ya") { _, _ ->
                     try {
@@ -89,14 +93,15 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                             nama,
                             jumlahBersih,
                             tanggal,
-                            "KELUAR",
-                            ket
+                            "MASUK",
+                            ket,
+                            anggotaId // 🔥 FIX UTAMA
                         )
 
                         if (result == -1L) {
                             Toast.makeText(this, "Gagal menyimpan ke database", Toast.LENGTH_LONG).show()
                         } else {
-                            Toast.makeText(this, "Pengeluaran disimpan!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Pemasukan disimpan!", Toast.LENGTH_SHORT).show()
                             finish()
                         }
 
@@ -111,8 +116,8 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .show()
         }
 
-        // 🔙 BACK
-        findViewById<ImageView>(R.id.btnBackPengeluaran).setOnClickListener {
+        // 🔙 tombol back
+        findViewById<ImageView>(R.id.btnBackPemasukan).setOnClickListener {
             finish()
         }
     }

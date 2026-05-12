@@ -33,3 +33,4 @@ class AnggotaBayarAdapter(
 
     override fun getItemCount() = list.size
 }
+

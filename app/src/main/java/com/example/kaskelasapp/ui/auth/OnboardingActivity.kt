@@ -105,3 +105,4 @@ class OnboardingAdapter(private val pages: List<OnboardingPage>) :
 
     override fun getItemCount() = pages.size
 }
+

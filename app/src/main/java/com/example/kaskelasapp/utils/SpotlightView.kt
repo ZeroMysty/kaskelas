@@ -60,3 +60,4 @@ class SpotlightView(context: Context, attrs: AttributeSet?) : View(context, attr
         canvas.drawRoundRect(targetRect, 20f, 20f, borderPaint)
     }
 }
+

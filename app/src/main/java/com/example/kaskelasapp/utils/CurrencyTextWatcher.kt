@@ -48,3 +48,4 @@ class CurrencyTextWatcher(private val editText: EditText) : TextWatcher {
         isUpdating = false
     }
 }
+

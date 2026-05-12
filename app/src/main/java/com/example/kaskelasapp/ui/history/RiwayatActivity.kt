@@ -172,3 +172,4 @@ class RiwayatActivity : AppCompatActivity() {
         rvRiwayat.adapter = adapter
     }
 }
+
