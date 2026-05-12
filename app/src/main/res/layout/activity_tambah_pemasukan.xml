@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@color/bg_base">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/glass_bg" />
 
     <!-- Content -->
     <androidx.core.widget.NestedScrollView
@@ -22,20 +27,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
-            <!-- Amount Focus Area -->
+            <!-- Metode Pembayaran Toggle -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/glass_bg"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="Metode Penerimaan"
+                        android:textColor="@color/text_main"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/rgMetode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rbTunai"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="@color/brand_primary"
+                            android:checked="true"
+                            android:text="Tunai"
+                            android:textColor="@color/text_main" />
+
+                        <RadioButton
+                            android:id="@+id/rbEwallet"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="@color/brand_primary"
+                            android:text="E-Wallet / QRIS"
+                            android:textColor="@color/text_main" />
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Amount Focus Area -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/glass_bg"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="32dp">
@@ -43,11 +100,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:alpha="0.5"
+                        android:alpha="0.7"
                         android:text="Jumlah Pemasukan"
                         android:textColor="@color/text_main"
-                        android:textSize="@dimen/text_caption"
-                        android:fontFamily="sans-serif-medium" />
+                        android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/etJumlahPemasukan"
@@ -59,9 +115,9 @@
                         android:hint="Rp 0"
                         android:inputType="number"
                         android:textColor="@color/brand_accent"
-                        android:textColorHint="#2016A34A"
+                        android:textColorHint="#4016A34A"
                         android:textSize="42sp"
-                        android:fontFamily="sans-serif-black" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -69,17 +125,16 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
+                android:layout_marginHorizontal="20dp"
+                app:cardBackgroundColor="@color/glass_bg"
+                app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_card"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_card_lg">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -87,67 +142,84 @@
                         android:layout_marginBottom="24dp"
                         android:text="Informasi Transaksi"
                         android:textColor="@color/text_main"
-                        android:textSize="@dimen/text_h2"
-                        android:fontFamily="sans-serif-black" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <!-- Input Nama -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.4"
-                        android:text="NAMA TRANSAKSI"
-                        android:textColor="@color/text_main"
-                        android:textSize="10sp"
-                        android:fontFamily="sans-serif-black"
-                        android:letterSpacing="0.1" />
-                    <EditText
-                        android:id="@+id/etNamaPemasukan"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/bg_input_putih"
-                        android:hint="Contoh: Iuran Kas"
-                        android:paddingHorizontal="16dp"
-                        android:textColor="@color/text_main"
-                        android:textColorHint="@color/text_sub"
-                        android:textSize="@dimen/text_body"
-                        android:singleLine="true" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Nama Transaksi / Pembayar"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp">
 
-                    <!-- Input Keterangan -->
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNamaPemasukan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Upload Image Area -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:alpha="0.4"
-                        android:text="KETERANGAN (OPSIONAL)"
+                        android:layout_marginBottom="8dp"
+                        android:text="Bukti Transaksi (Struk/Transfer)"
                         android:textColor="@color/text_main"
-                        android:textSize="10sp"
-                        android:fontFamily="sans-serif-black"
-                        android:letterSpacing="0.1" />
-                    <EditText
-                        android:id="@+id/etKeteranganPemasukan"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardUploadBukti"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="32dp"
-                        android:background="@drawable/bg_input_putih"
-                        android:gravity="top"
-                        android:hint="Tambahkan catatan..."
-                        android:padding="16dp"
-                        android:textColor="@color/text_main"
-                        android:textColorHint="@color/text_sub"
-                        android:textSize="@dimen/text_body" />
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/glass_border_dark"
+                        app:strokeWidth="1dp">
 
-                    <androidx.appcompat.widget.AppCompatButton
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/ivPreviewBukti"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_edit"
+                                app:tint="@color/text_sub" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Tap untuk Upload Foto"
+                                android:textColor="@color/text_sub"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Button Area: Simpan atau Generate QR -->
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSimpanPemasukan"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_action_height"
-                        android:background="@drawable/bg_btn_green"
-                        android:text="Simpan Pemasukan"
-                        android:textAllCaps="false"
-                        android:textColor="@color/brand_accent"
-                        android:textSize="@dimen/text_body"
-                        android:fontFamily="sans-serif-bold" />
+                        android:layout_height="56dp"
+                        android:text="Simpan Pemasukan Tunai"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/brand_accent"
+                        app:cornerRadius="12dp" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -160,14 +232,14 @@
         android:layout_height="90dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/margin_main"
-        android:paddingTop="@dimen/header_top_padding">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="24dp">
 
         <ImageButton
             android:id="@+id/btnBackPemasukan"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@drawable/bg_glass_card"
+            android:background="@drawable/glass_bg"
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_main" />
@@ -178,8 +250,8 @@
             android:layout_marginStart="16dp"
             android:text="Pemasukan Baru"
             android:textColor="@color/text_main"
-            android:textSize="@dimen/text_h1"
-            android:fontFamily="sans-serif-black" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </FrameLayout>
