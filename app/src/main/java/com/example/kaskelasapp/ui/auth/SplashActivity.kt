@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,9 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.utils.BackgroundHelper
+import com.example.kaskelasapp.ui.main.MainActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,13 +74,13 @@ class SplashActivity : AppCompatActivity() {
             }
             .start()
 
-        // Transisi ke Onboarding atau MainActivity
+        // Transisi ke Onboarding atau RoleSelection
         Handler(Looper.getMainLooper()).postDelayed({
             val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
             val isFinished = sharedPref.getBoolean("onboarding_finished", false)
             
             val intent = if (isFinished) {
-                Intent(this, MainActivity::class.java)
+                Intent(this, RoleSelectionActivity::class.java)
             } else {
                 Intent(this, OnboardingActivity::class.java)
             }
@@ -88,4 +91,3 @@ class SplashActivity : AppCompatActivity() {
         }, 3500)
     }
 }
-

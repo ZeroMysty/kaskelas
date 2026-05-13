@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.auth
 
 import android.content.Context
 import android.content.Intent
@@ -12,6 +12,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.utils.BackgroundHelper
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -74,8 +77,8 @@ class OnboardingActivity : AppCompatActivity() {
             apply()
         }
 
-        // 3. Go to MainActivity
-        startActivity(Intent(this, MainActivity::class.java))
+        // 3. Go to RoleSelectionActivity
+        startActivity(Intent(this, RoleSelectionActivity::class.java))
         finish()
     }
 }
@@ -105,4 +108,3 @@ class OnboardingAdapter(private val pages: List<OnboardingPage>) :
 
     override fun getItemCount() = pages.size
 }
-
