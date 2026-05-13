@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/glass_bg" />
+        android:background="@drawable/bg_glass_card" />
 
     <!-- Content -->
     <androidx.core.widget.NestedScrollView
@@ -196,7 +196,7 @@
                                 android:id="@+id/ivPreviewBukti"
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_edit"
+                                android:src="@drawable/ic_nav_settings"
                                 app:tint="@color/text_sub" />
 
                             <TextView
@@ -239,7 +239,7 @@
             android:id="@+id/btnBackPengeluaran"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@drawable/glass_bg"
+            android:background="@drawable/bg_glass_card"
             android:padding="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/text_main" />

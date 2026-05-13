@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_base"
     android:fillViewport="true"
-    tools:context=".ui.auth.LoginBendaharaActivity">
+    tools:context=".ui.auth.LoginSiswaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Login Bendahara"
+            android:text="Login Siswa"
             android:textColor="@color/brand_primary"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Masuk untuk mulai mengelola kas kelasmu"
+            android:text="Masuk untuk memantau dan membayar kas kelasmu"
             android:textColor="@color/text_sub"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"

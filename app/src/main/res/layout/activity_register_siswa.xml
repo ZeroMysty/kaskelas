@@ -64,7 +64,7 @@
                 android:textStyle="bold"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="12dp"
-                app:icon="@drawable/ic_edit"
+                app:icon="@drawable/ic_nav_settings"
                 app:iconTint="@null"
                 app:strokeColor="@color/glass_border_dark"
                 app:strokeWidth="1dp" />
@@ -230,13 +230,38 @@
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Daftar &amp; Gabung Kelas"
+                android:text="Daftar Sekarang"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:backgroundTint="@color/brand_accent"
+                app:backgroundTint="@color/brand_primary"
                 app:cornerRadius="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sudah punya akun? "
+                    android:textColor="@color/text_sub"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvToLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masuk di sini"
+                    android:textColor="@color/brand_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+

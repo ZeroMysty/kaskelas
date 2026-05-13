@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/glass_bg"
+    android:background="@drawable/bg_glass_card"
     tools:context=".RoleSelectionActivity">
 
     <!-- Premium Background Gradient -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/glass_bg" />
+        android:background="@drawable/bg_glass_card" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_dashboard"
+                    android:src="@drawable/ic_nav_home"
                     app:tint="@color/brand_primary" />
 
                 <LinearLayout
@@ -113,7 +113,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_group"
+                    android:src="@drawable/ic_nav_members"
                     app:tint="@color/brand_accent" />
 
                 <LinearLayout
@@ -144,3 +144,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

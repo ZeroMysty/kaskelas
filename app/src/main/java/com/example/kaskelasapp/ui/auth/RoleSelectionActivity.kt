@@ -21,7 +21,7 @@ class RoleSelectionActivity : AppCompatActivity() {
         }
 
         cardSiswa.setOnClickListener {
-            val intent = Intent(this, RegisterSiswaActivity::class.java)
+            val intent = Intent(this, LoginSiswaActivity::class.java)
             startActivity(intent)
         }
     }

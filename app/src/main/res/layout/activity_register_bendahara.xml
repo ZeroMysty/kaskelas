@@ -64,7 +64,7 @@
                 android:textStyle="bold"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="12dp"
-                app:icon="@drawable/ic_edit" 
+                app:icon="@drawable/ic_nav_settings" 
                 app:iconTint="@null"
                 app:strokeColor="@color/glass_border_dark"
                 app:strokeWidth="1dp" />
@@ -238,3 +238,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+

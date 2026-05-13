@@ -322,3 +322,4 @@
 
     <include layout="@layout/layout_tutorial" />
 </FrameLayout>
+

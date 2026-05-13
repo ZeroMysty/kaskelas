@@ -8,14 +8,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_glass_card" />
+        android:background="@drawable/bg_main" />
 
-    <!-- Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="80dp">
+        android:paddingBottom="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,105 +26,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
 
-            <!-- Metode Pembayaran Toggle -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/glass_bg"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:text="Metode Penerimaan"
-                        android:textColor="@color/text_main"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <RadioGroup
-                        android:id="@+id/rgMetode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/rbTunai"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/brand_primary"
-                            android:checked="true"
-                            android:text="Tunai"
-                            android:textColor="@color/text_main" />
-
-                        <RadioButton
-                            android:id="@+id/rbEwallet"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/brand_primary"
-                            android:text="E-Wallet / QRIS"
-                            android:textColor="@color/text_main" />
-                    </RadioGroup>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Amount Focus Area -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="@color/glass_bg"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="32dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.7"
-                        android:text="Jumlah Pemasukan"
-                        android:textColor="@color/text_main"
-                        android:textSize="14sp" />
-
-                    <EditText
-                        android:id="@+id/etJumlahPemasukan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@android:color/transparent"
-                        android:gravity="center"
-                        android:hint="Rp 0"
-                        android:inputType="number"
-                        android:textColor="@color/brand_accent"
-                        android:textColorHint="#4016A34A"
-                        android:textSize="42sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Input Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/glass_bg"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
@@ -136,50 +41,127 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
+                    <!-- Pilihan Metode -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
-                        android:text="Informasi Transaksi"
+                        android:layout_marginBottom="12dp"
+                        android:text="Metode Pembayaran"
                         android:textColor="@color/text_main"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <!-- Input Nama -->
+                    <RadioGroup
+                        android:id="@+id/rgMetodePembayaran"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rbEwallet"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_selector"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="E-Wallet"
+                            android:textColor="@color/text_main"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rbTunai"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_selector"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="Tunai"
+                            android:textColor="@color/text_main"
+                            android:textStyle="bold" />
+                    </RadioGroup>
+
+                    <!-- E-Wallet Guide (Tampil jika E-Wallet dipilih) -->
+                    <LinearLayout
+                        android:id="@+id/layoutEwalletGuide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnLihatQR"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:text="Lihat / Simpan QR Bendahara"
+                            android:textColor="@color/brand_primary"
+                            android:textStyle="bold"
+                            app:backgroundTint="@color/white"
+                            app:cornerRadius="12dp"
+                            app:icon="@drawable/ic_search"
+                            app:iconTint="@color/brand_primary"
+                            app:strokeColor="@color/brand_primary"
+                            app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="*Simpan QR ini ke galerimu lalu scan melalui aplikasi Gopay/DANA/OVO/Spay untuk membayar."
+                            android:textColor="@color/text_sub"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- Nominal -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="Jumlah Pembayaran"
+                        android:textColor="@color/text_main"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Nama Transaksi / Pembayar"
+                        android:hint="Rp"
                         app:boxCornerRadiusBottomEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusTopStart="12dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etNamaPemasukan"
+                            android:id="@+id/etNominalBayar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName" />
+                            android:inputType="number"
+                            android:text="20000"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Upload Image Area -->
+                    <!-- Upload Bukti -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Bukti Transaksi (Struk/Transfer)"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="Bukti Pembayaran"
                         android:textColor="@color/text_main"
-                        android:textSize="12sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardUploadBukti"
+                        android:id="@+id/btnUploadBuktiSiswa"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="32dp"
-                        app:cardBackgroundColor="@color/white"
+                        android:layout_height="140dp"
+                        app:cardBackgroundColor="@color/bg_base"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/glass_border_dark"
@@ -188,37 +170,36 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/ivPreviewBukti"
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_nav_settings"
+                                android:src="@drawable/ic_plus_circle_green"
                                 app:tint="@color/text_sub" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="Tap untuk Upload Foto"
+                                android:text="Upload Foto/Screenshot"
                                 android:textColor="@color/text_sub"
                                 android:textSize="14sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Button Area: Simpan atau Generate QR -->
+                    <!-- Tombol Kirim -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSimpanPemasukan"
+                        android:id="@+id/btnKirimPembayaran"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="Simpan Pemasukan Tunai"
+                        android:layout_marginTop="32dp"
+                        android:text="Kirim Pembayaran"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:backgroundTint="@color/brand_accent"
+                        app:backgroundTint="@color/brand_primary"
                         app:cornerRadius="12dp" />
 
                 </LinearLayout>
@@ -236,7 +217,7 @@
         android:paddingTop="24dp">
 
         <ImageButton
-            android:id="@+id/btnBackPemasukan"
+            android:id="@+id/btnBackBayarSiswa"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="@drawable/bg_glass_card"
@@ -248,10 +229,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Pemasukan Baru"
+            android:text="Bayar Kas"
             android:textColor="@color/text_main"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
 
 </FrameLayout>
+
