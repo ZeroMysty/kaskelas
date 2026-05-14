@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,21 +7,38 @@ import android.os.Handler
 import android.os.Looper
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import androidx.appcompat.app.AppCompatActivity
-
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.graphics.Color
+import android.widget.TextView
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.models.Anggota
+import com.example.kaskelasapp.models.Transaksi
+import com.example.kaskelasapp.ui.main.MainActivity
+import com.example.kaskelasapp.ui.members.AnggotaBayarAdapter
+import com.example.kaskelasapp.ui.members.DetailAnggotaActivity
+import com.example.kaskelasapp.ui.transactions.DetailPemasukanActivity
+import com.example.kaskelasapp.ui.transactions.DetailPengeluaranActivity
+import com.example.kaskelasapp.ui.transactions.TambahPemasukanActivity
+import com.example.kaskelasapp.ui.transactions.TambahPengeluaranActivity
+import com.example.kaskelasapp.ui.history.RiwayatActivity
+import com.example.kaskelasapp.ui.chart.ChartDetailActivity
+import com.example.kaskelasapp.utils.BackgroundHelper
+import com.example.kaskelasapp.utils.NavigationHelper
+import com.example.kaskelasapp.utils.SpotlightView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.util.*
-import androidx.core.graphics.toColorInt
-import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHelper
@@ -54,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnNavPengeluaran).setOnClickListener {
             startActivity(Intent(this, TambahPengeluaranActivity::class.java))
         }
-        findViewById<View>(R.id.btnHistoryMain).setOnClickListener {
+        findViewById<View>(R.id.navHistory).setOnClickListener {
             val intent = Intent(this, RiwayatActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
@@ -66,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.cardGrafik)?.setOnClickListener { openChartDetail() }
         ivGrafikDummy?.setOnClickListener { openChartDetail() }
 
-        BottomNavHelper.setupBottomNav(this)
+        NavigationHelper.setupNavigation(this)
         BackgroundHelper.applyAnimatedBackground(this)
 
         // Tampilkan tutorial jika baru pertama kali install
@@ -94,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         
         var step = 0
         val steps = listOf(
-            Triple(findViewById<View>(R.id.cardBalance), "Dashboard Saldo", "Ini adalah ringkasan keuangan Anda. Semua total uang kas masuk dan keluar akan terakumulasi di sini."),
+            Triple(findViewById<View>(R.id.cardTotalBalance), "Dashboard Saldo", "Ini adalah ringkasan keuangan Anda. Semua total uang kas masuk dan keluar akan terakumulasi di sini."),
             Triple(findViewById<View>(R.id.cardGrafik), "Statistik Kas", "Pantau naik-turunnya saldo kas Anda melalui grafik interaktif ini secara real-time."),
             Triple(findViewById<View>(R.id.btnNavPemasukan), "Input Pemasukan", "Klik di sini untuk mencatat iuran yang masuk. Pastikan nominal sudah benar!"),
             Triple(findViewById<View>(R.id.btnNavPengeluaran), "Input Pengeluaran", "Gunakan ini untuk mencatat pengeluaran kelas. Transparan dan akurat."),

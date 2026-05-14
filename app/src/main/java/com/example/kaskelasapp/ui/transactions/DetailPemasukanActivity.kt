@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.transactions
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,9 @@ import android.widget.ImageButton
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.utils.BackgroundHelper
 
 class DetailPemasukanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +24,6 @@ class DetailPemasukanActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.tvDetailNamaP).text = transaksi.nama
                 findViewById<TextView>(R.id.tvDetailJumlahP).text = "Rp ${transaksi.jumlah}"
                 findViewById<TextView>(R.id.tvDetailTanggalP).text = transaksi.tanggal
-                findViewById<TextView>(R.id.tvDetailKeteranganP).text = transaksi.keterangan
             }
         }
 

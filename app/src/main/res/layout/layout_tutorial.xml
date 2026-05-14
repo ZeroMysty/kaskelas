@@ -8,7 +8,7 @@
     android:focusable="true"
     android:visibility="gone">
 
-    <com.example.kaskelasapp.SpotlightView
+    <com.example.kaskelasapp.utils.SpotlightView
         android:id="@+id/spotlightView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

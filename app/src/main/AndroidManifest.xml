@@ -74,11 +74,29 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
+            android:name=".ui.history.DetailTransaksiSiswaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
             android:name=".ui.main.ProfileSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         
+        <activity
+            android:name=".ui.main.KonfirmasiPembayaranActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".ui.main.DetailKonfirmasiPembayaranActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".ui.auth.OnboardingActivity"
             android:exported="false"

@@ -1,4 +1,8 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.transactions
+
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.utils.BackgroundHelper
 
 import android.os.Bundle
 import android.text.Editable
@@ -23,7 +27,6 @@ class TambahPemasukanActivity : AppCompatActivity() {
         // 🔥 Ambil dari XML (HARUS SESUAI ID)
         val etNama = findViewById<EditText>(R.id.etNamaPemasukan)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPemasukan)
-        val etKet = findViewById<EditText>(R.id.etKeteranganPemasukan)
         val btnSimpan = findViewById<Button >(R.id.btnSimpanPemasukan)
 
         // 🔥 Ambil anggotaId dari intent
@@ -67,7 +70,7 @@ class TambahPemasukanActivity : AppCompatActivity() {
             val nama = etNama.text.toString()
             val jumlahRaw = etJumlah.text.toString()
             val jumlahBersih = jumlahRaw.replace(".", "")
-            val ket = etKet.text.toString()
+            val ket = "" // Field removed from UI
             val tanggal = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
 
             if (nama.isEmpty() || jumlahBersih.isEmpty()) {
@@ -81,7 +84,6 @@ class TambahPemasukanActivity : AppCompatActivity() {
                 Nama       : $nama
                 Jumlah     : Rp $jumlahRaw
                 Tanggal    : $tanggal
-                Keterangan : ${if (ket.isEmpty()) "-" else ket}
             """.trimIndent()
 
             AlertDialog.Builder(this)
@@ -94,7 +96,7 @@ class TambahPemasukanActivity : AppCompatActivity() {
                             jumlahBersih,
                             tanggal,
                             "MASUK",
-                            ket,
+                            "",
                             anggotaId // 🔥 FIX UTAMA
                         )
 

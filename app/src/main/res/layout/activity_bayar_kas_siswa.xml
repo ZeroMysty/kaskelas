@@ -3,237 +3,270 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base">
+    android:background="@drawable/bg_main">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_main" />
+    <include layout="@layout/layout_animated_background" />
 
+    <!-- Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Spacer for Header -->
-            <View
+            <!-- Scrollable Header -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="@dimen/header_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="@dimen/header_top_padding">
 
+                <ImageButton
+                    android:id="@+id/btnBackBayarSiswa"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/text_main" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Bayar Kas"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h1"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- Profile/Header Area -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingVertical="32dp">
+
+                <FrameLayout
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:background="@drawable/bg_avatar">
+
+                    <ImageView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_home"
+                        app:tint="@color/brand_primary" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:alpha="0.5"
+                    android:text="Laporan Pembayaran Kas Siswa"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_caption"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Main Form Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/glass_bg"
-                app:cardCornerRadius="24dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="@dimen/padding_card_lg">
 
-                    <!-- Pilihan Metode -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:text="Metode Pembayaran"
+                        android:layout_marginBottom="24dp"
+                        android:text="Form Pembayaran"
                         android:textColor="@color/text_main"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/text_h2"
+                        android:fontFamily="sans-serif-black" />
 
+                    <!-- Nominal Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="JUMLAH PEMBAYARAN (RP)"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etAmountBayarSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="Rp 0"
+                        android:inputType="number"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textColorHint="@color/text_sub"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Catatan Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="CATATAN / KETERANGAN"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etNotesBayarSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="Contoh: Kas Minggu ke-2"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textColorHint="@color/text_sub"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Metode Pembayaran -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="METODE PEMBAYARAN"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
                     <RadioGroup
-                        android:id="@+id/rgMetodePembayaran"
+                        android:id="@+id/rgMetodeBayarSiswa"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="24dp"
                         android:orientation="horizontal">
-
                         <RadioButton
-                            android:id="@+id/rbEwallet"
+                            android:id="@+id/rbTunaiSiswa"
                             android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_marginEnd="6dp"
+                            android:layout_height="90dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_radio_selector"
+                            android:layout_marginEnd="8dp"
                             android:button="@null"
+                            android:background="@drawable/bg_payment_card_selector"
+                            android:checked="true"
+                            android:drawableTop="@drawable/ic_cash"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/icon_payment_card_selector"
                             android:gravity="center"
+                            android:padding="12dp"
+                            android:text="Tunai / Cash"
+                            android:textColor="@color/text_payment_card_selector"
+                            android:fontFamily="sans-serif-bold"
+                            android:textSize="12sp" />
+                        <RadioButton
+                            android:id="@+id/rbEwalletSiswa"
+                            android:layout_width="0dp"
+                            android:layout_height="90dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:button="@null"
+                            android:background="@drawable/bg_payment_card_selector"
+                            android:drawableTop="@drawable/ic_wallet"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/icon_payment_card_selector"
+                            android:gravity="center"
+                            android:padding="12dp"
                             android:text="E-Wallet"
-                            android:textColor="@color/text_main"
-                            android:textStyle="bold" />
-
-                        <RadioButton
-                            android:id="@+id/rbTunai"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_marginStart="6dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_selector"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:text="Tunai"
-                            android:textColor="@color/text_main"
-                            android:textStyle="bold" />
+                            android:textColor="@color/text_payment_card_selector"
+                            android:fontFamily="sans-serif-bold"
+                            android:textSize="12sp" />
                     </RadioGroup>
 
-                    <!-- E-Wallet Guide (Tampil jika E-Wallet dipilih) -->
-                    <LinearLayout
-                        android:id="@+id/layoutEwalletGuide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnLihatQR"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:text="Lihat / Simpan QR Bendahara"
-                            android:textColor="@color/brand_primary"
-                            android:textStyle="bold"
-                            app:backgroundTint="@color/white"
-                            app:cornerRadius="12dp"
-                            app:icon="@drawable/ic_search"
-                            app:iconTint="@color/brand_primary"
-                            app:strokeColor="@color/brand_primary"
-                            app:strokeWidth="1dp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="*Simpan QR ini ke galerimu lalu scan melalui aplikasi Gopay/DANA/OVO/Spay untuk membayar."
-                            android:textColor="@color/text_sub"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <!-- Nominal -->
+                    <!-- Bukti Transfer -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="Jumlah Pembayaran"
+                        android:alpha="0.4"
+                        android:text="BUKTI TRANSFER (OPSIONAL)"
                         android:textColor="@color/text_main"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Rp"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusTopStart="12dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etNominalBayar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:text="20000"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- Upload Bukti -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="Bukti Pembayaran"
-                        android:textColor="@color/text_main"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
                     <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/btnUploadBuktiSiswa"
+                        android:id="@+id/cardUploadBuktiSiswa"
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        app:cardBackgroundColor="@color/bg_base"
-                        app:cardCornerRadius="12dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="32dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/radius_card_sm"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/glass_border_dark"
                         app:strokeWidth="1dp">
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:orientation="vertical">
-
                             <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/ic_plus_circle_green"
+                                android:id="@+id/ivPreviewBuktiSiswa"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_nav_settings"
                                 app:tint="@color/text_sub" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="Upload Foto/Screenshot"
+                                android:text="Tap untuk Upload"
                                 android:textColor="@color/text_sub"
-                                android:textSize="14sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Tombol Kirim -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnKirimPembayaran"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSubmitBayarSiswa"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="32dp"
-                        android:text="Kirim Pembayaran"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/brand_primary"
-                        app:cornerRadius="12dp" />
+                        android:layout_height="@dimen/btn_action_height"
+                        android:background="@drawable/bg_btn_green"
+                        android:backgroundTint="@color/brand_primary"
+                        android:text="Kirim Laporan"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_white"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="24dp">
 
-        <ImageButton
-            android:id="@+id/btnBackBayarSiswa"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/bg_glass_card"
-            android:padding="10dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/text_main" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Bayar Kas"
-            android:textColor="@color/text_main"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
 
 </FrameLayout>
-

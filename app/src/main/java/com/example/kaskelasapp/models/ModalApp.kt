@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.models
 
 data class Anggota(
     val id: String,

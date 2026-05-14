@@ -7,6 +7,9 @@ plugins {
 android {
     namespace = "com.example.kaskelasapp"
     compileSdk = 36
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.example.kaskelasapp"

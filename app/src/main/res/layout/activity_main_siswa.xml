@@ -3,18 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base">
+    android:background="@drawable/bg_main">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_main" />
+    <include layout="@layout/layout_animated_background" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="110dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,185 +20,322 @@
 
             <!-- Header -->
             <LinearLayout
+                android:id="@+id/headerBerandaSiswa"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/header_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="20dp"
-                android:paddingTop="32dp"
-                android:paddingBottom="16dp">
-
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="@dimen/header_top_padding">
+                
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
+                    
                     <TextView
+                        android:id="@+id/tvGreetingSiswa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Halo, Siswa!"
+                        android:text="Kas Kelas XII IPA 1"
                         android:textColor="@color/text_main"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
+                        android:textSize="@dimen/text_h1"
+                        android:fontFamily="sans-serif-black" />
+                        
                     <TextView
+                        android:id="@+id/tvSubGreetingSiswa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="XII IPA 1"
+                        android:text="Halo, Budi Santoso"
                         android:textColor="@color/text_sub"
                         android:textSize="14sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/btnProfileSiswa"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_glass_card"
-                    android:padding="12dp"
+                    android:padding="10dp"
                     android:src="@drawable/ic_nav_members"
                     app:tint="@color/brand_primary" />
             </LinearLayout>
 
-            <!-- Status Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Status Cards (Horizontal Scroll) -->
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/brand_primary"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="8dp">
+                android:layout_marginTop="4dp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:scrollbars="none">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_abstract_shape_1"
-                    android:orientation="vertical"
-                    android:padding="24dp">
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.8"
-                        android:text="Status Kas Kamu"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
+                    <!-- Card 1: Status Pembayaran -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardStatusPembayaran"
+                        android:layout_width="280dp"
+                        android:layout_height="@dimen/card_balance_height"
+                        android:layout_marginEnd="16dp"
+                        app:cardBackgroundColor="@color/brand_primary"
+                        app:cardCornerRadius="@dimen/radius_card"
+                        app:cardElevation="6dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="LUNAS"
-                        android:textColor="@color/white"
-                        android:textSize="32sp"
-                        android:textStyle="bold" />
+                        <RelativeLayout
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_balance_card"
+                            android:padding="@dimen/padding_card_lg">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:alpha="0.8"
-                        android:text="Kas Bulan Ini"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp 20.000 / Rp 20.000"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.8"
+                                    android:text="Status Kas Kamu"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvStatusKasSiswa"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="LUNAS"
+                                    android:textColor="@color/white"
+                                    android:textSize="32sp"
+                                    android:fontFamily="sans-serif-black" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:alpha="0.5"
+                                android:src="@drawable/ic_nav_history"
+                                app:tint="@color/white" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Card 2: Total Kas Kelas (Transparansi) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardTotalKasKelas"
+                        android:layout_width="280dp"
+                        android:layout_height="@dimen/card_balance_height"
+                        android:layout_marginEnd="16dp"
+                        app:cardBackgroundColor="@color/glass_bg"
+                        app:cardCornerRadius="@dimen/radius_card"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="@dimen/padding_card_lg">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.8"
+                                    android:text="Total Kas Kelas Saat Ini"
+                                    android:textColor="@color/text_main"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTotalKasKelasTransparansi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Rp 2.450.000"
+                                    android:textColor="@color/brand_accent"
+                                    android:textSize="32sp"
+                                    android:fontFamily="sans-serif-black" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Card 3: Tabungan Saya -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardTabunganSaya"
+                        android:layout_width="280dp"
+                        android:layout_height="@dimen/card_balance_height"
+                        app:cardBackgroundColor="@color/glass_bg"
+                        app:cardCornerRadius="@dimen/radius_card"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="@dimen/padding_card_lg">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.8"
+                                    android:text="Total Yang Sudah Dibayar"
+                                    android:textColor="@color/text_main"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTabunganSiswa"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Rp 450.000"
+                                    android:textColor="@color/brand_primary"
+                                    android:textSize="32sp"
+                                    android:fontFamily="sans-serif-black" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </HorizontalScrollView>
 
             <!-- Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
+                
+                <androidx.cardview.widget.CardView
                     android:id="@+id/btnBayarKas"
                     android:layout_width="0dp"
-                    android:layout_height="120dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_height="@dimen/btn_action_height"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/glass_bg"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/brand_accent"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
+                    app:cardBackgroundColor="#00000000"
+                    app:cardCornerRadius="@dimen/radius_card"
+                    app:cardElevation="0dp">
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/ic_wallet"
-                            app:tint="@color/brand_accent" />
-
-                        <TextView
+                        android:background="@drawable/bg_btn_green">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Bayar Kas"
-                            android:textColor="@color/text_main"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="@dimen/icon_md"
+                                android:layout_height="@dimen/icon_md"
+                                android:src="@drawable/ic_plus_circle_green" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Bayar Kas"
+                                android:textColor="#16A34A"
+                                android:textSize="@dimen/text_body"
+                                android:fontFamily="sans-serif-bold" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </androidx.cardview.widget.CardView>
+                
+                <androidx.cardview.widget.CardView
                     android:id="@+id/btnRiwayatSiswa"
                     android:layout_width="0dp"
-                    android:layout_height="120dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_height="@dimen/btn_action_height"
+                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/glass_bg"
-                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="#00000000"
+                    app:cardCornerRadius="@dimen/radius_card"
                     app:cardElevation="0dp">
-
-                    <LinearLayout
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/ic_nav_history"
-                            app:tint="@color/brand_primary" />
-
-                        <TextView
+                        android:background="@drawable/bg_btn_green"
+                        android:backgroundTint="@color/bg_pulse_indigo">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Riwayatku"
-                            android:textColor="@color/text_main"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="@dimen/icon_md"
+                                android:layout_height="@dimen/icon_md"
+                                android:src="@drawable/ic_nav_history"
+                                app:tint="@color/brand_primary" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Riwayatku"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="@dimen/text_body"
+                                android:fontFamily="sans-serif-bold" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <!-- Transaksi Terakhir -->
+            <!-- Statistics Section (Transparansi) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="32dp"
-                android:text="Pembayaran Terakhir"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_section"
+                android:text="Statistik Kas Kelas"
                 android:textColor="@color/text_main"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_h2"
+                android:fontFamily="sans-serif-black" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardGrafikSiswa"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="16dp">
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- History Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_section"
+                android:text="Pembayaran Terakhir Saya"
+                android:textColor="@color/text_main"
+                android:textSize="@dimen/text_h2"
+                android:fontFamily="sans-serif-black" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRiwayatSiswa"
@@ -210,10 +344,14 @@
                 android:layout_marginTop="12dp"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="16dp" />
-
+                android:paddingHorizontal="@dimen/margin_main" />
+                
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</FrameLayout>
+    <include layout="@layout/layout_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
+</FrameLayout>

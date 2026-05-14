@@ -1,157 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base"
-    android:fillViewport="true"
-    tools:context=".ui.auth.LoginSiswaActivity">
+    android:background="@drawable/bg_main">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include layout="@layout/layout_animated_background" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <ImageView
-            android:id="@+id/btnBackLogin"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/text_main" />
-
-        <TextView
-            android:id="@+id/tvTitleLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Login Siswa"
-            android:textColor="@color/brand_primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBackLogin" />
-
-        <TextView
-            android:id="@+id/tvSubtitleLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Masuk untuk memantau dan membayar kas kelasmu"
-            android:textColor="@color/text_sub"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitleLogin" />
-
-        <!-- Form Container -->
         <LinearLayout
-            android:id="@+id/formContainerLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitleLogin">
+            android:padding="@dimen/margin_main">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Email atau Nomor Telepon"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etUsernameLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:hint="Password"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:endIconMode="password_toggle">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPasswordLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Masuk Sekarang"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:backgroundTint="@color/brand_primary"
-                app:cornerRadius="12dp" />
+            <!-- App Logo / Icon -->
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/bg_avatar">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_members"
+                    app:tint="@color/brand_primary" />
+            </FrameLayout>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="ATAU"
-                android:textAlignment="center"
-                android:textColor="@color/text_sub"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <!-- Tombol Login dengan Google -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGoogleLogin"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Masuk dengan Google"
+                android:text="Selamat Datang"
                 android:textColor="@color/text_main"
-                android:textStyle="bold"
-                app:backgroundTint="@color/white"
-                app:cornerRadius="12dp"
-                app:icon="@drawable/ic_nav_settings" 
-                app:iconTint="@null"
-                app:strokeColor="@color/glass_border_dark"
-                app:strokeWidth="1dp" />
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-black" />
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                android:alpha="0.5"
+                android:text="Masuk ke Akun Siswa KasKelas"
+                android:textColor="@color/text_main"
+                android:textSize="@dimen/text_body" />
+
+            <!-- Login Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Belum punya akun? "
-                    android:textColor="@color/text_sub"
-                    android:textSize="14sp" />
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card_lg">
 
-                <TextView
-                    android:id="@+id/tvToRegister"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Daftar di sini"
-                    android:textColor="@color/brand_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <!-- Email Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="EMAIL ATAU USERNAME"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etUsernameLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="contoh@siswa.com"
+                        android:inputType="textEmailAddress"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Password Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="PASSWORD"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etPasswordLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="32dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="••••••••"
+                        android:inputType="textPassword"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:background="@drawable/bg_btn_green"
+                        android:text="Masuk Sekarang"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_white"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Belum punya akun? "
+                            android:textColor="@color/text_sub"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tvToRegister"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daftar"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/btnBackLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Kembali Pilih Role"
+                android:textColor="@color/text_sub"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium" />
 
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</FrameLayout>
 

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main">
+
+    <include layout="@layout/layout_animated_background" />
+
+    <!-- Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Scrollable Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/header_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="@dimen/header_top_padding">
+
+                <ImageButton
+                    android:id="@+id/btnBackDetailSiswa"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/text_main" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Detail Transaksi"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h1"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- Status/Top Area -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingVertical="32dp">
+
+                <FrameLayout
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:background="@drawable/bg_avatar">
+
+                    <ImageView
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_history"
+                        app:tint="@color/brand_primary" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvDetailStatusBadgeSiswa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Transaksi Terverifikasi"
+                    android:textColor="@color/brand_accent"
+                    android:textSize="@dimen/text_caption"
+                    android:fontFamily="sans-serif-bold" />
+            </LinearLayout>
+
+            <!-- Main Data Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card_lg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:text="Informasi Transaksi"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h2"
+                        android:fontFamily="sans-serif-black" />
+
+                    <!-- Nominal Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="NOMINAL"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <TextView
+                        android:id="@+id/tvDetailAmountSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:text="Rp 50.000"
+                        android:textColor="@color/brand_primary"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-black" />
+
+                    <!-- Jenis Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="JENIS PEMBAYARAN"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <TextView
+                        android:id="@+id/tvDetailJenisSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:text="Kas Mingguan"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body" />
+
+                    <!-- Tanggal Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="TANGGAL &amp; WAKTU"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <TextView
+                        android:id="@+id/tvDetailTanggalSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="24dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:text="13 Mei 2026, 14:30"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body" />
+
+                    <!-- Bukti Transfer -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="LAMPIRAN BUKTI"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="32dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/radius_card_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/glass_border_dark"
+                        app:strokeWidth="1dp">
+                        <ImageView
+                            android:id="@+id/ivDetailBuktiSiswa"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/img_splashscreen" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCloseDetailSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:background="@drawable/bg_btn_green"
+                        android:backgroundTint="@color/brand_primary"
+                        android:text="Tutup Detail"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_white"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</FrameLayout>

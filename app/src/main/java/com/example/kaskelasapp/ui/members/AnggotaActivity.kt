@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.members
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.models.Anggota
+import com.example.kaskelasapp.ui.members.AnggotaAdapter
+import com.example.kaskelasapp.utils.BackgroundHelper
+import com.example.kaskelasapp.utils.NavigationHelper
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 class AnggotaActivity : AppCompatActivity() {
@@ -56,7 +62,7 @@ class AnggotaActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        BottomNavHelper.setupBottomNav(this)
+        NavigationHelper.setupNavigation(this)
         BackgroundHelper.applyAnimatedBackground(this)
     }
 

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/bg_main"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <!-- Drawer Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/brand_primary"
+        android:orientation="vertical"
+        android:padding="32dp">
+
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_glass_card"
+            android:padding="12dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_nav_members"
+                app:tint="@color/white" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvDrawerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Kas Kelas"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-black" />
+
+        <TextView
+            android:id="@+id/tvDrawerSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:alpha="0.8"
+            android:text="Manajemen Keuangan Pintar"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Drawer Items -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Item: Beranda -->
+        <LinearLayout
+            android:id="@+id/sideNavHome"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_btn_outline"
+            android:backgroundTint="@color/brand_primary"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_home"
+                app:tint="@color/brand_primary" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Beranda"
+                android:textColor="@color/brand_primary"
+                android:fontFamily="sans-serif-bold" />
+        </LinearLayout>
+
+        <!-- Item: Riwayat -->
+        <LinearLayout
+            android:id="@+id/sideNavHistory"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_history"
+                app:tint="@color/text_sub" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Riwayat Transaksi"
+                android:textColor="@color/text_main"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <!-- Item: Anggota -->
+        <LinearLayout
+            android:id="@+id/sideNavMembers"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_members"
+                app:tint="@color/text_sub" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Manajemen Anggota"
+                android:textColor="@color/text_main"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <!-- Item: Pengaturan -->
+        <LinearLayout
+            android:id="@+id/sideNavSettings"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_settings"
+                app:tint="@color/text_sub" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Pengaturan"
+                android:textColor="@color/text_main"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Footer Logout -->
+    <LinearLayout
+        android:id="@+id/sideNavLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_nav_settings"
+            app:tint="@color/brand_danger" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Keluar Aplikasi"
+            android:textColor="@color/brand_danger"
+            android:fontFamily="sans-serif-bold" />
+    </LinearLayout>
+
+</LinearLayout>

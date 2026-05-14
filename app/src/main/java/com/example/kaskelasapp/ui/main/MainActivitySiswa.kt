@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.kaskelasapp.R
 import com.example.kaskelasapp.ui.auth.RoleSelectionActivity
 import com.example.kaskelasapp.utils.BackgroundHelper
-import com.google.android.material.card.MaterialCardView
+import androidx.cardview.widget.CardView
 
 class MainActivitySiswa : AppCompatActivity() {
 
@@ -17,8 +17,8 @@ class MainActivitySiswa : AppCompatActivity() {
         BackgroundHelper.applyAnimatedBackground(this)
 
         val btnProfileSiswa = findViewById<ImageView>(R.id.btnProfileSiswa)
-        val btnBayarKas = findViewById<MaterialCardView>(R.id.btnBayarKas)
-        val btnRiwayatSiswa = findViewById<MaterialCardView>(R.id.btnRiwayatSiswa)
+        val btnBayarKas = findViewById<CardView>(R.id.btnBayarKas)
+        val btnRiwayatSiswa = findViewById<CardView>(R.id.btnRiwayatSiswa)
 
         // TODO: Create Profile Siswa Activity and Bayar Kas Activity
         

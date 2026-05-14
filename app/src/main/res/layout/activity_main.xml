@@ -1,325 +1,400 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_main">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/layout_animated_background" />
-
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="110dp">
+        android:background="@drawable/bg_main">
 
-        <LinearLayout
+        <include layout="@layout/layout_animated_background" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="110dp">
 
             <LinearLayout
-                android:id="@+id/headerBeranda"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/margin_main"
-                android:paddingTop="15dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/headerBeranda"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/header_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/margin_main"
+                    android:paddingTop="@dimen/header_top_padding">
+                    
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_glass_card"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_menu"
+                        android:visibility="gone"
+                        app:tint="@color/text_main" />
+                    
+                    <TextView
+                        android:id="@+id/tvHeaderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="0dp"
+                        android:text="Kas Kelas Anda"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h1"
+                        android:fontFamily="sans-serif-black" />
+                </LinearLayout>
+
+                <!-- Saldo Cards (Horizontal Scroll) -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_main"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Card 1: Total Saldo -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardTotalBalance"
+                            android:layout_width="280dp"
+                            android:layout_height="@dimen/card_balance_height"
+                            android:layout_marginEnd="16dp"
+                            app:cardBackgroundColor="@color/brand_primary"
+                            app:cardCornerRadius="@dimen/radius_card"
+                            app:cardElevation="6dp">
+
+                            <RelativeLayout
+                                android:layout_height="match_parent"
+                                android:background="@drawable/bg_balance_card"
+                                android:padding="@dimen/padding_card_lg">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:alpha="0.8"
+                                        android:text="Total Saldo Saat Ini"
+                                        android:textColor="@color/white"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvTotalSaldo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Rp 0"
+                                        android:textColor="@color/white"
+                                        android:textSize="32sp"
+                                        android:fontFamily="sans-serif-black" />
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:alpha="0.5"
+                                    android:src="@drawable/ic_wallet"
+                                    app:tint="@color/white" />
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Card 2: Saldo Tunai -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardTunaiBalance"
+                            android:layout_width="280dp"
+                            android:layout_height="@dimen/card_balance_height"
+                            android:layout_marginEnd="16dp"
+                            app:cardBackgroundColor="@color/glass_bg"
+                            app:cardCornerRadius="@dimen/radius_card"
+                            app:cardElevation="0dp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/padding_card_lg">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:alpha="0.8"
+                                        android:text="Saldo Uang Tunai"
+                                        android:textColor="@color/text_main"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvSaldoTunai"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Rp 0"
+                                        android:textColor="@color/brand_accent"
+                                        android:textSize="32sp"
+                                        android:fontFamily="sans-serif-black" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Card 3: Saldo E-Wallet -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardEwalletBalance"
+                            android:layout_width="280dp"
+                            android:layout_height="@dimen/card_balance_height"
+                            app:cardBackgroundColor="@color/glass_bg"
+                            app:cardCornerRadius="@dimen/radius_card"
+                            app:cardElevation="0dp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/padding_card_lg">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:alpha="0.8"
+                                        android:text="Saldo E-Wallet"
+                                        android:textColor="@color/text_main"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvSaldoEwallet"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Rp 0"
+                                        android:textColor="@color/brand_primary"
+                                        android:textSize="32sp"
+                                        android:fontFamily="sans-serif-black" />
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_main"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnNavPemasukan"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#00000000"
+                        app:cardCornerRadius="@dimen/radius_card"
+                        app:cardElevation="0dp">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_btn_green">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:layout_width="@dimen/icon_md"
+                                    android:layout_height="@dimen/icon_md"
+                                    android:src="@drawable/ic_plus_circle_green" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Pemasukan"
+                                    android:textColor="#16A34A"
+                                    android:textSize="@dimen/text_body"
+                                    android:fontFamily="sans-serif-bold" />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnNavPengeluaran"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#00000000"
+                        app:cardCornerRadius="@dimen/radius_card"
+                        app:cardElevation="0dp">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_btn_red">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:layout_width="@dimen/icon_md"
+                                    android:layout_height="@dimen/icon_md"
+                                    android:src="@drawable/ic_minus_circle_red" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Pengeluaran"
+                                    android:textColor="#DC2626"
+                                    android:textSize="@dimen/text_body"
+                                    android:fontFamily="sans-serif-bold" />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+                
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnNavKonfirmasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginHorizontal="@dimen/margin_main"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="@color/glass_bg"
+                    app:cardCornerRadius="@dimen/radius_card_sm"
+                    app:cardElevation="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="16dp">
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_nav_history"
+                            app:tint="@color/brand_primary" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:text="Konfirmasi Pembayaran Siswa"
+                            android:textColor="@color/text_main"
+                            android:fontFamily="sans-serif-black" />
+                        <TextView
+                            android:id="@+id/tvBadgeKonfirmasi"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_btn_red"
+                            android:backgroundTint="@color/brand_danger"
+                            android:gravity="center"
+                            android:text="3"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kas Kelas Anda"
+                    android:layout_marginStart="@dimen/margin_main"
+                    android:layout_marginTop="@dimen/margin_section"
+                    android:text="Statistik Kas"
                     android:textColor="@color/text_main"
-                    android:textSize="@dimen/text_h1"
+                    android:textSize="@dimen/text_h2"
                     android:fontFamily="sans-serif-black" />
-            </LinearLayout>
 
-            <!-- Saldo Cards (Horizontal Scroll) -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:clipToPadding="false"
-                android:paddingHorizontal="20dp"
-                android:scrollbars="none">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardGrafik"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginHorizontal="@dimen/margin_main"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="#00000000"
+                    app:cardCornerRadius="@dimen/radius_card"
+                    app:cardElevation="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_glass_card"
+                        android:padding="16dp">
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/barChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="@dimen/margin_main"
+                    android:layout_marginTop="@dimen/margin_section"
+                    android:text="Daftar Anggota"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h2"
+                    android:fontFamily="sans-serif-black" />
 
-                    <!-- Card 1: Total Saldo -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardTotalBalance"
-                        android:layout_width="280dp"
-                        android:layout_height="160dp"
-                        android:layout_marginEnd="16dp"
-                        app:cardBackgroundColor="@color/brand_primary"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="6dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_balance_card"
-                            android:padding="24dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.8"
-                                    android:text="Total Saldo Saat Ini"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/tvTotalSaldo"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Rp 0"
-                                    android:textColor="@color/white"
-                                    android:textSize="32sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:alpha="0.5"
-                                android:src="@drawable/ic_wallet"
-                                app:tint="@color/white" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Card 2: Saldo Tunai -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardTunaiBalance"
-                        android:layout_width="280dp"
-                        android:layout_height="160dp"
-                        android:layout_marginEnd="16dp"
-                        app:cardBackgroundColor="@color/glass_bg"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="24dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.8"
-                                    android:text="Saldo Uang Tunai"
-                                    android:textColor="@color/text_main"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/tvSaldoTunai"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Rp 0"
-                                    android:textColor="@color/brand_accent"
-                                    android:textSize="32sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Card 3: Saldo E-Wallet -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardEwalletBalance"
-                        android:layout_width="280dp"
-                        android:layout_height="160dp"
-                        app:cardBackgroundColor="@color/glass_bg"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="24dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.8"
-                                    android:text="Saldo E-Wallet"
-                                    android:textColor="@color/text_main"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/tvSaldoEwallet"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="Rp 0"
-                                    android:textColor="@color/brand_primary"
-                                    android:textSize="32sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btnNavPemasukan"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/btn_action_height"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardCornerRadius="@dimen/radius_card"
-                    app:cardElevation="0dp">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_btn_green">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="@dimen/icon_md"
-                                android:layout_height="@dimen/icon_md"
-                                android:src="@drawable/ic_plus_circle_green" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Pemasukan"
-                                android:textColor="#16A34A"
-                                android:textSize="@dimen/text_body"
-                                android:fontFamily="sans-serif-bold" />
-                        </LinearLayout>
-                    </FrameLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btnNavPengeluaran"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/btn_action_height"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardCornerRadius="@dimen/radius_card"
-                    app:cardElevation="0dp">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_btn_red">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="@dimen/icon_md"
-                                android:layout_height="@dimen/icon_md"
-                                android:src="@drawable/ic_minus_circle_red" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Pengeluaran"
-                                android:textColor="#DC2626"
-                                android:textSize="@dimen/text_body"
-                                android:fontFamily="sans-serif-bold" />
-                        </LinearLayout>
-                    </FrameLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="24dp"
-                android:text="Statistik Kas"
-                android:textColor="@color/text_main"
-                android:textSize="@dimen/text_h2"
-                android:fontFamily="sans-serif-black" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardGrafik"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                android:layout_marginTop="12dp"
-                app:cardBackgroundColor="#00000000"
-                app:cardCornerRadius="@dimen/radius_card"
-                app:cardElevation="0dp">
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAnggotaBeranda"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="16dp">
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/barChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="@dimen/margin_main" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="24dp"
-                android:text="Daftar Anggota"
-                android:textColor="@color/text_main"
-                android:textSize="@dimen/text_h2"
-                android:fontFamily="sans-serif-black" />
+        <include
+            android:id="@+id/bottomNavContainer"
+            layout="@layout/layout_bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAnggotaBeranda"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="4dp" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        <View
+            android:id="@+id/blurOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:visibility="gone" />
 
-    <include layout="@layout/layout_bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        <include layout="@layout/layout_tutorial" />
+    </FrameLayout>
 
-    <include layout="@layout/layout_tutorial" />
-</FrameLayout>
+    <!-- Side Navigation Menu -->
+    <include layout="@layout/layout_side_nav" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
 

@@ -1,4 +1,7 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.members
+
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.models.Anggota
 
 import android.view.LayoutInflater
 import android.view.View

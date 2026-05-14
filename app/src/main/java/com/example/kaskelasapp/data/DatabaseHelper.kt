@@ -1,4 +1,7 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.data
+
+import com.example.kaskelasapp.models.Anggota
+import com.example.kaskelasapp.models.Transaksi
 
 import android.content.ContentValues
 import android.content.Context

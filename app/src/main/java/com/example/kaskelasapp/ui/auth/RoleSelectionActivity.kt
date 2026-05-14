@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kaskelasapp.R
+import com.example.kaskelasapp.utils.BackgroundHelper
 import com.google.android.material.card.MaterialCardView
 
 class RoleSelectionActivity : AppCompatActivity() {
@@ -11,6 +12,7 @@ class RoleSelectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_role_selection)
+        BackgroundHelper.applyAnimatedBackground(this)
 
         val cardBendahara = findViewById<MaterialCardView>(R.id.cardBendahara)
         val cardSiswa = findViewById<MaterialCardView>(R.id.cardSiswa)

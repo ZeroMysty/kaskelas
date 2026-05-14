@@ -3,141 +3,199 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base">
+    android:background="@drawable/bg_main">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_main" />
+    <include layout="@layout/layout_animated_background" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="110dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Profile Header Info -->
+            <!-- Scrollable Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/header_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="@dimen/header_top_padding">
+
+                <ImageButton
+                    android:id="@+id/btnBackProfileSiswa"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/text_main" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Profil Saya"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h1"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- Profile Focus Area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingTop="120dp"
-                android:paddingBottom="24dp">
+                android:paddingVertical="32dp">
 
-                <ImageView
-                    android:id="@+id/ivProfileSiswa"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@drawable/bg_glass_card"
-                    android:padding="20dp"
-                    android:src="@drawable/ic_nav_members"
-                    app:tint="@color/brand_primary" />
+                <FrameLayout
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:background="@drawable/bg_avatar">
+
+                    <ImageView
+                        android:id="@+id/ivProfileSiswaPage"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_members"
+                        app:tint="@color/brand_primary" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/tvNamaSiswaProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Budi Setiawan"
+                    android:layout_marginTop="20dp"
+                    android:text="Budi Santoso"
                     android:textColor="@color/text_main"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvNisSiswaProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="NIS: 12345678"
-                    android:textColor="@color/text_sub"
-                    android:textSize="14sp" />
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif-black" />
 
                 <TextView
                     android:id="@+id/tvKelasSiswaProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/bg_pill_green"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="Kelas XII IPA 1"
-                    android:textColor="@color/brand_primary"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:alpha="0.5"
+                    android:text="Kelas: XII IPA 1 (Absen 08)"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_caption"
+                    android:fontFamily="sans-serif-medium" />
             </LinearLayout>
 
+            <!-- Main Form Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="#1AE53935"
-                app:cardCornerRadius="20dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="@dimen/padding_card_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Pengaturan Akun"
-                        android:textColor="@color/brand_danger"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_marginBottom="24dp"
+                        android:text="Biodata Update"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h2"
+                        android:fontFamily="sans-serif-black" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnLogoutSiswa"
+                    <!-- Email Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="EMAIL AKTIF"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etEmailSiswaProfile"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:text="Keluar Akun (Logout)"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/brand_danger"
-                        app:cornerRadius="12dp" />
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="budi@student.com"
+                        android:inputType="textEmailAddress"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Phone Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="NOMOR TELEPON (WA)"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etPhoneSiswaProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="32dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="08123456789"
+                        android:inputType="phone"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnUpdateProfileSiswa"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/bg_btn_green"
+                        android:backgroundTint="@color/brand_primary"
+                        android:text="Simpan Perubahan"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_white"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnLogoutSiswa"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:text="Keluar Akun"
+                        android:textAllCaps="false"
+                        android:textColor="@color/brand_danger"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Header -->
-    <LinearLayout
+    <include
+        layout="@layout/layout_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="24dp">
-
-        <ImageButton
-            android:id="@+id/btnBackProfileSiswa"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/bg_glass_card"
-            android:padding="10dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/text_main" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Profil Siswa"
-            android:textColor="@color/text_main"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </FrameLayout>
-

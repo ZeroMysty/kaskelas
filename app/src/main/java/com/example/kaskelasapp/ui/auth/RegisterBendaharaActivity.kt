@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kaskelasapp.R
 import com.example.kaskelasapp.ui.main.MainActivity
+import com.example.kaskelasapp.utils.BackgroundHelper
 import com.google.android.material.button.MaterialButton
 
 class RegisterBendaharaActivity : AppCompatActivity() {
@@ -13,10 +14,10 @@ class RegisterBendaharaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_bendahara)
+        BackgroundHelper.applyAnimatedBackground(this)
 
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val btnRegister = findViewById<MaterialButton>(R.id.btnRegister)
-        val btnGoogle = findViewById<MaterialButton>(R.id.btnGoogle)
+        val btnBack = findViewById<android.widget.TextView>(R.id.btnBack)
+        val btnRegister = findViewById<android.widget.Button>(R.id.btnRegister)
 
         btnBack.setOnClickListener {
             finish()
@@ -26,12 +27,6 @@ class RegisterBendaharaActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             // Clear task so user can't press back to registration
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-        
-        btnGoogle.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

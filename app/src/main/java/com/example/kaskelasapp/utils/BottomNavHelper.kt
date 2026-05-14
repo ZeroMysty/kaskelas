@@ -1,6 +1,12 @@
 @file:Suppress("DEPRECATION")
-package com.example.kaskelasapp
+package com.example.kaskelasapp.utils
 
+import com.example.kaskelasapp.ui.main.MainActivity
+import com.example.kaskelasapp.ui.history.RiwayatActivity
+import com.example.kaskelasapp.ui.members.AnggotaActivity
+import com.example.kaskelasapp.ui.settings.SettingsActivity
+
+import com.example.kaskelasapp.R
 import android.app.Activity
 import android.content.Intent
 import android.view.View

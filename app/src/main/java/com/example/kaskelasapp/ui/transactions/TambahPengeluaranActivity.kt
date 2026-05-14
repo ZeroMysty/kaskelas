@@ -1,4 +1,8 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.transactions
+
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.utils.BackgroundHelper
 
 import android.os.Bundle
 import android.text.Editable
@@ -22,7 +26,6 @@ class TambahPengeluaranActivity : AppCompatActivity() {
 
         val etNama = findViewById<EditText>(R.id.etNamaPengeluaran)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
-        val etKet = findViewById<EditText>(R.id.etKeteranganPengeluaran)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanPengeluaran)
 
         // 🔥 FORMAT RUPIAH (AMAN)
@@ -63,7 +66,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             val nama = etNama.text.toString()
             val jumlahRaw = etJumlah.text.toString()
             val jumlahBersih = jumlahRaw.replace(".", "")
-            val ket = etKet.text.toString()
+            val ket = "" // Field removed from UI
             val tanggal = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
 
             if (nama.isEmpty() || jumlahBersih.isEmpty()) {
@@ -77,7 +80,6 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 Nama       : $nama
                 Jumlah     : Rp $jumlahRaw
                 Tanggal    : $tanggal
-                Keterangan : ${if (ket.isEmpty()) "-" else ket}
             """.trimIndent()
 
             AlertDialog.Builder(this)
@@ -90,7 +92,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                             jumlahBersih,
                             tanggal,
                             "KELUAR",
-                            ket
+                            ""
                         )
 
                         if (result == -1L) {
@@ -112,7 +114,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         }
 
         // 🔙 BACK
-        findViewById<ImageView>(R.id.btnBackPengeluaran).setOnClickListener {
+        findViewById<ImageButton>(R.id.btnBackPengeluaran).setOnClickListener {
             finish()
         }
     }

@@ -1,241 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base"
-    android:fillViewport="true"
-    tools:context=".RegisterBendaharaActivity">
+    android:background="@drawable/bg_main">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include layout="@layout/layout_animated_background" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/text_main" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Daftar Bendahara"
-            android:textColor="@color/brand_primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
-
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Buat kelas dan kelola kas dengan mudah"
-            android:textColor="@color/text_sub"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-        <!-- Form Container -->
         <LinearLayout
-            android:id="@+id/formContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+            android:padding="@dimen/margin_main"
+            android:paddingBottom="40dp">
 
-            <!-- Tombol Daftar dengan Google -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGoogle"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Daftar dengan Google"
-                android:textColor="@color/text_main"
-                android:textStyle="bold"
-                app:backgroundTint="@color/white"
-                app:cornerRadius="12dp"
-                app:icon="@drawable/ic_nav_settings" 
-                app:iconTint="@null"
-                app:strokeColor="@color/glass_border_dark"
-                app:strokeWidth="1dp" />
+            <!-- App Logo / Icon -->
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_avatar">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_history"
+                    app:tint="@color/brand_primary" />
+            </FrameLayout>
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buat Akun Bendahara"
+                android:textColor="@color/text_main"
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                android:alpha="0.5"
+                android:text="Lengkapi data diri pengelola kas kelas"
+                android:textColor="@color/text_main"
+                android:textSize="@dimen/text_body" />
+
+            <!-- Register Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="ATAU"
-                android:textAlignment="center"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card_lg">
+
+                    <!-- Nama Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="NAMA LENGKAP"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etNama"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="Admin Kas Kelas"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Grouped Info -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:alpha="0.4"
+                                android:text="NO. ABSEN"
+                                android:textColor="@color/text_main"
+                                android:textSize="10sp"
+                                android:fontFamily="sans-serif-black"
+                                android:letterSpacing="0.1" />
+                            <EditText
+                                android:id="@+id/etAbsen"
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@drawable/bg_input_putih"
+                                android:hint="01"
+                                android:inputType="number"
+                                android:paddingHorizontal="16dp"
+                                android:textColor="@color/text_main"
+                                android:textSize="@dimen/text_body"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:alpha="0.4"
+                                android:text="NIS"
+                                android:textColor="@color/text_main"
+                                android:textSize="10sp"
+                                android:fontFamily="sans-serif-black"
+                                android:letterSpacing="0.1" />
+                            <EditText
+                                android:id="@+id/etNis"
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@drawable/bg_input_putih"
+                                android:hint="123456"
+                                android:inputType="number"
+                                android:paddingHorizontal="16dp"
+                                android:textColor="@color/text_main"
+                                android:textSize="@dimen/text_body"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Phone Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="NOMOR TELEPON"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="0812xxxx"
+                        android:inputType="phone"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Password Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="PASSWORD"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="••••••••"
+                        android:inputType="textPassword"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <!-- Confirm Password Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="KONFIRMASI PASSWORD"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <EditText
+                        android:id="@+id/etPasswordConfirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="32dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:hint="••••••••"
+                        android:inputType="textPassword"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:background="@drawable/bg_btn_green"
+                        android:text="Daftar Sekarang"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_white"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sudah punya akun? "
+                            android:textColor="@color/text_sub"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tvToLogin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Masuk"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Batal Mendaftar"
                 android:textColor="@color/text_sub"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Nama Lengkap"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNama"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:hint="No. Absen"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etAbsen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:hint="NIS"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNis"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Nomor Telepon Aktif (WA)"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Password"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:endIconMode="password_toggle">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:hint="Konfirmasi Password"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:endIconMode="password_toggle">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPasswordConfirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- E-Wallet Setup dipindah ke Settings (Activity Settings) -->
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRegister"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Daftar Sekarang"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:backgroundTint="@color/brand_primary"
-                app:cornerRadius="12dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sudah punya akun? "
-                    android:textColor="@color/text_sub"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tvToLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Masuk di sini"
-                    android:textColor="@color/brand_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium" />
 
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</FrameLayout>
 

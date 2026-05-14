@@ -1,10 +1,12 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.utils
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import com.example.kaskelasapp.R
 import android.app.Activity
 import android.view.View
 import android.view.animation.LinearInterpolator
+import com.example.kaskelasapp.data.DatabaseHelper
 
 object BackgroundHelper {
 

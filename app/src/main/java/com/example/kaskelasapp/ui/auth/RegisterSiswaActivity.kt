@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kaskelasapp.R
-import com.example.kaskelasapp.ui.main.MainActivity
+import com.example.kaskelasapp.ui.main.MainActivitySiswa
+import com.example.kaskelasapp.utils.BackgroundHelper
 import com.google.android.material.button.MaterialButton
 
 class RegisterSiswaActivity : AppCompatActivity() {
@@ -13,10 +14,10 @@ class RegisterSiswaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_siswa)
+        BackgroundHelper.applyAnimatedBackground(this)
 
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val btnRegister = findViewById<MaterialButton>(R.id.btnRegister)
-        val btnGoogle = findViewById<MaterialButton>(R.id.btnGoogle)
+        val btnBack = findViewById<android.widget.TextView>(R.id.btnBack)
+        val btnRegister = findViewById<android.widget.Button>(R.id.btnRegister)
 
         btnBack.setOnClickListener {
             finish()
@@ -24,12 +25,6 @@ class RegisterSiswaActivity : AppCompatActivity() {
 
         // Mock Navigation to Main Dashboard Siswa
         btnRegister.setOnClickListener {
-            val intent = Intent(this, MainActivitySiswa::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-        
-        btnGoogle.setOnClickListener {
             val intent = Intent(this, MainActivitySiswa::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

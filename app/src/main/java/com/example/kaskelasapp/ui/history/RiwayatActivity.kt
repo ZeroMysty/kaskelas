@@ -1,4 +1,4 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.history
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.models.Transaksi
+import com.example.kaskelasapp.ui.history.RiwayatAdapter
+import com.example.kaskelasapp.ui.transactions.DetailPemasukanActivity
+import com.example.kaskelasapp.ui.transactions.DetailPengeluaranActivity
+import com.example.kaskelasapp.utils.BackgroundHelper
+import com.example.kaskelasapp.utils.NavigationHelper
 import java.io.File
 import java.io.FileOutputStream
 
@@ -47,7 +55,7 @@ class RiwayatActivity : AppCompatActivity() {
             exportToCSV()
         }
 
-        setupBottomNav()
+        NavigationHelper.setupNavigation(this)
         BackgroundHelper.applyAnimatedBackground(this)
     }
 
@@ -124,9 +132,6 @@ class RiwayatActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBottomNav() {
-        BottomNavHelper.setupBottomNav(this)
-    }
 
     override fun onResume() {
         super.onResume()

@@ -3,44 +3,168 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_base">
+    android:background="@drawable/bg_main">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_main" />
+    <include layout="@layout/layout_animated_background" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="110dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Spacer for Header -->
-            <View
+            <!-- Header -->
+            <LinearLayout
+                android:id="@+id/headerRiwayatSiswa"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="@dimen/header_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/margin_main"
+                android:paddingTop="@dimen/header_top_padding">
+                
+                <ImageButton
+                    android:id="@+id/btnBackRiwayatSiswa"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/text_main" />
 
-            <!-- Pencarian -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="Riwayat Saya"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_h1"
+                    android:fontFamily="sans-serif-black" />
+                    
+                <ImageButton
+                    android:id="@+id/btnExportRiwayatSiswa"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_glass_card"
+                    android:backgroundTint="#202196F3"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/brand_primary" />
+            </LinearLayout>
+
+            <!-- Summary Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="4dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="6dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_balance_card"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:orientation="vertical">
+                        <TextView
+                            android:text="Total Terbayar"
+                            android:textColor="@color/text_white"
+                            android:textSize="12sp"
+                            android:alpha="0.8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tvTotalDibayarSiswa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Rp 450.000"
+                            android:textColor="@color/text_white"
+                            android:textSize="28sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+                    
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="60dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:alpha="0.2"
+                        android:background="@color/text_white" />
+                        
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:text="Status"
+                            android:textColor="@color/text_white"
+                            android:textSize="11sp"
+                            android:alpha="0.7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tvStatusSiswaRiwayat"
+                            android:text="LUNAS"
+                            android:textColor="@color/text_white"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="8dp"
+                            android:alpha="0.2"
+                            android:background="@color/text_white" />
+                        <TextView
+                            android:text="Tunggakan"
+                            android:textColor="@color/text_white"
+                            android:textSize="11sp"
+                            android:alpha="0.7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tvTunggakanSiswaRiwayat"
+                            android:text="Rp 0"
+                            android:textColor="@color/text_white"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Search Bar -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginHorizontal="20dp"
-                app:cardBackgroundColor="@color/glass_bg"
-                app:cardCornerRadius="16dp"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
                 app:cardElevation="0dp">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_glass_card">
                     <ImageView
-                        android:id="@+id/ivSearchIconRiwayat"
+                        android:id="@+id/ivSearchIconRiwayatSiswa"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_alignParentStart="true"
@@ -49,23 +173,23 @@
                         android:alpha="0.35"
                         android:src="@drawable/ic_search"
                         app:tint="@color/text_main" />
-
                     <EditText
                         android:id="@+id/etSearchRiwayatSiswa"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toEndOf="@+id/ivSearchIconRiwayat"
+                        android:layout_toEndOf="@+id/ivSearchIconRiwayatSiswa"
                         android:background="@null"
-                        android:hint="Cari riwayat bulan..."
+                        android:hint="Cari pembayaran..."
                         android:paddingStart="10dp"
                         android:paddingEnd="16dp"
-                        android:singleLine="true"
                         android:textColor="@color/text_main"
                         android:textColorHint="@color/text_sub"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_body"
+                        android:singleLine="true" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- History List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRiwayatSiswaPage"
                 android:layout_width="match_parent"
@@ -73,37 +197,9 @@
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="16dp" />
+                android:paddingHorizontal="@dimen/margin_main" />
+                
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="24dp">
-
-        <ImageButton
-            android:id="@+id/btnBackRiwayatSiswa"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:background="@drawable/bg_glass_card"
-            android:padding="10dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/text_main" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Riwayat Pembayaran"
-            android:textColor="@color/text_main"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
 </FrameLayout>
-

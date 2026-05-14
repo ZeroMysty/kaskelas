@@ -1,4 +1,7 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.history
+
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.models.Transaksi
 
 import android.view.LayoutInflater
 import android.view.View

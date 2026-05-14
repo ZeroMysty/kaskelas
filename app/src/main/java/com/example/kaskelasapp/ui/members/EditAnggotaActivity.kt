@@ -1,4 +1,8 @@
-package com.example.kaskelasapp
+package com.example.kaskelasapp.ui.members
+
+import com.example.kaskelasapp.R
+import com.example.kaskelasapp.data.DatabaseHelper
+import com.example.kaskelasapp.utils.BackgroundHelper
 
 import android.os.Bundle
 import android.widget.Button
