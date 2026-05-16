@@ -1,16 +1,27 @@
 package com.example.kaskelasapp
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import java.io.File
+import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TambahPengeluaranActivity : AppCompatActivity() {
+    
+    private var imageUri: Uri? = null
+    private lateinit var ivPreview: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +35,42 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
         val etKet = findViewById<EditText>(R.id.etKeteranganPengeluaran)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanPengeluaran)
+        val btnPilihFoto = findViewById<LinearLayout>(R.id.btnPilihFotoPengeluaran)
+        ivPreview = findViewById(R.id.ivPreviewPengeluaran)
+
+        // 🔥 REGISTER IMAGE PICKER
+        val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                imageUri = uri
+                ivPreview.setImageURI(uri)
+                ivPreview.setPadding(0, 0, 0, 0)
+                ivPreview.imageTintList = null
+                ivPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+        }
+
+        // 🔥 REGISTER PERMISSION LAUNCHER
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                pickImage.launch("image/*")
+            } else {
+                Toast.makeText(this, "Izin galeri diperlukan!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnPilihFoto.setOnClickListener {
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                pickImage.launch("image/*")
+            } else {
+                requestPermissionLauncher.launch(permission)
+            }
+        }
 
         // 🔥 FORMAT RUPIAH (AMAN)
         etJumlah.addTextChangedListener(object : TextWatcher {
@@ -85,12 +132,17 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setPositiveButton("Ya") { _, _ ->
                     try {
+                        // Simpan foto ke internal storage jika ada
+                        val finalImagePath = imageUri?.let { saveImageToInternalStorage(it) }
+
                         val result = db.insertTransaksi(
                             nama,
                             jumlahBersih,
                             tanggal,
                             "KELUAR",
-                            ket
+                            ket,
+                            null,
+                            finalImagePath
                         )
 
                         if (result == -1L) {
@@ -114,6 +166,22 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         // 🔙 BACK
         findViewById<ImageView>(R.id.btnBackPengeluaran).setOnClickListener {
             finish()
+        }
+    }
+
+    private fun saveImageToInternalStorage(uri: Uri): String? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val fileName = "bukti_${System.currentTimeMillis()}.jpg"
+            val file = File(filesDir, fileName)
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            file.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

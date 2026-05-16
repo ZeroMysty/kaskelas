@@ -5,17 +5,20 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db", null, 2) {
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db", null, 3) {
     override fun onCreate(db: SQLiteDatabase) {
         // Tabel Anggota
         db.execSQL("CREATE TABLE anggota (id TEXT PRIMARY KEY, nama TEXT, nis TEXT)")
         // Tabel Transaksi
-        db.execSQL("CREATE TABLE transaksi (id INTEGER PRIMARY KEY AUTOINCREMENT, judul TEXT, jumlah TEXT, tanggal TEXT, jenis TEXT, keterangan TEXT, anggota_id TEXT)")
+        db.execSQL("CREATE TABLE transaksi (id INTEGER PRIMARY KEY AUTOINCREMENT, judul TEXT, jumlah TEXT, tanggal TEXT, jenis TEXT, keterangan TEXT, anggota_id TEXT, bukti_foto TEXT)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE transaksi ADD COLUMN anggota_id TEXT")
+        }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE transaksi ADD COLUMN bukti_foto TEXT")
         }
     }
 
@@ -31,7 +34,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
     }
 
     // Fungsi Tambah Transaksi
-    fun insertTransaksi(judul: String, jumlah: String, tanggal: String, jenis: String, keterangan: String, anggotaId: String? = null): Long {
+    fun insertTransaksi(judul: String, jumlah: String, tanggal: String, jenis: String, keterangan: String, anggotaId: String? = null, buktiFoto: String? = null): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("judul", judul)
@@ -41,6 +44,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
             put("keterangan", keterangan)
             if (anggotaId != null) {
                 put("anggota_id", anggotaId)
+            }
+            if (buktiFoto != null) {
+                put("bukti_foto", buktiFoto)
             }
         }
         return db.insert("transaksi", null, values)
@@ -65,7 +71,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
                 val indexAnggotaId = getColumnIndex("anggota_id")
                 val anggotaId = if (indexAnggotaId != -1 && !isNull(indexAnggotaId)) getString(indexAnggotaId) else null
                 
-                list.add(Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId))
+                val indexBuktiFoto = getColumnIndex("bukti_foto")
+                val buktiFoto = if (indexBuktiFoto != -1 && !isNull(indexBuktiFoto)) getString(indexBuktiFoto) else null
+                
+                list.add(Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId, buktiFoto))
             }
             close()
         }
@@ -86,7 +95,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
                 val tanggal = getString(getColumnIndexOrThrow("tanggal"))
                 val tipe = getString(getColumnIndexOrThrow("jenis"))
                 val ket = getString(getColumnIndexOrThrow("keterangan"))
-                list.add(Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId))
+                val indexBuktiFoto = getColumnIndex("bukti_foto")
+                val buktiFoto = if (indexBuktiFoto != -1 && !isNull(indexBuktiFoto)) getString(indexBuktiFoto) else null
+
+                list.add(Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId, buktiFoto))
             }
             close()
         }
@@ -106,8 +118,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "uangkas.db",
             val ket = cursor.getString(cursor.getColumnIndexOrThrow("keterangan"))
             val indexAnggotaId = cursor.getColumnIndex("anggota_id")
             val anggotaId = if (indexAnggotaId != -1 && !cursor.isNull(indexAnggotaId)) cursor.getString(indexAnggotaId) else null
+            
+            val indexBuktiFoto = cursor.getColumnIndex("bukti_foto")
+            val buktiFoto = if (indexBuktiFoto != -1 && !cursor.isNull(indexBuktiFoto)) cursor.getString(indexBuktiFoto) else null
+            
             cursor.close()
-            Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId)
+            Transaksi(id, nama, jumlah, tanggal, tipe, ket, anggotaId, buktiFoto)
         } else {
             cursor.close()
             null
