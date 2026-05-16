@@ -29,79 +29,79 @@
             android:name=".ui.auth.RoleSelectionActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.auth.RegisterBendaharaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.auth.LoginBendaharaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.auth.RegisterSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.auth.LoginSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.main.MainActivitySiswa"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.main.BayarKasSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.history.RiwayatSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.history.DetailTransaksiSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.main.ProfileSiswaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
         
         <activity
             android:name=".ui.main.KonfirmasiPembayaranActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.main.DetailKonfirmasiPembayaranActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
         <activity
             android:name=".ui.auth.OnboardingActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.KasKelasApp" />
 
 
         <!-- Main Activity (Beranda) - DIKUNCI PORTRAIT -->

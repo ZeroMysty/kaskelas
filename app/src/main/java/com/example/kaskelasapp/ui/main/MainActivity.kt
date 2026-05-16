@@ -241,12 +241,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateSaldo() {
         val total = db.hitungTotalSaldo()
+        val tunai = db.getSaldoByMetode("TUNAI")
+        val ewallet = db.getSaldoByMetode("E-WALLET")
+        val pendingCount = db.getCountPending()
+
         val formatRupiah =
             java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
                 maximumFractionDigits = 0
                 minimumFractionDigits = 0
             }
+        
         findViewById<android.widget.TextView>(R.id.tvTotalSaldo).text = formatRupiah.format(total)
+        findViewById<android.widget.TextView>(R.id.tvSaldoTunai).text = formatRupiah.format(tunai)
+        findViewById<android.widget.TextView>(R.id.tvSaldoEwallet).text = formatRupiah.format(ewallet)
+        
+        val tvBadge = findViewById<android.widget.TextView>(R.id.tvBadgeKonfirmasi)
+        if (pendingCount > 0) {
+            tvBadge.visibility = View.VISIBLE
+            tvBadge.text = pendingCount.toString()
+        } else {
+            tvBadge.visibility = View.GONE
+        }
     }
 
     private fun loadChart() {

@@ -35,18 +35,20 @@ class RiwayatAdapter(private var list: List<Transaksi>, private val onClick: (Tr
         holder.tvJudul.text = data.nama
         holder.tvTanggal.text = data.tanggal
 
-        val localeID = java.util.Locale.Builder().setLanguage("id").setRegion("ID").build()
-        val numberFormat = java.text.NumberFormat.getNumberInstance(localeID)
-        val formattedJumlah = numberFormat.format(data.jumlah.toLongOrNull() ?: 0)
+        val localeID = java.util.Locale.forLanguageTag("id-ID")
+        val numberFormat = java.text.NumberFormat.getCurrencyInstance(localeID).apply {
+            maximumFractionDigits = 0
+        }
+        val formattedJumlah = numberFormat.format(data.jumlah.toLongOrNull() ?: 0L)
 
         // Ganti ikon dan warna berdasarkan tipe (Masuk/Keluar)
         if (data.tipe == "MASUK") {
-            holder.tvJumlah.text = "+ Rp $formattedJumlah"
+            holder.tvJumlah.text = "+ $formattedJumlah"
             holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#16A34A"))
             holder.ivTipe.setImageResource(R.drawable.ic_plus_circle_green)
             holder.ivTipe.setBackgroundResource(R.drawable.bg_chip_green)
         } else {
-            holder.tvJumlah.text = "- Rp $formattedJumlah"
+            holder.tvJumlah.text = "- $formattedJumlah"
             holder.tvJumlah.setTextColor(android.graphics.Color.parseColor("#DC2626"))
             holder.ivTipe.setImageResource(R.drawable.ic_minus_circle_red)
             holder.ivTipe.setBackgroundResource(R.drawable.bg_chip_red)

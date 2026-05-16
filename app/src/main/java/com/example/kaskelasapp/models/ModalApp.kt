@@ -13,5 +13,7 @@ data class Transaksi(
     val tanggal: String,
     val tipe: String, // "MASUK" atau "KELUAR"
     val keterangan: String = "",
-    val anggota_id: String? = null
+    val anggota_id: String? = null,
+    val metode: String = "TUNAI", // "TUNAI" atau "E-WALLET"
+    val status: String = "SUCCESS" // "SUCCESS" atau "PENDING" (untuk konfirmasi)
 )

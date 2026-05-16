@@ -87,12 +87,18 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setPositiveButton("Ya") { _, _ ->
                     try {
+                        val selectedMetodeId = findViewById<RadioGroup>(R.id.rgMetode).checkedRadioButtonId
+                        val metode = if (selectedMetodeId == R.id.rbEwallet) "E-WALLET" else "TUNAI"
+
                         val result = db.insertTransaksi(
                             nama,
                             jumlahBersih,
                             tanggal,
                             "KELUAR",
-                            ""
+                            "",
+                            null,
+                            metode,
+                            "SUCCESS"
                         )
 
                         if (result == -1L) {
