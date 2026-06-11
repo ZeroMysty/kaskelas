@@ -18,18 +18,27 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+import androidx.lifecycle.ViewModelProvider
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+
 class TambahPengeluaranActivity : AppCompatActivity() {
     
     private var imageUri: Uri? = null
     private lateinit var ivPreview: ImageView
+    private lateinit var viewModel: KasViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_pengeluaran)
         BackgroundHelper.applyAnimatedBackground(this)
 
-
-        val db = DatabaseHelper(this)
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
 
         val etNama = findViewById<EditText>(R.id.etNamaPengeluaran)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
@@ -135,19 +144,17 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                         // Simpan foto ke internal storage jika ada
                         val finalImagePath = imageUri?.let { saveImageToInternalStorage(it) }
 
-                        val result = db.insertTransaksi(
-                            nama,
-                            jumlahBersih,
-                            tanggal,
-                            "KELUAR",
-                            ket,
-                            null,
-                            finalImagePath
+                        val newTrans = Transaksi(
+                            nama = nama,
+                            jumlah = jumlahBersih,
+                            tanggal = tanggal,
+                            tipe = "KELUAR",
+                            keterangan = ket,
+                            anggota_id = null,
+                            buktiFoto = finalImagePath
                         )
 
-                        if (result == -1L) {
-                            Toast.makeText(this, "Gagal menyimpan ke database", Toast.LENGTH_LONG).show()
-                        } else {
+                        viewModel.insertTransaksi(newTrans) {
                             Toast.makeText(this, "Pengeluaran disimpan!", Toast.LENGTH_SHORT).show()
                             finish()
                         }

@@ -56,9 +56,16 @@ dependencies {
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
     // MPAndroidChart untuk grafik
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Keamanan (App Lock)
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
+    // JSON Parsing untuk Backup
+    implementation("com.google.code.gson:gson:2.10.1")
 
     // Splash Screen
     implementation("androidx.core:core-splashscreen:1.2.0")

@@ -157,6 +157,90 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="Keamanan"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:alpha="0.6"
+                        android:text="Kunci aplikasi menggunakan Sidik Jari / PIN."
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_caption" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchAppLock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Aktifkan Kunci Aplikasi"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        app:useMaterialThemeColors="true" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="Bantuan"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h2" />
+
+                    <Button
+                        android:id="@+id/btnBukuPanduan"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_outline_button"
+                        android:text="Buka Buku Panduan"
+                        android:textAllCaps="false"
+                        android:textColor="@color/brand_primary"
+                        android:fontFamily="sans-serif-bold"
+                        app:backgroundTint="@null" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_glass_red"
                     android:orientation="vertical"
                     android:padding="@dimen/padding_card">
@@ -168,12 +252,36 @@
                         android:text="Manajemen Data"
                         android:textColor="@color/brand_danger"
                         android:textSize="@dimen/text_h2" />
+                        
+                    <Button
+                        android:id="@+id/btnBackupData"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_outline_button"
+                        android:text="Backup Data (.json)"
+                        android:textAllCaps="false"
+                        android:textColor="@color/brand_primary"
+                        android:fontFamily="sans-serif-bold"
+                        app:backgroundTint="@null" />
+
+                    <Button
+                        android:id="@+id/btnRestoreData"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_outline_button"
+                        android:text="Restore Data (.json)"
+                        android:textAllCaps="false"
+                        android:textColor="@color/brand_primary"
+                        android:fontFamily="sans-serif-bold"
+                        app:backgroundTint="@null" />
 
                     <Button
                         android:id="@+id/resetData"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="12dp"
                         android:background="@drawable/bg_outline_button_danger"
                         android:text="Reset Semua Data"
                         android:textAllCaps="false"

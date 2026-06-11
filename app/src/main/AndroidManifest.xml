@@ -112,6 +112,13 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
 
+        <!-- Manual Book Activity -->
+        <activity
+            android:name=".ManualBookActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".SettingsActivity" />
+
         <!-- Detail Anggota Activity -->
         <activity
             android:name=".DetailAnggotaActivity"

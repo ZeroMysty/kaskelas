@@ -12,11 +12,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.datepicker.MaterialDatePicker
+import androidx.core.util.Pair
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+import kotlinx.coroutines.launch
 
 class RiwayatActivity : AppCompatActivity() {
-    private lateinit var db: DatabaseHelper
+    private lateinit var viewModel: KasViewModel
     private lateinit var rvRiwayat: RecyclerView
     private lateinit var adapter: RiwayatAdapter
     private var fullList: List<Transaksi> = listOf()
@@ -25,12 +37,26 @@ class RiwayatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_riwayat)
 
-        db = DatabaseHelper(this)
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+
         rvRiwayat = findViewById(R.id.rvRiwayat)
         rvRiwayat.layoutManager = LinearLayoutManager(this)
 
-        loadTransaksi()
-        updateTotals()
+        adapter = RiwayatAdapter(emptyList()) { transaksi ->
+            val intent = if (transaksi.tipe == "MASUK") {
+                Intent(this, DetailPemasukanActivity::class.java)
+            } else {
+                Intent(this, DetailPengeluaranActivity::class.java)
+            }
+            intent.putExtra("TRANSAKSI_ID", transaksi.id)
+            startActivity(intent)
+        }
+        rvRiwayat.adapter = adapter
+
+        observeViewModel()
 
         // --- FITUR PENCARIAN ---
         val etSearch = findViewById<EditText>(R.id.etSearchRiwayat)
@@ -47,17 +73,70 @@ class RiwayatActivity : AppCompatActivity() {
             exportToCSV()
         }
 
+        // --- FITUR FILTER TANGGAL ---
+        findViewById<ImageButton>(R.id.btnFilterTanggal).setOnClickListener {
+            showDateRangePicker()
+        }
+
         setupBottomNav()
         BackgroundHelper.applyAnimatedBackground(this)
     }
 
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.transaksiList.collect { list ->
+                fullList = list
+                updateTotals()
+                
+                val etSearch = findViewById<EditText>(R.id.etSearchRiwayat)
+                filterData(etSearch?.text.toString())
+            }
+        }
+    }
+
+    private var filterStartDate: Long? = null
+    private var filterEndDate: Long? = null
+
     private fun filterData(query: String) {
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        
         val filtered = fullList.filter {
-            it.nama.contains(query, ignoreCase = true) || 
-            it.tanggal.contains(query, ignoreCase = true) ||
-            it.keterangan.contains(query, ignoreCase = true)
+            val matchesSearch = it.nama.contains(query, ignoreCase = true) || 
+                                it.tanggal.contains(query, ignoreCase = true) ||
+                                it.keterangan.contains(query, ignoreCase = true)
+            
+            var matchesDate = true
+            if (filterStartDate != null && filterEndDate != null) {
+                try {
+                    val date = sdf.parse(it.tanggal)
+                    if (date != null) {
+                        matchesDate = date.time in filterStartDate!!..filterEndDate!!
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            
+            matchesSearch && matchesDate
         }
         adapter.updateData(filtered)
+        updateTotalsFiltered(filtered)
+    }
+    
+    private fun showDateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTitleText("Pilih Rentang Tanggal")
+        val picker = builder.build()
+        
+        picker.addOnPositiveButtonClickListener { selection ->
+            filterStartDate = selection.first
+            filterEndDate = selection.second
+            
+            val etSearch = findViewById<EditText>(R.id.etSearchRiwayat)
+            filterData(etSearch?.text.toString())
+        }
+        
+        picker.show(supportFragmentManager, picker.toString())
     }
 
     private fun exportToCSV() {
@@ -130,8 +209,7 @@ class RiwayatActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadTransaksi()
-        updateTotals()
+        viewModel.loadAllTransaksi()
     }
 
     private fun formatRupiah(number: Long): String {
@@ -139,11 +217,11 @@ class RiwayatActivity : AppCompatActivity() {
         return java.text.NumberFormat.getNumberInstance(localeID).format(number)
     }
 
-    private fun updateTotals() {
+    private fun updateTotalsFiltered(filteredList: List<Transaksi>) {
         var totalMasuk = 0L
         var totalKeluar = 0L
         
-        fullList.forEach {
+        filteredList.forEach {
             val jumlah = it.jumlah.replace(".", "").toLongOrNull() ?: 0
             if (it.tipe == "MASUK") {
                 totalMasuk += jumlah
@@ -158,17 +236,7 @@ class RiwayatActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvTotalKeluarRiwayat)?.text = "Rp ${formatRupiah(totalKeluar)}"
     }
 
-    private fun loadTransaksi() {
-        fullList = db.getAllTransaksi()
-        adapter = RiwayatAdapter(fullList) { transaksi ->
-            val intent = if (transaksi.tipe == "MASUK") {
-                Intent(this, DetailPemasukanActivity::class.java)
-            } else {
-                Intent(this, DetailPengeluaranActivity::class.java)
-            }
-            intent.putExtra("TRANSAKSI_ID", transaksi.id)
-            startActivity(intent)
-        }
-        rvRiwayat.adapter = adapter
+    private fun updateTotals() {
+        updateTotalsFiltered(fullList)
     }
 }

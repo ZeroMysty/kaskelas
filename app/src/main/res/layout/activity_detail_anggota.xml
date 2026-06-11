@@ -65,6 +65,109 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Status Tagihan Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_main"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#00000000"
+                app:cardCornerRadius="@dimen/radius_card"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_card">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="Status Tagihan"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_h2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Total Kas Dibayar:"
+                            android:textColor="@color/text_main"
+                            android:alpha="0.8" />
+                            
+                        <TextView
+                            android:id="@+id/tvTotalDibayar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rp 0"
+                            android:textColor="@color/brand_primary"
+                            android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Target Terkini:"
+                            android:textColor="@color/text_main"
+                            android:alpha="0.8" />
+                            
+                        <TextView
+                            android:id="@+id/tvTargetKas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rp 0"
+                            android:textColor="@color/text_main"
+                            android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+                    
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_sub"
+                        android:alpha="0.2"
+                        android:layout_marginVertical="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Status:"
+                            android:textColor="@color/text_main"
+                            android:fontFamily="sans-serif-bold" />
+                            
+                        <TextView
+                            android:id="@+id/tvStatusTunggakan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LUNAS"
+                            android:textColor="@color/brand_accent"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/labelRiwayat"
                 android:layout_width="wrap_content"

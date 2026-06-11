@@ -10,47 +10,58 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+import androidx.lifecycle.lifecycleScope
+import com.example.kaskelasapp.data.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 class DetailPemasukanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_pemasukan)
 
-        val db = DatabaseHelper(this)
         val transaksiId = intent.getIntExtra("TRANSAKSI_ID", -1)
 
         if (transaksiId != -1) {
-            val transaksi = db.getTransaksiById(transaksiId)
-            if (transaksi != null) {
-                findViewById<TextView>(R.id.tvDetailNamaP).text = transaksi.nama
-                findViewById<TextView>(R.id.tvDetailJumlahP).text = "Rp ${transaksi.jumlah}"
-                findViewById<TextView>(R.id.tvDetailTanggalP).text = transaksi.tanggal
-                findViewById<TextView>(R.id.tvDetailKeteranganP).text = transaksi.keterangan
+            lifecycleScope.launch {
+                val db = AppDatabase.getDatabase(this@DetailPemasukanActivity)
+                val transaksi = withContext(Dispatchers.IO) {
+                    db.transaksiDao().getTransaksiById(transaksiId)
+                }
                 
-                val ivBukti = findViewById<ImageView>(R.id.ivDetailBuktiP)
-                val tvNoBukti = findViewById<TextView>(R.id.tvNoBuktiP)
-                
-                if (!transaksi.buktiFoto.isNullOrEmpty()) {
-                    try {
-                        val file = File(transaksi.buktiFoto)
-                        if (file.exists()) {
-                            ivBukti.setImageURI(Uri.fromFile(file))
-                        } else {
-                            ivBukti.setImageURI(Uri.parse(transaksi.buktiFoto))
+                if (transaksi != null) {
+                    findViewById<TextView>(R.id.tvDetailNamaP).text = transaksi.nama
+                    findViewById<TextView>(R.id.tvDetailJumlahP).text = "Rp ${transaksi.jumlah}"
+                    findViewById<TextView>(R.id.tvDetailTanggalP).text = transaksi.tanggal
+                    findViewById<TextView>(R.id.tvDetailKeteranganP).text = transaksi.keterangan
+                    
+                    val ivBukti = findViewById<ImageView>(R.id.ivDetailBuktiP)
+                    val tvNoBukti = findViewById<TextView>(R.id.tvNoBuktiP)
+                    
+                    if (!transaksi.buktiFoto.isNullOrEmpty()) {
+                        try {
+                            val file = File(transaksi.buktiFoto)
+                            if (file.exists()) {
+                                ivBukti.setImageURI(Uri.fromFile(file))
+                            } else {
+                                ivBukti.setImageURI(Uri.parse(transaksi.buktiFoto))
+                            }
+                            ivBukti.alpha = 1.0f
+                            ivBukti.scaleType = ImageView.ScaleType.CENTER_CROP
+                            
+                            ivBukti.setOnClickListener {
+                                showFullScreenImage(this@DetailPemasukanActivity, transaksi.buktiFoto)
+                            }
+                        } catch (e: Exception) {
+                            ivBukti.visibility = View.GONE
+                            tvNoBukti.visibility = View.VISIBLE
+                            tvNoBukti.text = "Gagal memuat gambar"
                         }
-                        ivBukti.alpha = 1.0f
-                        ivBukti.scaleType = ImageView.ScaleType.CENTER_CROP
-                        
-                        ivBukti.setOnClickListener {
-                            showFullScreenImage(this, transaksi.buktiFoto!!)
-                        }
-                    } catch (e: Exception) {
+                    } else {
                         ivBukti.visibility = View.GONE
                         tvNoBukti.visibility = View.VISIBLE
-                        tvNoBukti.text = "Gagal memuat gambar"
                     }
-                } else {
-                    ivBukti.visibility = View.GONE
-                    tvNoBukti.visibility = View.VISIBLE
                 }
             }
         }

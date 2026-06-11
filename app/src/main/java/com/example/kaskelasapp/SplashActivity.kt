@@ -6,8 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.cardview.widget.CardView
+import java.util.concurrent.Executor
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,15 +80,58 @@ class SplashActivity : AppCompatActivity() {
             val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
             val isFinished = sharedPref.getBoolean("onboarding_finished", false)
             
-            val intent = if (isFinished) {
-                Intent(this, MainActivity::class.java)
+            val settingsPref = getSharedPreferences("SettingsKas", android.content.Context.MODE_PRIVATE)
+            val isAppLockEnabled = settingsPref.getBoolean("app_lock_enabled", false)
+
+            if (isAppLockEnabled) {
+                showBiometricPrompt {
+                    navigateToNextScreen(isFinished)
+                }
             } else {
-                Intent(this, OnboardingActivity::class.java)
+                navigateToNextScreen(isFinished)
             }
-            
-            startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
         }, 3500)
+    }
+
+    private fun navigateToNextScreen(isFinished: Boolean) {
+        val intent = if (isFinished) {
+            Intent(this, MainActivity::class.java)
+        } else {
+            Intent(this, OnboardingActivity::class.java)
+        }
+        
+        startActivity(intent)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
+    }
+
+    private fun showBiometricPrompt(onSuccess: () -> Unit) {
+        val executor: Executor = ContextCompat.getMainExecutor(this)
+        val biometricPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    Toast.makeText(applicationContext, "Autentikasi gagal: $errString", Toast.LENGTH_SHORT).show()
+                    finish() // Close app if auth fails or cancelled
+                }
+
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    onSuccess()
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Toast.makeText(applicationContext, "Autentikasi gagal. Coba lagi.", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Kunci Aplikasi Kas Kelas")
+            .setSubtitle("Gunakan sidik jari atau PIN Anda untuk membuka")
+            .setAllowedAuthenticators(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG or androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
     }
 }

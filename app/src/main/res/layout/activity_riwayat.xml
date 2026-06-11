@@ -160,6 +160,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_toEndOf="@+id/ivSearchIconRiwayat"
+                        android:layout_toStartOf="@+id/btnFilterTanggal"
                         android:background="@null"
                         android:hint="Cari transaksi..."
                         android:paddingStart="10dp"
@@ -168,6 +169,14 @@
                         android:textColorHint="@color/text_sub"
                         android:textSize="@dimen/text_body"
                         android:singleLine="true" />
+                    <ImageButton
+                        android:id="@+id/btnFilterTanggal"
+                        android:layout_width="48dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_baseline_calendar_month_24"
+                        app:tint="@color/brand_primary" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 

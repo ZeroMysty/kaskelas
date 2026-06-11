@@ -13,12 +13,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 
+import androidx.lifecycle.ViewModelProvider
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+
 class OnboardingActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: KasViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
         BackgroundHelper.applyAnimatedBackground(this)
+
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPagerOnboarding)
         val btnNext = findViewById<Button>(R.id.btnNextOnboarding)
@@ -63,20 +76,15 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun finishOnboarding() {
-        // 1. Reset Database (Factory Reset)
-        val db = DatabaseHelper(this)
-        db.resetDatabase()
-
-        // 2. Mark as done in SharedPreferences
-        val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putBoolean("onboarding_finished", true)
-            apply()
+        viewModel.resetDatabase {
+            val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            with(sharedPref.edit()) {
+                putBoolean("onboarding_finished", true)
+                apply()
+            }
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
-
-        // 3. Go to MainActivity
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 }
 
