@@ -225,8 +225,34 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/btn_action_height"
                         android:layout_marginTop="32dp"
-                        android:background="@drawable/bg_btn_red"
+                        android:background="@drawable/bg_btn_green"
                         android:text="Selesai"
+                        android:textAllCaps="false"
+                        android:textColor="@color/brand_accent"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <!-- Tombol Edit Transaksi -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnEditDetailPe"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_glass_card"
+                        android:text="Edit Transaksi"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_body"
+                        android:fontFamily="sans-serif-bold" />
+
+                    <!-- Tombol Hapus Transaksi -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnHapusDetailPe"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_action_height"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_btn_red"
+                        android:text="Hapus Transaksi"
                         android:textAllCaps="false"
                         android:textColor="@color/brand_danger"
                         android:textSize="@dimen/text_body"

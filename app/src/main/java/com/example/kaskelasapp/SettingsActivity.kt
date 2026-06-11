@@ -12,9 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.kaskelasapp.data.AnggotaEntity
-import com.example.kaskelasapp.data.AppDatabase
 import com.example.kaskelasapp.data.TransaksiEntity
-import com.example.kaskelasapp.repository.KasRepository
 import com.example.kaskelasapp.viewmodel.KasViewModel
 import com.example.kaskelasapp.viewmodel.KasViewModelFactory
 import com.google.gson.Gson
@@ -23,8 +21,8 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
 data class BackupData(
-    val anggotaList: List<AnggotaEntity>,
-    val transaksiList: List<TransaksiEntity>
+    val anggotaList: List<AnggotaEntity>?,
+    val transaksiList: List<TransaksiEntity>?
 )
 
 class SettingsActivity : AppCompatActivity() {
@@ -35,10 +33,10 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         val etNominalCustom = findViewById<EditText>(R.id.etNominalCustom)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanSettings)
@@ -217,22 +215,24 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun performBackup(uri: Uri) {
-        lifecycleScope.launch {
-            try {
-                val anggotaList = viewModel.anggotaList.value
-                val transaksiList = viewModel.transaksiList.value
-                val backupData = BackupData(anggotaList, transaksiList)
-                val jsonStr = Gson().toJson(backupData)
+        // Fix: load data fresh dari DB sebelum backup, jangan pakai StateFlow.value
+        // yang bisa masih emptyList() jika user langsung buka Settings tanpa lewat beranda
+        viewModel.getDataForBackup { anggotaList, transaksiList ->
+            lifecycleScope.launch {
+                try {
+                    val backupData = BackupData(anggotaList, transaksiList)
+                    val jsonStr = com.google.gson.Gson().toJson(backupData)
 
-                contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    OutputStreamWriter(outputStream).use { writer ->
-                        writer.write(jsonStr)
+                    contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        java.io.OutputStreamWriter(outputStream).use { writer ->
+                            writer.write(jsonStr)
+                        }
                     }
+                    Toast.makeText(this@SettingsActivity, "Backup berhasil disimpan (${anggotaList.size} anggota, ${transaksiList.size} transaksi)", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this@SettingsActivity, "Gagal melakukan backup", Toast.LENGTH_SHORT).show()
                 }
-                Toast.makeText(this@SettingsActivity, "Backup berhasil disimpan", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this@SettingsActivity, "Gagal melakukan backup", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -243,14 +243,17 @@ class SettingsActivity : AppCompatActivity() {
                 contentResolver.openInputStream(uri)?.use { inputStream ->
                     InputStreamReader(inputStream).use { reader ->
                         val jsonStr = reader.readText()
-                        val backupData = Gson().fromJson(jsonStr, BackupData::class.java)
+                        val backupData = com.google.gson.Gson().fromJson(jsonStr, BackupData::class.java)
 
                         if (backupData != null && backupData.anggotaList != null && backupData.transaksiList != null) {
-                            // Wipe current db and import
-                            viewModel.resetDatabase {
-                                backupData.anggotaList.forEach { viewModel.insertAnggota(it) }
-                                backupData.transaksiList.forEach { viewModel.insertTransaksi(it) }
-                                Toast.makeText(this@SettingsActivity, "Restore berhasil!", Toast.LENGTH_LONG).show()
+                            // Fix: gunakan batchRestore untuk menghindari race condition
+                            // (insert semua sekaligus, hanya 1 kali trigger loadAll di akhir)
+                            viewModel.batchRestore(backupData.anggotaList, backupData.transaksiList) {
+                                Toast.makeText(
+                                    this@SettingsActivity,
+                                    "Restore berhasil! (${backupData.anggotaList.size} anggota, ${backupData.transaksiList.size} transaksi)",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         } else {
                             Toast.makeText(this@SettingsActivity, "Format file tidak valid", Toast.LENGTH_SHORT).show()

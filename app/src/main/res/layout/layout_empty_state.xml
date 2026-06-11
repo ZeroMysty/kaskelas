@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_search"
+        android:alpha="0.2" />
+
+    <TextView
+        android:id="@+id/tvEmptyStateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Belum ada data"
+        android:textColor="@color/text_main"
+        android:alpha="0.6"
+        android:textSize="@dimen/text_body"
+        android:fontFamily="sans-serif-medium" />
+
+</LinearLayout>

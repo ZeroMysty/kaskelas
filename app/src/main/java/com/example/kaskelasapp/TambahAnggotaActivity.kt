@@ -2,16 +2,15 @@ package com.example.kaskelasapp
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.lifecycle.ViewModelProvider
-import com.example.kaskelasapp.data.AppDatabase
-import com.example.kaskelasapp.repository.KasRepository
 import com.example.kaskelasapp.viewmodel.KasViewModel
 import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TambahAnggotaActivity : AppCompatActivity() {
     private lateinit var viewModel: KasViewModel
@@ -21,10 +20,10 @@ class TambahAnggotaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tambah_anggota)
         BackgroundHelper.applyAnimatedBackground(this)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         val etNama = findViewById<EditText>(R.id.etNamaAnggota)
         val etID = findViewById<EditText>(R.id.etIdAnggota)
@@ -39,7 +38,13 @@ class TambahAnggotaActivity : AppCompatActivity() {
             val nis = etNIS.text.toString()
 
             if (nama.isNotEmpty() && id.isNotEmpty() && nis.isNotEmpty()) {
-                val anggota = Anggota(id, nama, nis)
+                val tanggalHariIni = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
+                val anggota = Anggota(
+                    id = id,
+                    nama = nama,
+                    nis = nis,
+                    tanggalBergabung = tanggalHariIni
+                )
                 viewModel.insertAnggota(anggota)
                 Toast.makeText(this, "Anggota Berhasil Disimpan", Toast.LENGTH_SHORT).show()
                 finish()

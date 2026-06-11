@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Kas Kelas</string>
+    <string name="error_fill_all_data">Isi semua data!</string>
+    <string name="cancel">Batal</string>
+    <string name="save">Simpan</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="success_save">Data berhasil disimpan</string>
+    <string name="empty_state_title">Belum ada data</string>
 </resources>

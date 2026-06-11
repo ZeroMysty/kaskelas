@@ -8,18 +8,18 @@ import androidx.room.Update
 
 @Dao
 interface AnggotaDao {
-    @Query("SELECT * FROM anggota")
-    fun getAllAnggota(): List<AnggotaEntity>
+    @Query("SELECT * FROM anggota ORDER BY nama ASC")
+    suspend fun getAllAnggota(): List<AnggotaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAnggota(anggota: AnggotaEntity)
+    suspend fun insertAnggota(anggota: AnggotaEntity)
 
     @Update
-    fun updateAnggota(anggota: AnggotaEntity)
+    suspend fun updateAnggota(anggota: AnggotaEntity)
 
     @Query("DELETE FROM anggota WHERE id = :id")
-    fun deleteAnggotaById(id: String)
+    suspend fun deleteAnggotaById(id: String)
 
     @Query("DELETE FROM anggota")
-    fun deleteAllAnggota()
+    suspend fun deleteAllAnggota()
 }

@@ -21,11 +21,10 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.kaskelasapp.data.AppDatabase
-import com.example.kaskelasapp.repository.KasRepository
 import com.example.kaskelasapp.viewmodel.KasViewModel
 import com.example.kaskelasapp.viewmodel.KasViewModelFactory
 import kotlinx.coroutines.launch
+import com.example.kaskelasapp.data.AnggotaEntity
 import java.util.Locale
 import java.util.Calendar
 import android.graphics.Color
@@ -40,10 +39,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        // Gunakan Application-level factory — tidak perlu buat DB/Repository manual
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         rvAnggotaBeranda = findViewById(R.id.rvAnggotaBeranda)
         rvAnggotaBeranda.layoutManager = LinearLayoutManager(this)
@@ -54,11 +54,7 @@ class MainActivity : AppCompatActivity() {
                 tampilkanDialogBayar(anggota)
             },
             onItemClick = { anggota ->
-                val intent = Intent(this, DetailAnggotaActivity::class.java)
-                intent.putExtra("ANGGOTA_ID", anggota.id)
-                intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-                intent.putExtra("ANGGOTA_NIS", anggota.nis)
-                startActivity(intent)
+                bukaTambahAnggota(anggota)
             }
         )
         rvAnggotaBeranda.adapter = adapter
@@ -105,11 +101,7 @@ class MainActivity : AppCompatActivity() {
                     list = list,
                     onPayClick = { anggota -> tampilkanDialogBayar(anggota) },
                     onItemClick = { anggota ->
-                        val intent = Intent(this@MainActivity, DetailAnggotaActivity::class.java)
-                        intent.putExtra("ANGGOTA_ID", anggota.id)
-                        intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-                        intent.putExtra("ANGGOTA_NIS", anggota.nis)
-                        startActivity(intent)
+                        bukaTambahAnggota(anggota)
                     }
                 )
                 rvAnggotaBeranda.adapter = adapter
@@ -130,6 +122,15 @@ class MainActivity : AppCompatActivity() {
                 loadChart(list)
             }
         }
+    }
+
+    private fun bukaTambahAnggota(anggota: AnggotaEntity) {
+        val intent = Intent(this, DetailAnggotaActivity::class.java)
+        intent.putExtra("ANGGOTA_ID", anggota.id)
+        intent.putExtra("ANGGOTA_NAMA", anggota.nama)
+        intent.putExtra("ANGGOTA_NIS", anggota.nis)
+        intent.putExtra("ANGGOTA_TANGGAL_BERGABUNG", anggota.tanggalBergabung)
+        startActivity(intent)
     }
 
     private fun checkTutorial() {

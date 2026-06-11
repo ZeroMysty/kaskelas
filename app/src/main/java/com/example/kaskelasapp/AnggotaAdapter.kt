@@ -7,10 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AnggotaAdapter(
-    private val listAnggota: List<Anggota>,
+    private var listAnggota: List<Anggota>,
     private val layoutResId: Int, // Bisa item_anggota_bayar atau item_anggota_edit
     private val listener: (Anggota) -> Unit
 ) : RecyclerView.Adapter<AnggotaAdapter.ViewHolder>() {
+
+    fun updateData(newList: List<Anggota>) {
+        listAnggota = newList
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // IDs for item_anggota_edit

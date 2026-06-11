@@ -1,8 +1,11 @@
 package com.example.kaskelasapp.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.kaskelasapp.KasKelasApp
 import com.example.kaskelasapp.data.AnggotaEntity
 import com.example.kaskelasapp.data.TransaksiEntity
 import com.example.kaskelasapp.repository.KasRepository
@@ -10,7 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class KasViewModel(private val repository: KasRepository) : ViewModel() {
+class KasViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository: KasRepository = (application as KasKelasApp).repository
 
     private val _anggotaList = MutableStateFlow<List<AnggotaEntity>>(emptyList())
     val anggotaList: StateFlow<List<AnggotaEntity>> = _anggotaList
@@ -60,9 +65,27 @@ class KasViewModel(private val repository: KasRepository) : ViewModel() {
         }
     }
 
-    fun insertTransaksi(transaksi: TransaksiEntity, onComplete: (() -> Unit)? = null) {
+    fun insertTransaksi(transaksi: TransaksiEntity, onComplete: () -> Unit) {
         viewModelScope.launch {
             repository.insertTransaksi(transaksi)
+            loadAllTransaksi()
+            loadTotalSaldo()
+            onComplete()
+        }
+    }
+
+    fun updateTransaksi(transaksi: TransaksiEntity, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            repository.updateTransaksi(transaksi)
+            loadAllTransaksi()
+            loadTotalSaldo()
+            onComplete()
+        }
+    }
+
+    fun deleteTransaksi(id: Int, onComplete: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            repository.deleteTransaksiById(id)
             loadAllTransaksi()
             loadTotalSaldo()
             onComplete?.invoke()
@@ -84,13 +107,38 @@ class KasViewModel(private val repository: KasRepository) : ViewModel() {
             onComplete?.invoke()
         }
     }
+
+    // Load data langsung dari DB sebelum backup (tidak andalkan StateFlow.value)
+    fun getDataForBackup(onReady: (List<AnggotaEntity>, List<TransaksiEntity>) -> Unit) {
+        viewModelScope.launch {
+            val anggota = repository.getAllAnggota()
+            val transaksi = repository.getAllTransaksi()
+            onReady(anggota, transaksi)
+        }
+    }
+
+    // Batch restore — insert semua data sekaligus, hanya 1x trigger loadAll di akhir
+    fun batchRestore(
+        anggotaList: List<AnggotaEntity>,
+        transaksiList: List<TransaksiEntity>,
+        onComplete: (() -> Unit)? = null
+    ) {
+        viewModelScope.launch {
+            repository.batchRestore(anggotaList, transaksiList)
+            loadAllAnggota()
+            loadAllTransaksi()
+            loadTotalSaldo()
+            onComplete?.invoke()
+        }
+    }
 }
 
-class KasViewModelFactory(private val repository: KasRepository) : ViewModelProvider.Factory {
+// Factory menggunakan Application — tidak perlu repository parameter lagi
+class KasViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(KasViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return KasViewModel(repository) as T
+            return KasViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

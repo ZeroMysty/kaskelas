@@ -36,7 +36,7 @@ class ChartDetailActivity : AppCompatActivity() {
         
         val database = AppDatabase.getDatabase(this)
         val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
+        val factory = KasViewModelFactory(application)
         viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
 
         findViewById<ImageView>(R.id.btnBackChart).setOnClickListener {
@@ -80,7 +80,25 @@ class ChartDetailActivity : AppCompatActivity() {
             "7 Hari Terakhir" -> 6
             "Bulan Ini" -> Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1
             "Tahun Ini" -> Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
-            else -> 29 // Default Semua tampilkan 30 hari terakhir
+            else -> {
+                // Fix "Semua Data": hitung dari tanggal transaksi tertua, bukan hardcode 30 hari
+                if (allTransaksi.isEmpty()) {
+                    29
+                } else {
+                    var earliest = Calendar.getInstance()
+                    for (t in allTransaksi) {
+                        try {
+                            val d = sdf.parse(t.tanggal) ?: continue
+                            val cal = Calendar.getInstance().apply { time = d }
+                            if (cal.before(earliest)) earliest = cal
+                        } catch (e: Exception) { /* skip */ }
+                    }
+                    val now = Calendar.getInstance()
+                    val diffMs = now.timeInMillis - earliest.timeInMillis
+                    val diffDays = (diffMs / (1000 * 60 * 60 * 24)).toInt()
+                    diffDays.coerceAtLeast(0)
+                }
+            }
         }
 
         // Kronologis: Masa Lalu -> Hari Ini

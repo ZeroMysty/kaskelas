@@ -116,6 +116,43 @@
                         android:textSize="@dimen/text_body"
                         android:singleLine="true" />
 
+                    <!-- Input Tanggal (DatePicker) -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="TANGGAL TRANSAKSI"
+                        android:textColor="@color/text_main"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_input_putih"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:id="@+id/tvTanggalPilihanPe"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Pilih Tanggal"
+                            android:textColor="@color/text_main"
+                            android:textSize="@dimen/text_body" />
+                            
+                        <ImageView
+                            android:id="@+id/ivIconKalenderPe"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_baseline_calendar_month_24"
+                            app:tint="@color/text_sub" />
+                    </LinearLayout>
+
                     <!-- Input Keterangan -->
                     <TextView
                         android:layout_width="wrap_content"
@@ -209,6 +246,7 @@
             app:tint="@color/text_main" />
 
         <TextView
+            android:id="@+id/tvHeaderTitlePengeluaran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

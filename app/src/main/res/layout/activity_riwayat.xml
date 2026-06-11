@@ -169,6 +169,17 @@
                         android:textColorHint="@color/text_sub"
                         android:textSize="@dimen/text_body"
                         android:singleLine="true" />
+                    <!-- Tombol reset filter (tampil hanya saat filter aktif) -->
+                    <ImageButton
+                        android:id="@+id/btnResetFilter"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_toStartOf="@+id/btnFilterTanggal"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        android:visibility="gone"
+                        app:tint="@color/brand_danger" />
                     <ImageButton
                         android:id="@+id/btnFilterTanggal"
                         android:layout_width="48dp"
@@ -188,6 +199,12 @@
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:paddingHorizontal="4dp" />
+
+            <include layout="@layout/layout_empty_state"
+                android:id="@+id/emptyStateContainerRiwayat"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

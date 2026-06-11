@@ -13,7 +13,15 @@ import androidx.core.content.ContextCompat
 import androidx.cardview.widget.CardView
 import java.util.concurrent.Executor
 
+@android.annotation.SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
+
+    companion object {
+        // FIX #8: Timeout sebelum re-auth diperlukan (5 menit)
+        private const val AUTH_TIMEOUT_MS = 5 * 60 * 1000L
+        private const val PREF_LAST_AUTH_TIME = "last_auth_time"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -30,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
 
         // 1. Persiapan Awal (Hidden)
         cardLogo.alpha = 0f
-        cardLogo.scaleX = 3f // Mulai dari sangat besar (Aggressive zoom in)
+        cardLogo.scaleX = 3f
         cardLogo.scaleY = 3f
         
         // 2. Ledakan Logo (Aggressive Zoom In)
@@ -38,7 +46,7 @@ class SplashActivity : AppCompatActivity() {
             .alpha(1f)
             .scaleX(1f)
             .scaleY(1f)
-            .setDuration(400) // Sangat cepat
+            .setDuration(400)
             .setInterpolator(android.view.animation.AccelerateInterpolator())
             .withEndAction {
                 // Flash Effect
@@ -61,7 +69,7 @@ class SplashActivity : AppCompatActivity() {
                 // Logo Glow Intense
                 logoGlow?.animate()?.alpha(1f)?.scaleX(2f)?.scaleY(2f)?.setDuration(300)?.start()
 
-                // 3. Teks Reveal (Snappy)
+                // Teks Reveal
                 layoutText?.let {
                     it.translationY = 100f
                     it.animate()
@@ -84,13 +92,57 @@ class SplashActivity : AppCompatActivity() {
             val isAppLockEnabled = settingsPref.getBoolean("app_lock_enabled", false)
 
             if (isAppLockEnabled) {
-                showBiometricPrompt {
+                val biometricManager = androidx.biometric.BiometricManager.from(this)
+                val canAuthenticate = biometricManager.canAuthenticate(
+                    androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                    androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                )
+                if (canAuthenticate == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS) {
+                    showBiometricPrompt {
+                        // Catat waktu autentikasi berhasil
+                        settingsPref.edit().putLong(PREF_LAST_AUTH_TIME, System.currentTimeMillis()).apply()
+                        navigateToNextScreen(isFinished)
+                    }
+                } else {
+                    settingsPref.edit().putBoolean("app_lock_enabled", false).apply()
+                    Toast.makeText(this, "Perangkat tidak mendukung kunci biometrik. Fitur dinonaktifkan.", Toast.LENGTH_LONG).show()
                     navigateToNextScreen(isFinished)
                 }
             } else {
                 navigateToNextScreen(isFinished)
             }
         }, 3500)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // FIX #8: Re-auth jika app kembali dari background setelah > 5 menit
+        // Hanya berlaku jika SplashActivity sudah di-create sebelumnya (bukan fresh start)
+        // Cek dengan melihat apakah ada saved state yang menandakan activity sudah pernah berjalan
+        checkReAuthIfNeeded()
+    }
+
+    private fun checkReAuthIfNeeded() {
+        val settingsPref = getSharedPreferences("SettingsKas", android.content.Context.MODE_PRIVATE)
+        val isAppLockEnabled = settingsPref.getBoolean("app_lock_enabled", false)
+        if (!isAppLockEnabled) return
+
+        val lastAuthTime = settingsPref.getLong(PREF_LAST_AUTH_TIME, 0L)
+        val timeSinceAuth = System.currentTimeMillis() - lastAuthTime
+
+        // Jika sudah lebih dari 5 menit sejak autentikasi terakhir, paksa auth ulang
+        if (lastAuthTime > 0 && timeSinceAuth > AUTH_TIMEOUT_MS) {
+            val biometricManager = androidx.biometric.BiometricManager.from(this)
+            val canAuthenticate = biometricManager.canAuthenticate(
+                androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            )
+            if (canAuthenticate == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS) {
+                showBiometricPrompt {
+                    settingsPref.edit().putLong(PREF_LAST_AUTH_TIME, System.currentTimeMillis()).apply()
+                }
+            }
+        }
     }
 
     private fun navigateToNextScreen(isFinished: Boolean) {
@@ -101,7 +153,12 @@ class SplashActivity : AppCompatActivity() {
         }
         
         startActivity(intent)
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(android.app.Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
         finish()
     }
 
@@ -112,7 +169,7 @@ class SplashActivity : AppCompatActivity() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Toast.makeText(applicationContext, "Autentikasi gagal: $errString", Toast.LENGTH_SHORT).show()
-                    finish() // Close app if auth fails or cancelled
+                    finish()
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

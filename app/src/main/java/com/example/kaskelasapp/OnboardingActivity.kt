@@ -28,10 +28,10 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_onboarding)
         BackgroundHelper.applyAnimatedBackground(this)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPagerOnboarding)
         val btnNext = findViewById<Button>(R.id.btnNextOnboarding)

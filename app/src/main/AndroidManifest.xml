@@ -7,8 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <application
+        android:name=".KasKelasApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,7 +32,7 @@
         <activity
             android:name=".OnboardingActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
@@ -39,27 +41,27 @@
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.KasKelasApp"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="unspecified" />
 
         <!-- Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".AnggotaActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <!-- Tambah Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".TambahAnggotaActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".AnggotaActivity" />
 
         <!-- Edit Anggota Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".EditAnggotaActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".AnggotaActivity" />
 
 
@@ -68,35 +70,35 @@
         <activity
             android:name=".TambahPemasukanActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <!-- Tambah Pengeluaran Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".TambahPengeluaranActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <!-- Detail Pemasukan Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".DetailPemasukanActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".RiwayatActivity" />
 
         <!-- Detail Pengeluaran Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".DetailPengeluaranActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".RiwayatActivity" />
 
         <!-- Riwayat Activity - DIKUNCI PORTRAIT -->
         <activity
             android:name=".RiwayatActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <!-- KHUSUS Chart Detail - DIKUNCI LANDSCAPE -->
@@ -109,21 +111,21 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <!-- Manual Book Activity -->
         <activity
             android:name=".ManualBookActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".SettingsActivity" />
 
         <!-- Detail Anggota Activity -->
         <activity
             android:name=".DetailAnggotaActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:parentActivityName=".MainActivity" />
 
         <provider

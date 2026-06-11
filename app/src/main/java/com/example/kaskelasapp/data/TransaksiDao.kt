@@ -8,23 +8,29 @@ import androidx.room.Query
 @Dao
 interface TransaksiDao {
     @Query("SELECT * FROM transaksi ORDER BY id DESC")
-    fun getAllTransaksi(): List<TransaksiEntity>
+    suspend fun getAllTransaksi(): List<TransaksiEntity>
 
     @Query("SELECT * FROM transaksi WHERE anggota_id = :anggotaId ORDER BY id DESC")
-    fun getTransaksiByAnggota(anggotaId: String): List<TransaksiEntity>
+    suspend fun getTransaksiByAnggota(anggotaId: String): List<TransaksiEntity>
 
     @Query("SELECT * FROM transaksi WHERE id = :id LIMIT 1")
-    fun getTransaksiById(id: Int): TransaksiEntity?
+    suspend fun getTransaksiById(id: Int): TransaksiEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTransaksi(transaksi: TransaksiEntity): Long
+    suspend fun insertTransaksi(transaksi: TransaksiEntity): Long
+
+    @androidx.room.Update
+    suspend fun updateTransaksi(transaksi: TransaksiEntity)
 
     @Query("SELECT SUM(CAST(jumlah AS INTEGER)) FROM transaksi WHERE jenis='MASUK'")
-    fun getTotalMasuk(): Long?
+    suspend fun getTotalMasuk(): Long?
 
     @Query("SELECT SUM(CAST(jumlah AS INTEGER)) FROM transaksi WHERE jenis='KELUAR'")
-    fun getTotalKeluar(): Long?
+    suspend fun getTotalKeluar(): Long?
+
+    @Query("DELETE FROM transaksi WHERE id = :id")
+    suspend fun deleteTransaksiById(id: Int)
 
     @Query("DELETE FROM transaksi")
-    fun deleteAllTransaksi()
+    suspend fun deleteAllTransaksi()
 }

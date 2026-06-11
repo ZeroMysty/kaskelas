@@ -2,14 +2,11 @@ package com.example.kaskelasapp
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.lifecycle.ViewModelProvider
-import com.example.kaskelasapp.data.AppDatabase
-import com.example.kaskelasapp.repository.KasRepository
 import com.example.kaskelasapp.viewmodel.KasViewModel
 import com.example.kaskelasapp.viewmodel.KasViewModelFactory
 
@@ -21,14 +18,15 @@ class EditAnggotaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_anggota)
         BackgroundHelper.applyAnimatedBackground(this)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         val anggotaId = intent.getStringExtra("ANGGOTA_ID") ?: ""
         val anggotaNama = intent.getStringExtra("ANGGOTA_NAMA") ?: ""
         val anggotaNis = intent.getStringExtra("ANGGOTA_NIS") ?: ""
+        val tanggalBergabung = intent.getStringExtra("ANGGOTA_TANGGAL_BERGABUNG") ?: ""
 
         val etNama = findViewById<EditText>(R.id.etEditNama)
         val etNis = findViewById<EditText>(R.id.etEditNis)
@@ -46,7 +44,12 @@ class EditAnggotaActivity : AppCompatActivity() {
             val newNis = etNis.text.toString()
 
             if (newNama.isNotEmpty() && newNis.isNotEmpty()) {
-                val anggota = Anggota(anggotaId, newNama, newNis)
+                val anggota = Anggota(
+                    id = anggotaId,
+                    nama = newNama,
+                    nis = newNis,
+                    tanggalBergabung = tanggalBergabung
+                )
                 viewModel.updateAnggota(anggota)
                 Toast.makeText(this, "Data diperbarui", Toast.LENGTH_SHORT).show()
                 finish()
@@ -56,7 +59,7 @@ class EditAnggotaActivity : AppCompatActivity() {
         btnHapus.setOnClickListener {
             android.app.AlertDialog.Builder(this)
                 .setTitle("Hapus Anggota")
-                .setMessage("Apakah Anda yakin ingin menghapus ${anggotaNama}?")
+                .setMessage("Apakah Anda yakin ingin menghapus $anggotaNama?")
                 .setPositiveButton("Ya") { _, _ ->
                     viewModel.deleteAnggota(anggotaId)
                     Toast.makeText(this, "Anggota dihapus", Toast.LENGTH_SHORT).show()

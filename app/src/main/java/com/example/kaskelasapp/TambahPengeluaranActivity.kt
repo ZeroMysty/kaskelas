@@ -8,37 +8,43 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+import com.google.android.material.datepicker.MaterialDatePicker
 import java.io.File
 import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-import androidx.lifecycle.ViewModelProvider
-import com.example.kaskelasapp.data.AppDatabase
-import com.example.kaskelasapp.repository.KasRepository
-import com.example.kaskelasapp.viewmodel.KasViewModel
-import com.example.kaskelasapp.viewmodel.KasViewModelFactory
-
 class TambahPengeluaranActivity : AppCompatActivity() {
     
     private var imageUri: Uri? = null
     private lateinit var ivPreview: ImageView
     private lateinit var viewModel: KasViewModel
+    // FIX #5: simpan tanggal yang dipilih user
+    private var selectedDate: Date = Date()
+    private lateinit var tvTanggalPilihan: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_pengeluaran)
         BackgroundHelper.applyAnimatedBackground(this)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         val etNama = findViewById<EditText>(R.id.etNamaPengeluaran)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
@@ -46,8 +52,16 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         val btnSimpan = findViewById<Button>(R.id.btnSimpanPengeluaran)
         val btnPilihFoto = findViewById<LinearLayout>(R.id.btnPilihFotoPengeluaran)
         ivPreview = findViewById(R.id.ivPreviewPengeluaran)
+        tvTanggalPilihan = findViewById(R.id.tvTanggalPilihanPe)
 
-        // 🔥 REGISTER IMAGE PICKER
+        // Tampilkan tanggal hari ini sebagai default
+        updateTanggalDisplay()
+
+        // FIX #5: Tombol pemilih tanggal
+        tvTanggalPilihan.setOnClickListener { showDatePicker() }
+        findViewById<ImageView>(R.id.ivIconKalenderPe)?.setOnClickListener { showDatePicker() }
+
+        // REGISTER IMAGE PICKER
         val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 imageUri = uri
@@ -58,7 +72,7 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             }
         }
 
-        // 🔥 REGISTER PERMISSION LAUNCHER
+        // REGISTER PERMISSION LAUNCHER
         val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 pickImage.launch("image/*")
@@ -80,8 +94,40 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 requestPermissionLauncher.launch(permission)
             }
         }
+        
+        val intentMode = intent.getStringExtra("MODE")
+        val transaksiId = intent.getIntExtra("TRANSAKSI_ID", -1)
+        
+        if (intentMode == "EDIT" && transaksiId != -1) {
+            findViewById<TextView>(R.id.tvHeaderTitlePengeluaran).text = "Edit Pengeluaran"
+            btnSimpan.text = "Simpan Perubahan"
+            
+            lifecycleScope.launch {
+                val db = (application as com.example.kaskelasapp.KasKelasApp).database
+                val tx = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    db.transaksiDao().getTransaksiById(transaksiId)
+                }
+                if (tx != null) {
+                    etNama.setText(tx.nama)
+                    etJumlah.setText(tx.jumlah)
+                    etKet.setText(tx.keterangan)
+                    val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                    try {
+                        selectedDate = sdf.parse(tx.tanggal) ?: Date()
+                        updateTanggalDisplay()
+                    } catch (e: Exception) {}
+                    if (tx.buktiFoto != null) {
+                        imageUri = Uri.fromFile(File(tx.buktiFoto))
+                        ivPreview.setImageURI(imageUri)
+                        ivPreview.setPadding(0, 0, 0, 0)
+                        ivPreview.imageTintList = null
+                        ivPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+                    }
+                }
+            }
+        }
 
-        // 🔥 FORMAT RUPIAH (AMAN)
+        // FORMAT RUPIAH
         etJumlah.addTextChangedListener(object : TextWatcher {
             private var current = ""
 
@@ -114,13 +160,13 @@ class TambahPengeluaranActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // 🔥 BUTTON SIMPAN → ALERT PREVIEW
+        // BUTTON SIMPAN
         btnSimpan.setOnClickListener {
             val nama = etNama.text.toString()
             val jumlahRaw = etJumlah.text.toString()
             val jumlahBersih = jumlahRaw.replace(".", "")
             val ket = etKet.text.toString()
-            val tanggal = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date())
+            val tanggal = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(selectedDate)
 
             if (nama.isEmpty() || jumlahBersih.isEmpty()) {
                 Toast.makeText(this, "Isi semua data!", Toast.LENGTH_SHORT).show()
@@ -141,10 +187,12 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setPositiveButton("Ya") { _, _ ->
                     try {
-                        // Simpan foto ke internal storage jika ada
-                        val finalImagePath = imageUri?.let { saveImageToInternalStorage(it) }
+                        val finalImagePath = imageUri?.let { uri ->
+                            if (uri.scheme == "file") uri.path else saveImageToInternalStorage(uri)
+                        }
 
-                        val newTrans = Transaksi(
+                        val newTrans = com.example.kaskelasapp.data.TransaksiEntity(
+                            id = if (intentMode == "EDIT") transaksiId else 0,
                             nama = nama,
                             jumlah = jumlahBersih,
                             tanggal = tanggal,
@@ -154,9 +202,16 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                             buktiFoto = finalImagePath
                         )
 
-                        viewModel.insertTransaksi(newTrans) {
-                            Toast.makeText(this, "Pengeluaran disimpan!", Toast.LENGTH_SHORT).show()
-                            finish()
+                        if (intentMode == "EDIT") {
+                            viewModel.updateTransaksi(newTrans) {
+                                Toast.makeText(this@TambahPengeluaranActivity, "Perubahan disimpan!", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                        } else {
+                            viewModel.insertTransaksi(newTrans) {
+                                Toast.makeText(this@TambahPengeluaranActivity, "Pengeluaran disimpan!", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
                         }
 
                     } catch (e: Exception) {
@@ -170,8 +225,49 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .show()
         }
 
-        // 🔙 BACK
+        // Tombol back
         findViewById<ImageView>(R.id.btnBackPengeluaran).setOnClickListener {
+            konfirmasiKeluar(etNama, etJumlah)
+        }
+
+        // FIX #15: Konfirmasi saat sistem back ditekan
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                konfirmasiKeluar(etNama, etJumlah)
+            }
+        })
+    }
+
+    // FIX #5: Tampilkan MaterialDatePicker
+    private fun showDatePicker() {
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Pilih Tanggal Transaksi")
+            .setSelection(selectedDate.time)
+            .build()
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            selectedDate = Date(selection)
+            updateTanggalDisplay()
+        }
+        picker.show(supportFragmentManager, "DATE_PICKER_PENGELUARAN")
+    }
+
+    private fun updateTanggalDisplay() {
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        tvTanggalPilihan.text = sdf.format(selectedDate)
+    }
+
+    // FIX #15: Konfirmasi jika ada data yang sudah diisi
+    private fun konfirmasiKeluar(etNama: EditText, etJumlah: EditText) {
+        val hasData = etNama.text.isNotEmpty() || etJumlah.text.isNotEmpty()
+        if (hasData) {
+            AlertDialog.Builder(this)
+                .setTitle("Batalkan Pengeluaran?")
+                .setMessage("Data yang sudah diisi akan hilang. Yakin ingin keluar?")
+                .setPositiveButton("Ya, Keluar") { _, _ -> finish() }
+                .setNegativeButton("Tetap di Sini", null)
+                .show()
+        } else {
             finish()
         }
     }

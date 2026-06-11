@@ -8,15 +8,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.example.kaskelasapp.data.AppDatabase
-import com.example.kaskelasapp.repository.KasRepository
 import com.example.kaskelasapp.viewmodel.KasViewModel
 import com.example.kaskelasapp.viewmodel.KasViewModelFactory
 import kotlinx.coroutines.launch
@@ -26,18 +24,30 @@ class AnggotaActivity : AppCompatActivity() {
     private lateinit var rvDaftarAnggota: RecyclerView
     private lateinit var adapter: AnggotaAdapter
     private var daftarAnggotaFull = listOf<Anggota>()
+    private lateinit var tvEmptyState: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anggota)
 
-        val database = AppDatabase.getDatabase(this)
-        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
-        val factory = KasViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            KasViewModelFactory(application)
+        )[KasViewModel::class.java]
 
         rvDaftarAnggota = findViewById(R.id.rvDaftarAnggota)
         rvDaftarAnggota.layoutManager = LinearLayoutManager(this)
+        tvEmptyState = findViewById(R.id.tvEmptyStateText)
+
+        // Inisialisasi adapter sekali — update via updateData(), bukan buat adapter baru tiap filter
+        adapter = AnggotaAdapter(emptyList(), R.layout.item_anggota_edit) { anggota: Anggota ->
+            val intent = Intent(this, EditAnggotaActivity::class.java)
+            intent.putExtra("ANGGOTA_ID", anggota.id)
+            intent.putExtra("ANGGOTA_NAMA", anggota.nama)
+            intent.putExtra("ANGGOTA_NIS", anggota.nis)
+            startActivity(intent)
+        }
+        rvDaftarAnggota.adapter = adapter
 
         observeViewModel()
 
@@ -88,7 +98,7 @@ class AnggotaActivity : AppCompatActivity() {
                 daftarAnggotaFull = list
                 findViewById<TextView>(R.id.tvTotalAnggota).text = "${daftarAnggotaFull.size} Anggota"
                 
-                // Re-apply filter if there is text in search
+                // Re-apply filter jika ada teks di search
                 val etSearch = findViewById<EditText>(R.id.etSearchAnggota)
                 filterAnggota(etSearch.text.toString())
             }
@@ -100,17 +110,22 @@ class AnggotaActivity : AppCompatActivity() {
             daftarAnggotaFull
         } else {
             daftarAnggotaFull.filter {
-                it.nama.contains(query, ignoreCase = true) || 
-                it.id.contains(query, ignoreCase = true)
+                it.nama.contains(query, ignoreCase = true) ||
+                // FIX #7: cari berdasarkan NIS, bukan UUID internal
+                it.nis.contains(query, ignoreCase = true)
             }
         }
-        adapter = AnggotaAdapter(filtered, R.layout.item_anggota_edit) { anggota: Anggota ->
-            val intent = Intent(this, EditAnggotaActivity::class.java)
-            intent.putExtra("ANGGOTA_ID", anggota.id)
-            intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-            intent.putExtra("ANGGOTA_NIS", anggota.nis)
-            startActivity(intent)
+        adapter.updateData(filtered)
+
+        // FIX #14: tampilkan empty state jika tidak ada data
+        val emptyContainer = findViewById<View>(R.id.emptyStateContainerAnggota)
+        if (filtered.isEmpty()) {
+            emptyContainer.visibility = View.VISIBLE
+            tvEmptyState.text = if (query.isEmpty()) "Belum ada anggota.\nTambahkan anggota baru!" else "Anggota \"$query\" tidak ditemukan."
+            rvDaftarAnggota.visibility = View.GONE
+        } else {
+            emptyContainer.visibility = View.GONE
+            rvDaftarAnggota.visibility = View.VISIBLE
         }
-        rvDaftarAnggota.adapter = adapter
     }
 }
