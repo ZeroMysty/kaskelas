@@ -59,6 +59,8 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+
+
         <!-- Nominal -->
         <TextView
             android:id="@+id/tvNominalRiwayat"

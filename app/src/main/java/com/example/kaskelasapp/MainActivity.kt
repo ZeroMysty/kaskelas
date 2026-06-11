@@ -19,12 +19,19 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import java.util.*
-import androidx.core.graphics.toColorInt
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+import kotlinx.coroutines.launch
+import java.util.Locale
+import java.util.Calendar
 import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var db: DatabaseHelper
+    private lateinit var viewModel: KasViewModel
     private lateinit var rvAnggotaBeranda: RecyclerView
     private lateinit var adapter: AnggotaBayarAdapter
 
@@ -33,14 +40,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = DatabaseHelper(this)
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
 
         rvAnggotaBeranda = findViewById(R.id.rvAnggotaBeranda)
         rvAnggotaBeranda.layoutManager = LinearLayoutManager(this)
 
-        updateSaldo()
-        loadChart()
-        loadAnggotaBayar()
+        adapter = AnggotaBayarAdapter(
+            list = emptyList(),
+            onPayClick = { anggota ->
+                tampilkanDialogBayar(anggota)
+            },
+            onItemClick = { anggota ->
+                val intent = Intent(this, DetailAnggotaActivity::class.java)
+                intent.putExtra("ANGGOTA_ID", anggota.id)
+                intent.putExtra("ANGGOTA_NAMA", anggota.nama)
+                intent.putExtra("ANGGOTA_NIS", anggota.nis)
+                startActivity(intent)
+            }
+        )
+        rvAnggotaBeranda.adapter = adapter
+
+        observeViewModel()
 
         // Hide keyboard when clicking outside
         window.decorView.setOnTouchListener { _, _ ->
@@ -72,6 +95,40 @@ class MainActivity : AppCompatActivity() {
         // Tampilkan tutorial jika baru pertama kali install
         findViewById<View>(R.id.tutorialRoot).post {
             checkTutorial()
+        }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.anggotaList.collect { list ->
+                adapter = AnggotaBayarAdapter(
+                    list = list,
+                    onPayClick = { anggota -> tampilkanDialogBayar(anggota) },
+                    onItemClick = { anggota ->
+                        val intent = Intent(this@MainActivity, DetailAnggotaActivity::class.java)
+                        intent.putExtra("ANGGOTA_ID", anggota.id)
+                        intent.putExtra("ANGGOTA_NAMA", anggota.nama)
+                        intent.putExtra("ANGGOTA_NIS", anggota.nis)
+                        startActivity(intent)
+                    }
+                )
+                rvAnggotaBeranda.adapter = adapter
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.totalSaldo.collect { total ->
+                val formatRupiah =
+                    java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
+                        maximumFractionDigits = 0
+                        minimumFractionDigits = 0
+                    }
+                findViewById<android.widget.TextView>(R.id.tvTotalSaldo).text = formatRupiah.format(total)
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.transaksiList.collect { list ->
+                loadChart(list)
+            }
         }
     }
 
@@ -160,32 +217,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateSaldo()
-        loadChart()
-        loadAnggotaBayar()
+        viewModel.loadAllAnggota()
+        viewModel.loadTotalSaldo()
+        viewModel.loadAllTransaksi()
     }
 
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
-    }
-
-    private fun loadAnggotaBayar() {
-        val daftarAnggota = db.getAllAnggota()
-        adapter = AnggotaBayarAdapter(
-            list = daftarAnggota,
-            onPayClick = { anggota ->
-                tampilkanDialogBayar(anggota)
-            },
-            onItemClick = { anggota ->
-                val intent = Intent(this, DetailAnggotaActivity::class.java)
-                intent.putExtra("ANGGOTA_ID", anggota.id)
-                intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-                intent.putExtra("ANGGOTA_NIS", anggota.nis)
-                startActivity(intent)
-            }
-        )
-        rvAnggotaBeranda.adapter = adapter
     }
 
     private fun tampilkanDialogBayar(anggota: Anggota) {
@@ -202,46 +241,33 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Lanjut") { _, _ ->
                 val tgl = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
                     .format(java.util.Date())
-                db.insertTransaksi(
-                    judul = "Bayar kas",
+                val newTrans = Transaksi(
+                    nama = "Bayar kas",
                     jumlah = nominalDefault,
                     tanggal = tgl,
-                    jenis = "MASUK",
+                    tipe = "MASUK",
                     keterangan = "Pembayaran dari ${anggota.nama}",
-                    anggotaId = anggota.id
+                    anggota_id = anggota.id
                 )
-                updateSaldo()
-                loadChart()
-                android.widget.Toast.makeText(
-                    this,
-                    "Pembayaran berhasil!",
-                    android.widget.Toast.LENGTH_SHORT
-                ).show()
+                viewModel.insertTransaksi(newTrans) {
+                    android.widget.Toast.makeText(
+                        this,
+                        "Pembayaran berhasil!",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    private fun updateSaldo() {
-        val total = db.hitungTotalSaldo()
-        val formatRupiah =
-            java.text.NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID")).apply {
-                maximumFractionDigits = 0
-                minimumFractionDigits = 0
-            }
-        findViewById<android.widget.TextView>(R.id.tvTotalSaldo).text = formatRupiah.format(total)
-    }
-
-    private fun loadChart() {
+    private fun loadChart(allTransaksi: List<Transaksi>) {
         val chart = findViewById<BarChart>(R.id.barChart) ?: return
 
         val sdf = java.text.SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val days = mutableListOf<String>()
         val entriesMasuk = mutableListOf<BarEntry>()
         val entriesKeluar = mutableListOf<BarEntry>()
-
-        val allTransaksi = db.getAllTransaksi()
-
         // Ambil data 7 hari terakhir (Kronologis: Masa Lalu -> Hari Ini)
         for (i in 6 downTo 0) {
             val calendar = Calendar.getInstance()

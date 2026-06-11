@@ -1,29 +1,85 @@
 package com.example.kaskelasapp
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import java.io.File
+import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+import androidx.lifecycle.ViewModelProvider
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+
 class TambahPengeluaranActivity : AppCompatActivity() {
+    
+    private var imageUri: Uri? = null
+    private lateinit var ivPreview: ImageView
+    private lateinit var viewModel: KasViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_pengeluaran)
         BackgroundHelper.applyAnimatedBackground(this)
 
-
-        val db = DatabaseHelper(this)
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
 
         val etNama = findViewById<EditText>(R.id.etNamaPengeluaran)
         val etJumlah = findViewById<EditText>(R.id.etJumlahPengeluaran)
         val etKet = findViewById<EditText>(R.id.etKeteranganPengeluaran)
         val btnSimpan = findViewById<Button>(R.id.btnSimpanPengeluaran)
+        val btnPilihFoto = findViewById<LinearLayout>(R.id.btnPilihFotoPengeluaran)
+        ivPreview = findViewById(R.id.ivPreviewPengeluaran)
+
+        // 🔥 REGISTER IMAGE PICKER
+        val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                imageUri = uri
+                ivPreview.setImageURI(uri)
+                ivPreview.setPadding(0, 0, 0, 0)
+                ivPreview.imageTintList = null
+                ivPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+        }
+
+        // 🔥 REGISTER PERMISSION LAUNCHER
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                pickImage.launch("image/*")
+            } else {
+                Toast.makeText(this, "Izin galeri diperlukan!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnPilihFoto.setOnClickListener {
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                pickImage.launch("image/*")
+            } else {
+                requestPermissionLauncher.launch(permission)
+            }
+        }
 
         // 🔥 FORMAT RUPIAH (AMAN)
         etJumlah.addTextChangedListener(object : TextWatcher {
@@ -85,17 +141,20 @@ class TambahPengeluaranActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setPositiveButton("Ya") { _, _ ->
                     try {
-                        val result = db.insertTransaksi(
-                            nama,
-                            jumlahBersih,
-                            tanggal,
-                            "KELUAR",
-                            ket
+                        // Simpan foto ke internal storage jika ada
+                        val finalImagePath = imageUri?.let { saveImageToInternalStorage(it) }
+
+                        val newTrans = Transaksi(
+                            nama = nama,
+                            jumlah = jumlahBersih,
+                            tanggal = tanggal,
+                            tipe = "KELUAR",
+                            keterangan = ket,
+                            anggota_id = null,
+                            buktiFoto = finalImagePath
                         )
 
-                        if (result == -1L) {
-                            Toast.makeText(this, "Gagal menyimpan ke database", Toast.LENGTH_LONG).show()
-                        } else {
+                        viewModel.insertTransaksi(newTrans) {
                             Toast.makeText(this, "Pengeluaran disimpan!", Toast.LENGTH_SHORT).show()
                             finish()
                         }
@@ -114,6 +173,22 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         // 🔙 BACK
         findViewById<ImageView>(R.id.btnBackPengeluaran).setOnClickListener {
             finish()
+        }
+    }
+
+    private fun saveImageToInternalStorage(uri: Uri): String? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val fileName = "bukti_${System.currentTimeMillis()}.jpg"
+            val file = File(filesDir, fileName)
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            file.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

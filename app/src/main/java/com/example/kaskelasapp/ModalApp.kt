@@ -1,17 +1,7 @@
 package com.example.kaskelasapp
 
-data class Anggota(
-    val id: String,
-    val nama: String,
-    val nis: String
-)
+import com.example.kaskelasapp.data.AnggotaEntity
+import com.example.kaskelasapp.data.TransaksiEntity
 
-data class Transaksi(
-    val id: Int,
-    val nama: String,
-    val jumlah: String,
-    val tanggal: String,
-    val tipe: String, // "MASUK" atau "KELUAR"
-    val keterangan: String = "",
-    val anggota_id: String? = null
-)
+typealias Anggota = AnggotaEntity
+typealias Transaksi = TransaksiEntity

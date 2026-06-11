@@ -13,8 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.kaskelasapp.data.AppDatabase
+import com.example.kaskelasapp.repository.KasRepository
+import com.example.kaskelasapp.viewmodel.KasViewModel
+import com.example.kaskelasapp.viewmodel.KasViewModelFactory
+import kotlinx.coroutines.launch
+
 class AnggotaActivity : AppCompatActivity() {
-    private lateinit var db: DatabaseHelper
+    private lateinit var viewModel: KasViewModel
     private lateinit var rvDaftarAnggota: RecyclerView
     private lateinit var adapter: AnggotaAdapter
     private var daftarAnggotaFull = listOf<Anggota>()
@@ -23,11 +31,15 @@ class AnggotaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anggota)
 
-        db = DatabaseHelper(this)
+        val database = AppDatabase.getDatabase(this)
+        val repository = KasRepository(database.anggotaDao(), database.transaksiDao())
+        val factory = KasViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[KasViewModel::class.java]
+
         rvDaftarAnggota = findViewById(R.id.rvDaftarAnggota)
         rvDaftarAnggota.layoutManager = LinearLayoutManager(this)
 
-        loadDataAnggota()
+        observeViewModel()
 
         findViewById<ExtendedFloatingActionButton>(R.id.btnTambahAnggotaBaru).setOnClickListener {
             startActivity(Intent(this, TambahAnggotaActivity::class.java))
@@ -62,7 +74,7 @@ class AnggotaActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataAnggota()
+        viewModel.loadAllAnggota()
     }
 
     private fun hideKeyboard(view: EditText) {
@@ -70,17 +82,17 @@ class AnggotaActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun loadDataAnggota() {
-        daftarAnggotaFull = db.getAllAnggota()
-        findViewById<TextView>(R.id.tvTotalAnggota).text = "${daftarAnggotaFull.size} Anggota"
-        adapter = AnggotaAdapter(daftarAnggotaFull, R.layout.item_anggota_edit) { anggota: Anggota ->
-            val intent = Intent(this, EditAnggotaActivity::class.java)
-            intent.putExtra("ANGGOTA_ID", anggota.id)
-            intent.putExtra("ANGGOTA_NAMA", anggota.nama)
-            intent.putExtra("ANGGOTA_NIS", anggota.nis)
-            startActivity(intent)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.anggotaList.collect { list ->
+                daftarAnggotaFull = list
+                findViewById<TextView>(R.id.tvTotalAnggota).text = "${daftarAnggotaFull.size} Anggota"
+                
+                // Re-apply filter if there is text in search
+                val etSearch = findViewById<EditText>(R.id.etSearchAnggota)
+                filterAnggota(etSearch.text.toString())
+            }
         }
-        rvDaftarAnggota.adapter = adapter
     }
 
     private fun filterAnggota(query: String) {
